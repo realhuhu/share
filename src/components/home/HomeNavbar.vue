@@ -1,25 +1,25 @@
 <template>
-  <div class="fixed w-screen bottom-0 z-10">
-    <var-bottom-navigation :active="active" @change="emits('update:active',$event)">
+  <div class="fixed w-screen left-0 bottom-0 z-10">
+    <var-bottom-navigation :active="active">
       <var-bottom-navigation-item
-          label="资料"
-          icon="format-list-checkbox"
-          @click="router.replace('/home/resource')"
+        label="资料"
+        icon="format-list-checkbox"
+        @click="replace('/home/resource')"
       />
       <var-bottom-navigation-item
-          label="悬赏"
-          icon="cart-outline"
-          @click="router.replace('/home/reward')"
+        label="悬赏"
+        icon="cart-outline"
+        @click="replace('/home/reward')"
       />
       <var-bottom-navigation-item
-          label="收藏"
-          icon="heart-outline"
-          @click="router.replace('/home/favorite')"
+        label="收藏"
+        icon="heart-outline"
+        @click="replace('/home/favorite')"
       />
       <var-bottom-navigation-item
-          label="我的"
-          icon="account-circle-outline"
-          @click="router.replace('/home/profile')"
+        label="我的"
+        icon="account-circle-outline"
+        @click="replace('/home/profile')"
       />
       <template #fab>
         <var-icon name="plus" size="30"/>
@@ -40,6 +40,12 @@ interface Props {
 const router = useRouter()
 const emits = defineEmits(["update:active"])
 withDefaults(defineProps<Props>(), {active: 0})
+
+const replace = (page: HomePagePath) => {
+  router.replace(page)
+  emits("update:active", ["/home/resource", "/home/reward", "/home/favorite", "/home/profile"].indexOf(page))
+}
+
 defineOptions({
   name: "HomeNavbar"
 })

@@ -1,7 +1,7 @@
 <template>
   <router-view v-slot="{ Component }">
     <keep-alive>
-      <transition :name="page_animation">
+      <transition :name="page_animation || undefined">
         <component :is="Component"/>
       </transition>
     </keep-alive>
@@ -22,6 +22,10 @@ import {ref, watch} from "vue";
 const router = useRouter()
 const page_animation = ref<PageAnimation>()
 watch(() => router.currentRoute.value, (new_value, old_value) => {
+  if (window.innerWidth >= 768 || old_value.path === "/") {
+    page_animation.value = null
+    return
+  }
   page_animation.value = new_value.meta.depth > old_value.meta.depth ? "scale-push" : "scale-pop"
 })
 

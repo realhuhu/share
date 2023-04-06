@@ -5,6 +5,7 @@ import Icons from "unplugin-icons/vite"
 import AutoImport from "unplugin-auto-import/vite"
 import IconsResolver from "unplugin-icons/resolver"
 import Components from "unplugin-vue-components/vite"
+import viteCompression from "vite-plugin-compression";
 import DefineOptions from "unplugin-vue-define-options/vite"
 import {VarletUIResolver} from "unplugin-vue-components/resolvers"
 
@@ -13,6 +14,7 @@ export default defineConfig({
     Vue(),
     Icons(),
     DefineOptions(),
+    viteCompression(),
     Components({
       resolvers: [VarletUIResolver(), IconsResolver()]
     }),
