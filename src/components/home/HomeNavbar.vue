@@ -1,5 +1,5 @@
 <template>
-  <div class="navbar-wrapper fixed w-screen bottom-0 z-10">
+  <div class="fixed w-screen bottom-0 z-10">
     <var-bottom-navigation :active="active" @change="emits('update:active',$event)">
       <var-bottom-navigation-item
           label="资料"
@@ -12,8 +12,8 @@
           @click="router.replace('/home/reward')"
       />
       <var-bottom-navigation-item
-          label="消息"
-          icon="message-processing-outline"
+          label="收藏"
+          icon="heart-outline"
           @click="router.replace('/home/favorite')"
       />
       <var-bottom-navigation-item
@@ -21,7 +21,6 @@
           icon="account-circle-outline"
           @click="router.replace('/home/profile')"
       />
-
       <template #fab>
         <var-icon name="plus" size="30"/>
       </template>

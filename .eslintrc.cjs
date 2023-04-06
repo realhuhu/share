@@ -31,10 +31,10 @@ module.exports = {
     "semi": 0,  // 语句可以不需要分号结尾
     "one-var": 0, // 连续声明
     "space-before-function-paren": 0,  // 函数定义时括号前面要不要有空格
+    "no-undef": 0, // 能有未定义的变量
     // 警告
     "eqeqeq": 1, // 必须使用全等
     "eol-last": 1,  // 文件以单一的换行符结束
-    "no-undef": 1, // 不能有未定义的变量
     "no-extra-boolean-cast": 1, // 不必要的bool转换
     "no-extra-parens": 1, // 非必要的括号
     "no-empty": 1, // 块语句中的内容不能为空

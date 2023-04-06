@@ -17,15 +17,22 @@ declare module '@vue/runtime-core' {
     HomeProfile: typeof import('./src/components/home/HomeProfile.vue')['default']
     HomeResource: typeof import('./src/components/home/HomeResource.vue')['default']
     HomeReward: typeof import('./src/components/home/HomeReward.vue')['default']
+    ICarbonAccessibility: typeof import('~icons/carbon/accessibility')['default']
+    IMaterialSymbolsSearch: typeof import('~icons/material-symbols/search')['default']
+    MainSearch: typeof import('./src/components/single/MainSearch.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SearchBar: typeof import('./src/components/utils/SearchBar.vue')['default']
     VarAppBar: typeof import('@varlet/ui')['_AppBarComponent']
+    VarAvatar: typeof import('@varlet/ui')['_AvatarComponent']
     VarBottomNavigation: typeof import('@varlet/ui')['_BottomNavigationComponent']
     VarBottomNavigationItem: typeof import('@varlet/ui')['_BottomNavigationItemComponent']
     VarButton: typeof import('@varlet/ui')['_ButtonComponent']
     VarIcon: typeof import('@varlet/ui')['_IconComponent']
     VarTabItem: typeof import('@varlet/ui')['_TabItemComponent']
     VarTabsItems: typeof import('@varlet/ui')['_TabsItemsComponent']
+  }
+  export interface ComponentCustomProperties {
+    vRipple: typeof import('@varlet/ui')['_RippleComponent']
   }
 }

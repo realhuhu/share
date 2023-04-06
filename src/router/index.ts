@@ -11,7 +11,7 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import("@/views/HomePage.vue"),
     children: [
       {
-        path: "",
+        path: "/home",
         redirect: "/home/resource"
       },
       {
@@ -19,6 +19,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "resource",
         component: () => import("@/components/home/HomeResource.vue"),
         meta: {
+          depth: 0,
           navbar_active: 0
         }
       },
@@ -27,6 +28,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "reward",
         component: () => import("@/components/home/HomeReward.vue"),
         meta: {
+          depth: 0,
           navbar_active: 1
         }
       },
@@ -35,6 +37,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "favorite",
         component: () => import("@/components/home/HomeFavorite.vue"),
         meta: {
+          depth: 0,
           navbar_active: 2
         }
       },
@@ -43,10 +46,19 @@ const routes: Array<RouteRecordRaw> = [
         name: "profile",
         component: () => import("@/components/home/HomeProfile.vue"),
         meta: {
+          depth: 0,
           navbar_active: 3
         }
       }
     ]
+  },
+  {
+    path: "/search",
+    name: "search",
+    component: () => import("@/components/single/MainSearch.vue"),
+    meta: {
+      depth: 1
+    }
   }
 ]
 

@@ -1,18 +1,20 @@
 <template>
-  <home-header/>
   <div>
-    <router-view v-slot="{ Component }">
-      <keep-alive>
-        <transition :name="page_animation">
-          <component :is="Component"/>
-        </transition>
-      </keep-alive>
-    </router-view>
-  </div>
+    <home-header/>
+    <div>
+      <router-view v-slot="{ Component }">
+        <keep-alive>
+          <transition :name="page_animation">
+            <component :is="Component"/>
+          </transition>
+        </keep-alive>
+      </router-view>
+    </div>
 
-  <transition enter-active-class="animate__animated animate__fadeInUp" appear>
-    <home-navbar v-model:active="navbar_active"/>
-  </transition>
+    <transition enter-active-class="animate__animated animate__fadeInUp" appear>
+      <home-navbar v-model:active="navbar_active"/>
+    </transition>
+  </div>
 </template>
 
 
@@ -27,7 +29,7 @@ interface VM extends ComponentPublicInstance {
 }
 
 const navbar_active = ref<number>(0)
-const page_animation = ref<"switch-left" | "switch-right">("switch-left")
+const page_animation = ref<PageAnimation>()
 watch(navbar_active, (newValue, oldValue) => {
   if (newValue > oldValue) {
     page_animation.value = "switch-left"

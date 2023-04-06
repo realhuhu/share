@@ -1,20 +1,23 @@
 import {resolve} from "path";
 import {defineConfig} from "vite"
-import vue from "@vitejs/plugin-vue"
-import autoImport from "unplugin-auto-import/vite"
-import components from "unplugin-vue-components/vite"
+import Vue from "@vitejs/plugin-vue"
+import Icons from "unplugin-icons/vite"
+import AutoImport from "unplugin-auto-import/vite"
+import IconsResolver from "unplugin-icons/resolver"
+import Components from "unplugin-vue-components/vite"
 import DefineOptions from "unplugin-vue-define-options/vite"
 import {VarletUIResolver} from "unplugin-vue-components/resolvers"
 
 export default defineConfig({
   plugins: [
-    vue(),
+    Vue(),
+    Icons(),
     DefineOptions(),
-    components({
-      resolvers: [VarletUIResolver()]
+    Components({
+      resolvers: [VarletUIResolver(), IconsResolver()]
     }),
-    autoImport({
-      resolvers: [VarletUIResolver({autoImport: true})]
+    AutoImport({
+      resolvers: [VarletUIResolver({autoImport: true}), IconsResolver()]
     })
   ],
   resolve: {
