@@ -10,3 +10,5 @@ const app = createApp(App)
 app.use(router)
 app.use(createPinia())
 app.mount("#app")
+
+import "default-passive-events"

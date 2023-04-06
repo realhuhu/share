@@ -7,7 +7,7 @@
     "strict": true,
     "jsx": "preserve",
     "resolveJsonModule": true,
-    "isolatedModules": true,
+    "isolatedModules": false,
     "esModuleInterop": true,
     "lib": [
       "ESNext",
@@ -22,8 +22,10 @@
       ]
     },
     "types": [
-      "unplugin-vue-define-options/macros-global"
-      /* ... */
+      "unplugin-vue-define-options/macros-global",
+      "@types/node",
+      "@types/chai",
+      "@types/mocha"
     ]
   },
   "include": [
@@ -33,6 +35,12 @@
     "src/**/*.vue",
     "auto-imports.d.ts",
     "components.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "build",
+    "cache",
+    "artifacts"
   ],
   "references": [
     {
