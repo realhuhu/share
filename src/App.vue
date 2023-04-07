@@ -1,33 +1,69 @@
 <template>
   <router-view v-slot="{ Component }">
-    <keep-alive>
-      <transition :name="page_animation || undefined">
+    <transition :name="page_animation">
+      <keep-alive>
         <component :is="Component"/>
-      </transition>
-    </keep-alive>
+      </keep-alive>
+    </transition>
   </router-view>
 </template>
 
 <script setup lang="ts">
 import {useRouter} from "vue-router";
 import {ref, watch} from "vue";
-// import {ethers} from "ethers";
-// import {User__factory} from "@/assets/types/ethers";
-//
-// const provider = new ethers.providers.JsonRpcProvider("http://127.0.0.1:9545");
-// const address = "0xB0f24359e7843dC4d40DC859C8d35d1664056121"
-// const contract = User__factory.connect(address, provider)
-// contract.supply().then(console.log).catch(console.log)
+import {UseStore} from "@/store";
+import {Snackbar, Dialog} from "@varlet/ui"
+import "@varlet/ui/es/snackbar/style/index"
+import "@varlet/ui/es/dialog/style/index"
 
 const router = useRouter()
 const page_animation = ref<PageAnimation>()
+
 watch(() => router.currentRoute.value, (new_value, old_value) => {
   if (window.innerWidth >= 768 || old_value.path === "/") {
-    page_animation.value = null
+    page_animation.value = undefined
     return
   }
   page_animation.value = new_value.meta.depth > old_value.meta.depth ? "scale-push" : "scale-pop"
 })
+
+const useDefaultWallet = () => {
+  console.log(1)
+}
+
+const store = UseStore()
+const ethereum = store.ethereum
+switch (store.ethereum.type) {
+  case "local":
+    useDefaultWallet()
+    break
+  case "metamask":
+    ethereum.connectMetaMask(window.ethereum).then(({res, err}) => {
+      if (!err) {
+        ethereum.address = res[0]
+        window.ethereum.on("accountsChanged", (address_list: Address[]) => {
+          ethereum.address = address_list[0]
+        })
+        return
+      }
+
+      switch (err.code) {
+        case -32002:
+          Snackbar({content: "请打开MetaMask登录", type: "warning"})
+          break
+        default:
+          Snackbar({content: "未知的MetaMask错误", type: "error"})
+          break
+      }
+    })
+    break
+  case "other":
+    Dialog({
+      title: "不支持当前钱包，是否使用自带钱包？",
+      onConfirm: useDefaultWallet
+    })
+    break
+}
 
 </script>
 

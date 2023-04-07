@@ -23,9 +23,7 @@
     },
     "types": [
       "unplugin-vue-define-options/macros-global",
-      "@types/node",
-//      "@types/chai",
-//      "@types/mocha"
+      "@types/node"
     ]
   },
   "include": [

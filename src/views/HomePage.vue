@@ -1,28 +1,23 @@
 <template>
   <div>
-    <home-header class="md:hidden"/>
-
     <transition enter-active-class="animate__animated animate__fadeInUp" appear>
       <home-navbar class="md:hidden" v-model:active="navbar_active"/>
     </transition>
 
     <home-sidebar class="hidden md:flex" v-model:active="navbar_active"/>
 
-    <div>
-      <router-view v-slot="{ Component }">
+    <router-view v-slot="{ Component }">
+      <transition :name="page_animation || undefined">
         <keep-alive>
-          <transition :name="page_animation || undefined">
-            <component :is="Component"/>
-          </transition>
+          <component class="pt-12 md:ml-16 md:pt-0" :is="Component"/>
         </keep-alive>
-      </router-view>
-    </div>
+      </transition>
+    </router-view>
   </div>
 </template>
 
 
 <script lang="ts" setup>
-import HomeHeader from "@/components/home/HomeHeader.vue";
 import HomeNavbar from "@/components/home/HomeNavbar.vue";
 
 import {ref, watch, ComponentPublicInstance} from "vue"
@@ -38,7 +33,7 @@ const page_animation = ref<PageAnimation>()
 
 watch(navbar_active, (newValue, oldValue) => {
   if (window.innerWidth >= 768) {
-    page_animation.value = null
+    page_animation.value = undefined
     return
   }
   if (newValue > oldValue) {

@@ -1,8 +1,9 @@
 import {defineStore} from "pinia"
+import {Ethereum} from "@/assets/eth/ethereum";
 
 export const UseStore = defineStore("main", {
   state: () => ({
-    test: "name"
+    ethereum: new Ethereum()
   }),
   getters: {},
   actions: {}

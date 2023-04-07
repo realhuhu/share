@@ -5,7 +5,6 @@ contract User {
     uint public supply = 10;
 
     struct UserInfo {
-        bool _registered;
         string avatar; // 头像
         string nickname; // 昵称
         string signature; //签名
@@ -18,30 +17,37 @@ contract User {
     mapping(address => UserInfo) users;
     address[] _user;
 
-    modifier not_registered() {
-        require(!users[msg.sender]._registered, "123");
+    modifier registered() {
+        require(users[msg.sender]._registered, "E0");
+        _;
+    }
+
+    modifier notRegistered() {
+        require(!users[msg.sender]._registered, "E1");
         _;
     }
 
 
     function register(string memory nickname)
-    not_registered public returns (UserInfo memory) {
+    notRegistered public returns (UserInfo memory user_info) {
         address[] memory following;
         address[] memory follower;
 
-        UserInfo memory user_info = UserInfo({
-            _registered:true,
-            avatar:"",
-            nickname:nickname,
-            signature:"",
-            following:following,
-            follower:follower,
-            ID:0,
-            major:""
+        user_info = UserInfo({
+            avatar: "",
+            nickname: nickname,
+            signature: "",
+            following: following,
+            follower: follower,
+            ID: 0,
+            major: ""
         });
 
-        users[msg.sender]=user_info;
+        users[msg.sender] = user_info;
+    }
 
-        return user_info;
+    function selfInfo()
+    registered public view returns (){
+
     }
 }
