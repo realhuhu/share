@@ -16,7 +16,8 @@ module.exports = {
       '3xl': '0 35px 60px -15px rgba(0, 0, 0, 0.3)',
       inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
       none: 'none',
-      around: "0 0 10px 5px rgba(0, 0, 0, 0.06)"
+      around: "0 0 10px 5px rgba(0, 0, 0, 0.06)",
+      x: "2px 0 10px 5px rgba(0, 0, 0, 0.06)"
     }
   },
   plugins: [],

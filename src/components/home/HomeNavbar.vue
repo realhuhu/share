@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed w-screen left-0 bottom-0 z-10 var-elevation--5">
+  <div class="fixed w-screen left-0 bottom-0 z-10 shadow-x">
     <var-bottom-navigation :active="active">
       <var-bottom-navigation-item
         label="资料"

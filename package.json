@@ -23,6 +23,7 @@
     "postcss": "^8.4.21",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.4",
     "vue": "^3.2.45",
+    "vue-clipboard3": "^2.0.0",
     "vue-router": "^4.1.6"
   },
   "devDependencies": {

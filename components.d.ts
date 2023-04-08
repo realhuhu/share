@@ -9,6 +9,8 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    Clipboard: typeof import('./src/components/utils/Clipboard.vue')['default']
+    CreateEthAccount: typeof import('./src/components/single/CreateEthAccount.vue')['default']
     HomeFavorite: typeof import('./src/components/home/HomeFavorite.vue')['default']
     HomeHeader: typeof import('./src/components/home/HomeHeader.vue')['default']
     HomeNavbar: typeof import('./src/components/home/HomeNavbar.vue')['default']
@@ -16,7 +18,10 @@ declare module '@vue/runtime-core' {
     HomeResource: typeof import('./src/components/home/HomeResource.vue')['default']
     HomeReward: typeof import('./src/components/home/HomeReward.vue')['default']
     HomeSidebar: typeof import('./src/components/home/HomeSidebar.vue')['default']
+    ILogosEthereum: typeof import('~icons/logos/ethereum')['default']
+    ILogosEthereumColor: typeof import('~icons/logos/ethereum-color')['default']
     IMaterialSymbolsAdd: typeof import('~icons/material-symbols/add')['default']
+    IMaterialSymbolsContentCopyOutlineRounded: typeof import('~icons/material-symbols/content-copy-outline-rounded')['default']
     IMaterialSymbolsCurrencyExchangeRounded: typeof import('~icons/material-symbols/currency-exchange-rounded')['default']
     IMaterialSymbolsFormatListBulleted: typeof import('~icons/material-symbols/format-list-bulleted')['default']
     IMaterialSymbolsSearch: typeof import('~icons/material-symbols/search')['default']
@@ -27,12 +32,22 @@ declare module '@vue/runtime-core' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SearchBar: typeof import('./src/components/utils/SearchBar.vue')['default']
+    TextClipboard: typeof import('./src/components/utils/TextClipboard.vue')['default']
+    VarAppBar: typeof import('@varlet/ui')['_AppBarComponent']
     VarAvatar: typeof import('@varlet/ui')['_AvatarComponent']
     VarBottomNavigation: typeof import('@varlet/ui')['_BottomNavigationComponent']
     VarBottomNavigationItem: typeof import('@varlet/ui')['_BottomNavigationItemComponent']
     VarButton: typeof import('@varlet/ui')['_ButtonComponent']
     VarDivider: typeof import('@varlet/ui')['_DividerComponent']
     VarIcon: typeof import('@varlet/ui')['_IconComponent']
+    VarInput: typeof import('@varlet/ui')['_InputComponent']
+    VarTab: typeof import('@varlet/ui')['_TabComponent']
+    VarTabItem: typeof import('@varlet/ui')['_TabItemComponent']
+    VarTabs: typeof import('@varlet/ui')['_TabsComponent']
+    VarTabsItems: typeof import('@varlet/ui')['_TabsItemsComponent']
     VarTooltip: typeof import('@varlet/ui')['_TooltipComponent']
+  }
+  export interface ComponentCustomProperties {
+    vRipple: typeof import('@varlet/ui')['_RippleComponent']
   }
 }

@@ -41,18 +41,19 @@ switch (store.ethereum.type) {
     ethereum.connectMetaMask(window.ethereum).then(({res, err}) => {
       if (!err) {
         ethereum.address = res[0]
-        window.ethereum.on("accountsChanged", (address_list: Address[]) => {
-          ethereum.address = address_list[0]
-        })
         return
       }
 
+      window.ethereum.on("accountsChanged", (address_list: Address[]) => {
+        ethereum.address = address_list[0]
+      })
+
       switch (err.code) {
         case -32002:
-          Snackbar({content: "请打开MetaMask登录", type: "warning"})
+          Snackbar({content: "请打开MetaMask登录", type: "warning", duration: 1000})
           break
         default:
-          Snackbar({content: "未知的MetaMask错误", type: "error"})
+          Snackbar({content: "未知的MetaMask错误", type: "error",duration: 1000})
           break
       }
     })

@@ -59,6 +59,14 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       depth: 1
     }
+  },
+  {
+    path: "/create-eth-account",
+    name: "create-eth-account",
+    component: () => import("@/components/single/CreateEthAccount.vue"),
+    meta: {
+      depth: 2
+    }
   }
 ]
 
@@ -66,5 +74,10 @@ const router = createRouter({
   history: createWebHistory(),
   routes
 })
+
+export const safeBack = function (path: string) {
+  return !window.history.state.back && path ? router.replace(path || "/") : router.back()
+}
+
 
 export default router
