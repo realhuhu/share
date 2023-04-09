@@ -5,13 +5,11 @@
   "type": "commonjs",
   "scripts": {
     "dev": "vite --host",
-    "build": "vue-tsc && vite build",
     "preview": "vite preview",
-    "develop": "truffle develop --config truffle-config.cjs",
-    "compile": "truffle compile --config truffle-config.cjs && npm run typing-truffle && npm run typing-ethers",
-    "migrate": "truffle migrate --config truffle-config.cjs",
-    "typing-truffle": "typechain --target=truffle-v5 src/assets/eth/build/*.json --out-dir src/assets/types/truffle",
-    "typing-ethers": "typechain --target=ethers-v5 src/assets/eth/build/*.json --out-dir src/assets/types/ethers"
+    "build": "vue-tsc && vite build",
+    "typing": "typechain --target=truffle-v5 src/assets/eth/build/*.json --out-dir src/assets/types/truffle && typechain --target=ethers-v5 src/assets/eth/build/*.json --out-dir src/assets/types/ethers",
+    "compile": "truffle compile --config truffle-config.cjs && npm run typing",
+    "migrate": "truffle migrate --config truffle-config.cjs"
   },
   "dependencies": {
     "@varlet/ui": "^2.9.2",

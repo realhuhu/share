@@ -14,12 +14,60 @@ type AllEvents = never;
 export interface UserInstance extends Truffle.ContractInstance {
   supply(txDetails?: Truffle.TransactionDetails): Promise<BN>;
 
-  symbol(txDetails?: Truffle.TransactionDetails): Promise<string>;
+  register: {
+    (nickname: string, txDetails?: Truffle.TransactionDetails): Promise<
+      Truffle.TransactionResponse<AllEvents>
+    >;
+    call(
+      nickname: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<{
+      avatar: string;
+      nickname: string;
+      signature: string;
+      following: string[];
+      follower: string[];
+      ID: BN;
+      major: string;
+    }>;
+    sendTransaction(
+      nickname: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<string>;
+    estimateGas(
+      nickname: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<number>;
+  };
 
   methods: {
     supply(txDetails?: Truffle.TransactionDetails): Promise<BN>;
 
-    symbol(txDetails?: Truffle.TransactionDetails): Promise<string>;
+    register: {
+      (nickname: string, txDetails?: Truffle.TransactionDetails): Promise<
+        Truffle.TransactionResponse<AllEvents>
+      >;
+      call(
+        nickname: string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<{
+        avatar: string;
+        nickname: string;
+        signature: string;
+        following: string[];
+        follower: string[];
+        ID: BN;
+        major: string;
+      }>;
+      sendTransaction(
+        nickname: string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<string>;
+      estimateGas(
+        nickname: string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<number>;
+    };
   };
 
   getPastEvents(event: string): Promise<EventData[]>;

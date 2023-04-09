@@ -49,7 +49,7 @@
                 v-ripple
               >
                 <i-logos-ethereum-color class="h-8 md:h-12"/>
-                <div class="font-thin text-xs md:text-sm">注册以太坊</div>
+                <div class="font-thin text-xs md:text-sm">以太坊账户</div>
               </div>
             </div>
 

@@ -55,7 +55,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/search",
     name: "search",
-    component: () => import("@/components/single/MainSearch.vue"),
+    component: () => import("@/views/MainSearch.vue"),
     meta: {
       depth: 1
     }
@@ -63,7 +63,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/create-eth-account",
     name: "create-eth-account",
-    component: () => import("@/components/single/CreateEthAccount.vue"),
+    component: () => import("@/views/CreateEthAccount.vue"),
     meta: {
       depth: 2
     }

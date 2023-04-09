@@ -15,15 +15,15 @@ contract User {
     }
 
     mapping(address => UserInfo) users;
-    address[] _user;
+    mapping(address=>bool) _user;
 
     modifier registered() {
-        require(users[msg.sender]._registered, "E0");
+        require(_user[msg.sender], "E0");
         _;
     }
 
     modifier notRegistered() {
-        require(!users[msg.sender]._registered, "E1");
+        require(!_user[msg.sender], "E1");
         _;
     }
 
@@ -44,10 +44,5 @@ contract User {
         });
 
         users[msg.sender] = user_info;
-    }
-
-    function selfInfo()
-    registered public view returns (){
-
     }
 }

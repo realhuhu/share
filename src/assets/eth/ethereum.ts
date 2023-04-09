@@ -7,7 +7,6 @@ export class Ethereum {
   type: "local" | "metamask" | "other" = "local"
   provider: Nullable<Web3Provider> = null
   address: Nullable<Address> = null
-
   constructor() {
     if (window.ethereum === undefined) return
 

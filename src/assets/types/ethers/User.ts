@@ -4,8 +4,11 @@
 import type {
   BaseContract,
   BigNumber,
+  BigNumberish,
   BytesLike,
   CallOverrides,
+  ContractTransaction,
+  Overrides,
   PopulatedTransaction,
   Signer,
   utils,
@@ -20,19 +23,52 @@ import type {
   PromiseOrValue,
 } from "./common";
 
+export declare namespace User {
+  export type UserInfoStruct = {
+    avatar: PromiseOrValue<string>;
+    nickname: PromiseOrValue<string>;
+    signature: PromiseOrValue<string>;
+    following: PromiseOrValue<string>[];
+    follower: PromiseOrValue<string>[];
+    ID: PromiseOrValue<BigNumberish>;
+    major: PromiseOrValue<string>;
+  };
+
+  export type UserInfoStructOutput = [
+    string,
+    string,
+    string,
+    string[],
+    string[],
+    BigNumber,
+    string
+  ] & {
+    avatar: string;
+    nickname: string;
+    signature: string;
+    following: string[];
+    follower: string[];
+    ID: BigNumber;
+    major: string;
+  };
+}
+
 export interface UserInterface extends utils.Interface {
   functions: {
     "supply()": FunctionFragment;
-    "symbol()": FunctionFragment;
+    "register(string)": FunctionFragment;
   };
 
-  getFunction(nameOrSignatureOrTopic: "supply" | "symbol"): FunctionFragment;
+  getFunction(nameOrSignatureOrTopic: "supply" | "register"): FunctionFragment;
 
   encodeFunctionData(functionFragment: "supply", values?: undefined): string;
-  encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "register",
+    values: [PromiseOrValue<string>]
+  ): string;
 
   decodeFunctionResult(functionFragment: "supply", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "register", data: BytesLike): Result;
 
   events: {};
 }
@@ -66,17 +102,26 @@ export interface User extends BaseContract {
   functions: {
     supply(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    symbol(overrides?: CallOverrides): Promise<[string]>;
+    register(
+      nickname: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
   };
 
   supply(overrides?: CallOverrides): Promise<BigNumber>;
 
-  symbol(overrides?: CallOverrides): Promise<string>;
+  register(
+    nickname: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   callStatic: {
     supply(overrides?: CallOverrides): Promise<BigNumber>;
 
-    symbol(overrides?: CallOverrides): Promise<string>;
+    register(
+      nickname: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<User.UserInfoStructOutput>;
   };
 
   filters: {};
@@ -84,12 +129,18 @@ export interface User extends BaseContract {
   estimateGas: {
     supply(overrides?: CallOverrides): Promise<BigNumber>;
 
-    symbol(overrides?: CallOverrides): Promise<BigNumber>;
+    register(
+      nickname: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
     supply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    register(
+      nickname: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
   };
 }

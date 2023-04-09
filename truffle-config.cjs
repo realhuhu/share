@@ -6,8 +6,7 @@ require("ts-node").register({
 module.exports = {
   networks: {
     development: {
-      host: "127.0.0.1",
-      port: 9545,
+      url: "https://testnet.seutools.com/rpc",
       network_id: "*"
     }
   },

@@ -16,6 +16,7 @@ import {Snackbar, Dialog} from "@varlet/ui"
 import "@varlet/ui/es/snackbar/style/index"
 import "@varlet/ui/es/dialog/style/index"
 
+
 const router = useRouter()
 const page_animation = ref<PageAnimation>()
 
@@ -33,6 +34,7 @@ const useDefaultWallet = () => {
 
 const store = UseStore()
 const ethereum = store.ethereum
+
 switch (store.ethereum.type) {
   case "local":
     useDefaultWallet()
@@ -52,8 +54,12 @@ switch (store.ethereum.type) {
         case -32002:
           Snackbar({content: "请打开MetaMask登录", type: "warning", duration: 1000})
           break
+        case 4001:
+          Snackbar({content: "已取消连接MetaMask", type: "warning", duration: 1000})
+          break
         default:
-          Snackbar({content: "未知的MetaMask错误", type: "error",duration: 1000})
+          console.log(err.code);
+          Snackbar({content: "未知的MetaMask错误", type: "error", duration: 1000})
           break
       }
     })

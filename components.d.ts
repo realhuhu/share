@@ -9,8 +9,6 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    Clipboard: typeof import('./src/components/utils/Clipboard.vue')['default']
-    CreateEthAccount: typeof import('./src/components/single/CreateEthAccount.vue')['default']
     HomeFavorite: typeof import('./src/components/home/HomeFavorite.vue')['default']
     HomeHeader: typeof import('./src/components/home/HomeHeader.vue')['default']
     HomeNavbar: typeof import('./src/components/home/HomeNavbar.vue')['default']
@@ -18,7 +16,6 @@ declare module '@vue/runtime-core' {
     HomeResource: typeof import('./src/components/home/HomeResource.vue')['default']
     HomeReward: typeof import('./src/components/home/HomeReward.vue')['default']
     HomeSidebar: typeof import('./src/components/home/HomeSidebar.vue')['default']
-    ILogosEthereum: typeof import('~icons/logos/ethereum')['default']
     ILogosEthereumColor: typeof import('~icons/logos/ethereum-color')['default']
     IMaterialSymbolsAdd: typeof import('~icons/material-symbols/add')['default']
     IMaterialSymbolsContentCopyOutlineRounded: typeof import('~icons/material-symbols/content-copy-outline-rounded')['default']
@@ -28,7 +25,6 @@ declare module '@vue/runtime-core' {
     IMdiCardsHeartOutline: typeof import('~icons/mdi/cards-heart-outline')['default']
     IMdiMessageProcessingOutline: typeof import('~icons/mdi/message-processing-outline')['default']
     IPajamasProfile: typeof import('~icons/pajamas/profile')['default']
-    MainSearch: typeof import('./src/components/single/MainSearch.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SearchBar: typeof import('./src/components/utils/SearchBar.vue')['default']
