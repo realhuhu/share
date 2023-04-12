@@ -1,9 +1,7 @@
 <template>
   <router-view v-slot="{ Component }">
     <transition :name="page_animation">
-      <keep-alive>
-        <component :is="Component"/>
-      </keep-alive>
+      <component :is="Component"/>
     </transition>
   </router-view>
 </template>
@@ -13,9 +11,11 @@ import {useRouter} from "vue-router";
 import {ref, watch} from "vue";
 import {UseStore} from "@/store";
 import {Snackbar, Dialog} from "@varlet/ui"
+import output from "@/assets/eth/migrations/output.json"
 import "@varlet/ui/es/snackbar/style/index"
 import "@varlet/ui/es/dialog/style/index"
 
+console.log(output);
 
 const router = useRouter()
 const page_animation = ref<PageAnimation>()

@@ -8,9 +8,7 @@
 
     <router-view v-slot="{ Component }">
       <transition :name="page_animation || undefined" @after-enter="page_animation=undefined">
-        <keep-alive>
-          <component class="pt-12 md:ml-16 md:pt-0" :is="Component"/>
-        </keep-alive>
+        <component class="pt-12 md:ml-16 md:pt-0" :is="Component"/>
       </transition>
     </router-view>
   </div>
