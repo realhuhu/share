@@ -64,3 +64,19 @@ library AddressLinkedList {
         }
     }
 }
+
+library FileStore{
+    struct File{
+        address ipfs_address;
+        address uploader;
+        uint timestamp;
+        string title;
+        string description;
+        uint price;
+        uint heat;
+    }
+    struct T{
+        mapping(address=>File) files;
+        mapping (address=>address) _next_by_timestamp;
+    }  
+}
