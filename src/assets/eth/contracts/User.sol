@@ -6,6 +6,8 @@ import "./Lib.sol";
 contract UserContract {
     using AddressLinkedList for AddressLinkedList.T;
 
+    address public admin;
+
     struct UserInfo {
         string avatar; // 头像
         string nickname; // 昵称
@@ -14,6 +16,7 @@ contract UserContract {
         AddressLinkedList.T followers; //关注我的
         uint ID; // 校园卡ID
         string major; // 专业
+        uint heart;
     }
 
     struct UserSelfInfo {
@@ -24,6 +27,7 @@ contract UserContract {
         uint follower_num; //关注我的
         uint ID; // 校园卡ID
         string major; // 专业
+        uint heart;
     }
 
     struct UserBriefInfo {
@@ -32,6 +36,7 @@ contract UserContract {
         string signature; //签名
         uint following_num; //我的关注
         uint follower_num; //关注我的
+        uint heart;
     }
 
     struct UserSimpleInfo {
@@ -41,6 +46,11 @@ contract UserContract {
 
     mapping(address => UserInfo) users;
     mapping(address => bool) _users_bit;
+
+
+    constructor(){
+        admin=msg.sender;
+    }
 
     modifier _registered_(address user) {
         require(_users_bit[user], "E0: User.sol>UserContract>_registered_");
@@ -80,7 +90,8 @@ contract UserContract {
             following_num: user_info.followings.length,
             follower_num: user_info.followers.length,
             ID: user_info.ID,
-            major: user_info.major
+            major: user_info.major,
+            heart:user_info.heart
         });
     }
 
@@ -92,7 +103,8 @@ contract UserContract {
             nickname: user.nickname,
             signature: user.signature,
             following_num: user.followings.length,
-            follower_num: user.followers.length
+            follower_num: user.followers.length,
+            heart:user.heart
         });
     }
 
