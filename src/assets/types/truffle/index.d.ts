@@ -2,14 +2,14 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { UserContract } from "./User";
+import { UserContractContract } from "./UserContract";
 
 declare global {
   namespace Truffle {
     interface Artifacts {
-      require(name: "User"): UserContract;
+      require(name: "UserContract"): UserContractContract;
     }
   }
 }
 
-export { UserContract, UserInstance } from "./User";
+export { UserContractContract, UserContractInstance } from "./UserContract";

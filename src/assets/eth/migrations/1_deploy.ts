@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 const fs = require("fs")
 const path = require("path")
 
@@ -8,10 +9,16 @@ module.exports = async (
   network: "development",
   accounts: string[]
 ) => {
-  const TestContract = artifacts.require("User");
-  await deployer.deploy(TestContract);
-  const instance = await TestContract.deployed();
+  // @ts-ignore
+  const Lib = artifacts.require("AddressLinkedList");
+
+
+  const User = artifacts.require("UserContract");
+  await deployer.deploy(Lib);
+  deployer.link(Lib, User)
+  await deployer.deploy(User);
+  const instance = await User.deployed();
   fs.writeFileSync(path.join(__dirname, "output.json"), JSON.stringify({
-    "address": instance.address
+    "user": instance.address
   }))
 };

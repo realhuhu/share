@@ -17,9 +17,8 @@
 
 <script lang="ts" setup>
 import HomeNavbar from "@/components/home/HomeNavbar.vue";
-
-import {ref, watch, ComponentPublicInstance} from "vue"
 import HomeSidebar from "@/components/home/HomeSidebar.vue";
+import {ref, watch, ComponentPublicInstance} from "vue"
 
 interface VM extends ComponentPublicInstance {
   navbar_active: number

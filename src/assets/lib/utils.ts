@@ -1,12 +1,15 @@
-export const flat = async <T, R>(promise: Promise<T>): Promise<{
-  res: T,
-  err: null
-} | {
-  res: null,
-  err: R
-}> => new Promise(resolve => {
-  promise.then(res => resolve({res, err: null})).catch(err => resolve({res: null, err}))
-})
+import {Snackbar} from "@varlet/ui";
+import "@varlet/ui/es/snackbar/style/index"
+
+export const assertNotEmpty = <T>(data: T|null|undefined, message: string): T => {
+  if (data) return data
+  Snackbar({
+    duration: 1000,
+    type: "error",
+    content: message
+  })
+  throw Error(message)
+}
 
 export const stripAddress = (address: Address): string => {
   return address.substr(0, 5) + "..." + address.substr(38);
