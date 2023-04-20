@@ -5,9 +5,9 @@
 
     <div class="lg:flex lg:justify-center">
       <div class="flex flex-col md:mt-20 md:border md:mx-[10%] lg:w-[860px] lg:mx-0  md:shadow-around md:rounded-2xl">
-        <div v-if="store.address">
+        <div v-if="store.contracts_connected">
           <suspense>
-            <self-card :address="store.address"/>
+            <self-card :user="store.user as User"/>
             <template #fallback>
               <var-loading type="wave" class="py-10"/>
             </template>

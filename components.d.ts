@@ -9,6 +9,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    ConnectEthereum: typeof import('./src/components/others/ConnectEthereum.vue')['default']
     HomeFavorite: typeof import('./src/components/home/HomeFavorite.vue')['default']
     HomeHeader: typeof import('./src/components/home/HomeHeader.vue')['default']
     HomeNavbar: typeof import('./src/components/home/HomeNavbar.vue')['default']
@@ -26,13 +27,14 @@ declare module '@vue/runtime-core' {
     IMdiMessageProcessingOutline: typeof import('~icons/mdi/message-processing-outline')['default']
     IPajamasProfile: typeof import('~icons/pajamas/profile')['default']
     LoginModal: typeof import('./src/components/utils/LoginModal.vue')['default']
+    MetaMaskHelp: typeof import('./src/components/fullscreen/MetaMaskHelp.vue')['default']
+    MetaMaskTip: typeof import('./src/components/fullscreen/MetaMaskTip.vue')['default']
     RegisterModal: typeof import('./src/components/utils/RegisterModal.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SearchBar: typeof import('./src/components/utils/SearchBar.vue')['default']
     SelfCard: typeof import('./src/components/userCard/selfCard.vue')['default']
     TextClipboard: typeof import('./src/components/utils/TextClipboard.vue')['default']
-    UnlockModal: typeof import('./src/components/utils/UnlockModal.vue')['default']
     VarAppBar: typeof import('@varlet/ui')['_AppBarComponent']
     VarAvatar: typeof import('@varlet/ui')['_AvatarComponent']
     VarBottomNavigation: typeof import('@varlet/ui')['_BottomNavigationComponent']
@@ -42,6 +44,7 @@ declare module '@vue/runtime-core' {
     VarIcon: typeof import('@varlet/ui')['_IconComponent']
     VarInput: typeof import('@varlet/ui')['_InputComponent']
     VarLoading: typeof import('@varlet/ui')['_LoadingComponent']
+    VarOverlay: typeof import('@varlet/ui')['_OverlayComponent']
     VarPopup: typeof import('@varlet/ui')['_PopupComponent']
     VarTab: typeof import('@varlet/ui')['_TabComponent']
     VarTabItem: typeof import('@varlet/ui')['_TabItemComponent']

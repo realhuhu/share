@@ -1,5 +1,6 @@
 export {}
 import {ExternalProvider} from "ethers"
+import {UserContract as UserContractType} from "@/assets/types/ethers";
 
 declare global {
   type Nullable<T> = T | null
@@ -8,9 +9,22 @@ declare global {
   type Address = `0x${string}`
 
   type MetaMaskError = {
-    code: number,
+    code: number | string,
     message: string,
     stack: string
+  }
+
+  type BaseUser = UserContractType.UserSelfInfoStructOutput & {
+    avatar_b64?: string
+  }
+  type User = ({
+    is_registered: true
+    raw_data: BaseUser
+  } | {
+    is_registered: false
+    raw_data: null
+  }) & {
+    address: Address
   }
 
   interface Window {

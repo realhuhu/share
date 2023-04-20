@@ -47,7 +47,8 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/components/home/HomeProfile.vue"),
         meta: {
           depth: 0,
-          navbar_active: 3
+          navbar_active: 3,
+          auth: true
         }
       }
     ]

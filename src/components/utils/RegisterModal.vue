@@ -1,5 +1,5 @@
 <template>
-  <var-popup v-model:show="store.showRegisterModal" class="rounded">
+  <var-popup v-model:show="store.show_register_modal" class="rounded">
     <div class="flex flex-col justify-center items-center w-[90vw] max-w-[600px] p-6">
       <var-divider margin="0">授权以太坊账号</var-divider>
       <i-logos-ethereum-color class="h-12 w-12 mt-6"/>
@@ -11,8 +11,8 @@
         <var-button type="success" block @click="register" :disabled="!name">授权</var-button>
       </div>
 
-      <div class="text-xs text-gray-500 px-2">
-        将会使用您的账号({{ stripAddress(store.address) }})调用合约，在合约中创立账户
+      <div v-if="store.contracts_connected" class="text-xs text-gray-500 px-2">
+        将会使用您的账号({{ stripAddress((store.user as User).address) }})调用合约，在合约中创立账户
       </div>
     </div>
   </var-popup>
@@ -26,6 +26,7 @@ import {ref} from "vue";
 
 const store = UseStore()
 const name = ref<string>()
+
 const register = async () => {
   const nickname = assertNotEmpty(name.value, "昵称不能为空")
   const UserContract = assertNotEmpty(store.UserContract, "用户合约为初始化")

@@ -32,6 +32,7 @@ module.exports = {
     "one-var": 0, // 连续声明
     "space-before-function-paren": 0,  // 函数定义时括号前面要不要有空格
     "no-undef": 0, // 能有未定义的变量
+    "no-case-declarations": 0,
     // 警告
     "eqeqeq": 1, // 必须使用全等
     "eol-last": 1,  // 文件以单一的换行符结束
