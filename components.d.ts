@@ -9,6 +9,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    AccessHelp: typeof import('./src/components/fullscreen/AccessHelp.vue')['default']
     ConnectEthereum: typeof import('./src/components/others/ConnectEthereum.vue')['default']
     HomeFavorite: typeof import('./src/components/home/HomeFavorite.vue')['default']
     HomeHeader: typeof import('./src/components/home/HomeHeader.vue')['default']
@@ -43,6 +44,7 @@ declare module '@vue/runtime-core' {
     VarDivider: typeof import('@varlet/ui')['_DividerComponent']
     VarIcon: typeof import('@varlet/ui')['_IconComponent']
     VarInput: typeof import('@varlet/ui')['_InputComponent']
+    VarLink: typeof import('@varlet/ui')['_LinkComponent']
     VarLoading: typeof import('@varlet/ui')['_LoadingComponent']
     VarOverlay: typeof import('@varlet/ui')['_OverlayComponent']
     VarPopup: typeof import('@varlet/ui')['_PopupComponent']

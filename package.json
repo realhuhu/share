@@ -17,6 +17,7 @@
     "autoprefixer": "^10.4.14",
     "default-passive-events": "^2.0.0",
     "ethers": "^5.7.2",
+    "identicon.js": "^2.3.3",
     "pinia": "^2.0.28",
     "postcss": "^8.4.21",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.4",

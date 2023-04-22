@@ -3,7 +3,7 @@
   <router-view v-slot="{ Component }">
     <transition :name="page_animation">
       <component v-if="show_help" :is="Component"/>
-      <meta-mask-help v-else/>
+      <access-help v-else/>
     </transition>
   </router-view>
 
@@ -14,7 +14,7 @@
 import {useRoute, useRouter} from "vue-router";
 import {computed, ref, watch} from "vue";
 import {UseStore} from "@/store";
-import MetaMaskHelp from "@/components/fullscreen/MetaMaskHelp.vue";
+import AccessHelp from "@/components/fullscreen/AccessHelp.vue";
 
 const router = useRouter()
 const route = useRoute()
@@ -29,6 +29,10 @@ const show_help = computed(() => {
     if (route.meta.auth && !store.contracts_connected) return false
   }
   return true
+})
+
+watch(show_help, (new_value: boolean) => {
+  if (window.innerWidth <= 768) page_animation.value = !new_value ? "scale-push" : "scale-pop"
 })
 
 watch(() => router.currentRoute.value, (new_value, old_value) => {

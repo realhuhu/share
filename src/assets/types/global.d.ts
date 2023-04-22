@@ -20,9 +20,11 @@ declare global {
   type User = ({
     is_registered: true
     raw_data: BaseUser
+    avatar_b64: string
   } | {
     is_registered: false
     raw_data: null
+    avatar_b64: null
   }) & {
     address: Address
   }

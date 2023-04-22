@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-row justify-start items-start p-6 gap-4 whitespace-nowrap">
     <div class="w-[80px]">
-      <var-avatar src="https://varlet.gitee.io/varlet-ui/cat.jpg" size="80"/>
+      <var-avatar :src="avatar" size="80"/>
     </div>
 
     <div class="flex flex-col justify-start items-start">
@@ -44,10 +44,15 @@
 <script lang="ts" setup>
 import {UseStore} from "@/store";
 import {stripAddress} from "@/assets/lib/utils";
+import {computed} from "vue";
 
-defineProps<{
+const props = defineProps<{
   user: User
 }>()
+
+const avatar = computed(() => {
+  return props.user.is_registered ? props.user.avatar_b64 : "https://varlet.gitee.io/varlet-ui/cat.jpg"
+})
 
 const store = UseStore()
 
