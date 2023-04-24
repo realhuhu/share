@@ -3,11 +3,12 @@
   <router-view v-slot="{ Component }">
     <transition :name="page_animation">
       <component v-if="show_help" :is="Component"/>
-      <access-help v-else/>
+      <access-help v-else-if="store.ethereum_chain_id"/>
     </transition>
   </router-view>
 
   <register-modal/>
+  <default-wallet-modal/>
 </template>
 
 <script setup lang="ts">

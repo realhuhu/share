@@ -10,7 +10,7 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     AccessHelp: typeof import('./src/components/fullscreen/AccessHelp.vue')['default']
-    ConnectEthereum: typeof import('./src/components/others/ConnectEthereum.vue')['default']
+    DefaultWalletModal: typeof import('./src/components/utils/DefaultWalletModal.vue')['default']
     HomeFavorite: typeof import('./src/components/home/HomeFavorite.vue')['default']
     HomeHeader: typeof import('./src/components/home/HomeHeader.vue')['default']
     HomeNavbar: typeof import('./src/components/home/HomeNavbar.vue')['default']
@@ -28,8 +28,6 @@ declare module '@vue/runtime-core' {
     IMdiMessageProcessingOutline: typeof import('~icons/mdi/message-processing-outline')['default']
     IPajamasProfile: typeof import('~icons/pajamas/profile')['default']
     LoginModal: typeof import('./src/components/utils/LoginModal.vue')['default']
-    MetaMaskHelp: typeof import('./src/components/fullscreen/MetaMaskHelp.vue')['default']
-    MetaMaskTip: typeof import('./src/components/fullscreen/MetaMaskTip.vue')['default']
     RegisterModal: typeof import('./src/components/utils/RegisterModal.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
@@ -46,7 +44,6 @@ declare module '@vue/runtime-core' {
     VarInput: typeof import('@varlet/ui')['_InputComponent']
     VarLink: typeof import('@varlet/ui')['_LinkComponent']
     VarLoading: typeof import('@varlet/ui')['_LoadingComponent']
-    VarOverlay: typeof import('@varlet/ui')['_OverlayComponent']
     VarPopup: typeof import('@varlet/ui')['_PopupComponent']
     VarTab: typeof import('@varlet/ui')['_TabComponent']
     VarTabItem: typeof import('@varlet/ui')['_TabItemComponent']

@@ -19,6 +19,7 @@
     "ethers": "^5.7.2",
     "identicon.js": "^2.3.3",
     "pinia": "^2.0.28",
+    "pinia-plugin-persist": "^1.0.0",
     "postcss": "^8.4.21",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.4",
     "vue": "^3.2.45",

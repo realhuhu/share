@@ -6,6 +6,7 @@ import "@varlet/ui/es/snackbar/style/index"
 import "@varlet/ui/es/dialog/style/index"
 import Identicon from "identicon.js"
 
+
 import {UserContract, UserContract__factory} from "@/assets/types/ethers";
 import OutputAddress from "@/assets/eth/migrations/output.json";
 import {assertNotEmpty} from "@/assets/lib/utils";
@@ -33,6 +34,8 @@ type StoreType = ({
   ethereum_type: "local" | "metamask" | "other"
   ethereum_chain_id: Nullable<string>
   show_register_modal: boolean
+  show_default_wallet_modal: boolean
+  encrypted_private_key: Nullable<string>
 }
 export const UseStore = defineStore("main", {
   state: (): StoreType => ({
@@ -45,12 +48,15 @@ export const UseStore = defineStore("main", {
     contracts_connected: false,//是否已连接全部合约
     user: null,//用户信息
 
-    show_register_modal: false//展示授权框
+    show_register_modal: false,//展示授权框
+    show_default_wallet_modal: false,//展示自带钱包登录框
+
+    encrypted_private_key: null
   }),
   getters: {},
   actions: {
     async useDefaultWallet() {
-      console.log(1);
+      this.show_default_wallet_modal = true
     },
     isCorrectChain() {
       return this.correct_chain_id === this.ethereum_chain_id
@@ -68,13 +74,16 @@ export const UseStore = defineStore("main", {
           await this.useDefaultWallet()
           break
         case "metamask":
-          this.ethereum_chain_id = window.ethereum.chainId
-
-          //调取MetaMask登录，初始化provider
-          const address_list = await this.connectMetaMask()
-
-          //若正常登录MetaMask，尝试连接合约并初始化User
-          if (address_list) await this.afterMetaMaskLogin(address_list[0])
+          const inter = setInterval(async () => {
+            this.ethereum_chain_id = window.ethereum.chainId
+            if (this.ethereum_chain_id) {
+              //调取MetaMask登录，初始化provider
+              const address_list = await this.connectMetaMask()
+              //若正常登录MetaMask，尝试连接合约并初始化User
+              if (address_list) await this.afterMetaMaskLogin(address_list[0])
+              clearInterval(inter)
+            }
+          }, 50)
 
           window.ethereum.on("chainChanged", async (chain_id: string) => {
             //切换链时，修改provider
@@ -168,5 +177,14 @@ export const UseStore = defineStore("main", {
       }
     }
   }
+  // persist: {
+  //   enabled: true,
+  //   strategies: [
+  //     {
+  //       storage: localStorage,
+  //       paths: ["encryptedPrivateKey"]
+  //     }
+  //   ]
+  // }
 })
 
