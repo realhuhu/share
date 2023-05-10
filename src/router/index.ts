@@ -68,6 +68,15 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       depth: 2
     }
+  },
+  {
+    path: "/self-info",
+    name: "self-info",
+    component: () => import("@/views/SelfInfo.vue"),
+    meta: {
+      depth: 2,
+      auth: true
+    }
   }
 ]
 

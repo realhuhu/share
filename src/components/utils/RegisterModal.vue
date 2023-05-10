@@ -29,9 +29,12 @@ const name = ref<string>()
 
 const register = async () => {
   const nickname = assertNotEmpty(name.value, "昵称不能为空")
-  const UserContract = assertNotEmpty(store.UserContract, "用户合约为初始化")
-  const res = await UserContract.register(nickname)
+  const contract = assertNotEmpty(store.contract, "用户合约未初始化")
+  const res = await contract.register(nickname)
   await res.wait()
+  const user = assertNotEmpty(store.user, "用户未初始化")
+  await store.refreshUser(user.address)
+  store.show_register_modal = false
 }
 
 defineOptions({

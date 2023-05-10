@@ -1,6 +1,7 @@
 export {}
 import {ExternalProvider} from "ethers"
-import {UserContract as UserContractType} from "@/assets/types/ethers";
+import {StoreContact} from "@/assets/types/ethers/ImplementationContact";
+
 
 declare global {
   type Nullable<T> = T | null
@@ -8,18 +9,17 @@ declare global {
   type HomePagePath = "/home/resource" | "/home/reward" | "/home/favorite" | "/home/profile"
   type Address = `0x${string}`
 
+
   type MetaMaskError = {
     code: number | string,
     message: string,
     stack: string
   }
 
-  type BaseUser = UserContractType.UserSelfInfoStructOutput & {
-    avatar_b64?: string
-  }
+
   type User = ({
     is_registered: true
-    raw_data: BaseUser
+    raw_data: StoreContact.UserSelfInfoStructOutput
     avatar_b64: string
   } | {
     is_registered: false

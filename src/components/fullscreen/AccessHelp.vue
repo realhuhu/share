@@ -6,7 +6,7 @@
         <var-link
           href="https://testnet.seutools.com/"
           target="_blank"
-          type="success">seu测试链
+          type="success">OurChain测试链
         </var-link>
       </div>
 

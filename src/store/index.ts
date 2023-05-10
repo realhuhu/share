@@ -1,3 +1,4 @@
+import {toRaw} from "vue";
 import {defineStore} from "pinia"
 import {ethers} from "ethers";
 import {Web3Provider} from "@ethersproject/providers";
@@ -7,24 +8,23 @@ import "@varlet/ui/es/dialog/style/index"
 import Identicon from "identicon.js"
 
 
-import {UserContract, UserContract__factory} from "@/assets/types/ethers";
+import {ImplementationInterface, ImplementationInterface__factory} from "@/assets/types/ethers";
 import OutputAddress from "@/assets/eth/migrations/output.json";
 import {assertNotEmpty} from "@/assets/lib/utils";
-import {toRaw} from "vue";
 
 type StoreType = ({
   ethereum_connected: false
   provider: null
   contracts_connected: false
-  UserContract: null
+  contract: null
   user: null
 } | ({
   contracts_connected: false
-  UserContract: null
+  contract: null
   user: null
 } | {
   contracts_connected: true
-  UserContract: UserContract,
+  contract: ImplementationInterface,
   user: User
 }) & ({
   ethereum_connected: true
@@ -44,7 +44,7 @@ export const UseStore = defineStore("main", {
     ethereum_chain_id: null,//当前链ID
     provider: null,//Web3Provider
     ethereum_connected: false,//是否已连接钱包
-    UserContract: null,//用户合约
+    contract: null,//用户合约
     contracts_connected: false,//是否已连接全部合约
     user: null,//用户信息
 
@@ -94,7 +94,7 @@ export const UseStore = defineStore("main", {
               await this.afterMetaMaskLogin(window.ethereum.selectedAddress)
             } else {
               //切换到其它链时，清空合约相关数据
-              this.UserContract = null
+              this.contract = null
               this.contracts_connected = false
               this.user = null
             }
@@ -102,7 +102,7 @@ export const UseStore = defineStore("main", {
 
           window.ethereum.on("accountsChanged", async (address_list: Address[]) => {
             if (this.ethereum_connected && !this.isCorrectChain()) {
-              this.UserContract = null
+              this.contract = null
               this.contracts_connected = false
               this.user = null
             } else {
@@ -153,13 +153,13 @@ export const UseStore = defineStore("main", {
       }
     },
     connectContracts(provider: Web3Provider) {
-      this.UserContract = UserContract__factory.connect(OutputAddress.user, provider.getSigner())
+      this.contract = ImplementationInterface__factory.connect(OutputAddress.address, provider.getSigner())
     },
     async refreshUser(address: Address) {
-      const UserContract = assertNotEmpty(this.UserContract, "用户合约未初始化")
-      const is_registered = await UserContract.isRegistered(address)
+      const contract = assertNotEmpty(this.contract, "用户合约未初始化")
+      const is_registered = await contract.isRegistered(address)
       if (is_registered) {
-        const raw_data = await UserContract.getSelfInfo()
+        const raw_data = await contract.getSelfInfo()
 
         this.user = {
           is_registered: true,

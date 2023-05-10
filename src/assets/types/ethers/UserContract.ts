@@ -13,7 +13,11 @@ import type {
   Signer,
   utils,
 } from "ethers";
-import type { FunctionFragment, Result } from "@ethersproject/abi";
+import type {
+  FunctionFragment,
+  Result,
+  EventFragment,
+} from "@ethersproject/abi";
 import type { Listener, Provider } from "@ethersproject/providers";
 import type {
   TypedEventFilter,
@@ -23,105 +27,86 @@ import type {
   PromiseOrValue,
 } from "./common";
 
-export declare namespace UserContract {
+export declare namespace StoreContact {
   export type UserSelfInfoStruct = {
+    ID: PromiseOrValue<BigNumberish>;
+    coins: PromiseOrValue<BigNumberish>;
+    heart: PromiseOrValue<BigNumberish>;
+    experience: PromiseOrValue<BigNumberish>;
+    follower_num: PromiseOrValue<BigNumberish>;
+    following_num: PromiseOrValue<BigNumberish>;
+    login_timestamp: PromiseOrValue<BigNumberish>;
+    uploaded_file_num: PromiseOrValue<BigNumberish>;
+    major: PromiseOrValue<string>;
     avatar: PromiseOrValue<string>;
     nickname: PromiseOrValue<string>;
     signature: PromiseOrValue<string>;
-    login_timestamp: PromiseOrValue<BigNumberish>;
-    following_num: PromiseOrValue<BigNumberish>;
-    follower_num: PromiseOrValue<BigNumberish>;
-    ID: PromiseOrValue<BigNumberish>;
-    major: PromiseOrValue<string>;
-    heart: PromiseOrValue<BigNumberish>;
   };
 
   export type UserSelfInfoStructOutput = [
-    string,
-    string,
-    string,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
     BigNumber,
     BigNumber,
     BigNumber,
     BigNumber,
     string,
-    BigNumber
+    string,
+    string,
+    string
   ] & {
-    avatar: string;
-    nickname: string;
-    signature: string;
-    login_timestamp: BigNumber;
-    following_num: BigNumber;
-    follower_num: BigNumber;
     ID: BigNumber;
-    major: string;
+    coins: BigNumber;
     heart: BigNumber;
-  };
-
-  export type UserBriefInfoStruct = {
-    avatar: PromiseOrValue<string>;
-    nickname: PromiseOrValue<string>;
-    signature: PromiseOrValue<string>;
-    login_timestamp: PromiseOrValue<BigNumberish>;
-    following_num: PromiseOrValue<BigNumberish>;
-    follower_num: PromiseOrValue<BigNumberish>;
-    heart: PromiseOrValue<BigNumberish>;
-  };
-
-  export type UserBriefInfoStructOutput = [
-    string,
-    string,
-    string,
-    BigNumber,
-    BigNumber,
-    BigNumber,
-    BigNumber
-  ] & {
+    experience: BigNumber;
+    follower_num: BigNumber;
+    following_num: BigNumber;
+    login_timestamp: BigNumber;
+    uploaded_file_num: BigNumber;
+    major: string;
     avatar: string;
     nickname: string;
     signature: string;
-    login_timestamp: BigNumber;
-    following_num: BigNumber;
-    follower_num: BigNumber;
-    heart: BigNumber;
-  };
-
-  export type UserSimpleInfoStruct = {
-    avatar: PromiseOrValue<string>;
-    nickname: PromiseOrValue<string>;
-  };
-
-  export type UserSimpleInfoStructOutput = [string, string] & {
-    avatar: string;
-    nickname: string;
   };
 }
 
 export interface UserContractInterface extends utils.Interface {
   functions: {
     "admin()": FunctionFragment;
+    "renounceAdmin()": FunctionFragment;
+    "transferAdmin(address)": FunctionFragment;
     "register(string)": FunctionFragment;
     "isRegistered(address)": FunctionFragment;
     "getSelfInfo()": FunctionFragment;
-    "getUserInfo(address)": FunctionFragment;
-    "getFollowings(address)": FunctionFragment;
-    "getFollowers(address)": FunctionFragment;
-    "setFollow(address,bool)": FunctionFragment;
+    "updateAvatar(string)": FunctionFragment;
+    "updateNickname(string)": FunctionFragment;
+    "updateSignature(string)": FunctionFragment;
   };
 
   getFunction(
     nameOrSignatureOrTopic:
       | "admin"
+      | "renounceAdmin"
+      | "transferAdmin"
       | "register"
       | "isRegistered"
       | "getSelfInfo"
-      | "getUserInfo"
-      | "getFollowings"
-      | "getFollowers"
-      | "setFollow"
+      | "updateAvatar"
+      | "updateNickname"
+      | "updateSignature"
   ): FunctionFragment;
 
   encodeFunctionData(functionFragment: "admin", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "renounceAdmin",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "transferAdmin",
+    values: [PromiseOrValue<string>]
+  ): string;
   encodeFunctionData(
     functionFragment: "register",
     values: [PromiseOrValue<string>]
@@ -135,23 +120,27 @@ export interface UserContractInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "getUserInfo",
+    functionFragment: "updateAvatar",
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
-    functionFragment: "getFollowings",
+    functionFragment: "updateNickname",
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
-    functionFragment: "getFollowers",
+    functionFragment: "updateSignature",
     values: [PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setFollow",
-    values: [PromiseOrValue<string>, PromiseOrValue<boolean>]
   ): string;
 
   decodeFunctionResult(functionFragment: "admin", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "renounceAdmin",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "transferAdmin",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "register", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "isRegistered",
@@ -162,21 +151,36 @@ export interface UserContractInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getUserInfo",
+    functionFragment: "updateAvatar",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getFollowings",
+    functionFragment: "updateNickname",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getFollowers",
+    functionFragment: "updateSignature",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "setFollow", data: BytesLike): Result;
 
-  events: {};
+  events: {
+    "AdminTransferred(address,address)": EventFragment;
+  };
+
+  getEvent(nameOrSignatureOrTopic: "AdminTransferred"): EventFragment;
 }
+
+export interface AdminTransferredEventObject {
+  old_admin: string;
+  new_admin: string;
+}
+export type AdminTransferredEvent = TypedEvent<
+  [string, string],
+  AdminTransferredEventObject
+>;
+
+export type AdminTransferredEventFilter =
+  TypedEventFilter<AdminTransferredEvent>;
 
 export interface UserContract extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -207,6 +211,15 @@ export interface UserContract extends BaseContract {
   functions: {
     admin(overrides?: CallOverrides): Promise<[string]>;
 
+    renounceAdmin(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    transferAdmin(
+      new_admin: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     register(
       nickname: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -220,48 +233,37 @@ export interface UserContract extends BaseContract {
     getSelfInfo(
       overrides?: CallOverrides
     ): Promise<
-      [UserContract.UserSelfInfoStructOutput] & {
-        self_info: UserContract.UserSelfInfoStructOutput;
+      [StoreContact.UserSelfInfoStructOutput] & {
+        self_info: StoreContact.UserSelfInfoStructOutput;
       }
     >;
 
-    getUserInfo(
-      user_address: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<
-      [UserContract.UserBriefInfoStructOutput] & {
-        user_info: UserContract.UserBriefInfoStructOutput;
-      }
-    >;
+    updateAvatar(
+      avatar: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
-    getFollowings(
-      cursor: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<
-      [UserContract.UserSimpleInfoStructOutput[], BigNumber] & {
-        followings_info: UserContract.UserSimpleInfoStructOutput[];
-        length: BigNumber;
-      }
-    >;
+    updateNickname(
+      nickname: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
-    getFollowers(
-      cursor: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<
-      [UserContract.UserSimpleInfoStructOutput[], BigNumber] & {
-        followers_info: UserContract.UserSimpleInfoStructOutput[];
-        length: BigNumber;
-      }
-    >;
-
-    setFollow(
-      target_user: PromiseOrValue<string>,
-      is_follow: PromiseOrValue<boolean>,
+    updateSignature(
+      signature: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
   };
 
   admin(overrides?: CallOverrides): Promise<string>;
+
+  renounceAdmin(
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  transferAdmin(
+    new_admin: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   register(
     nickname: PromiseOrValue<string>,
@@ -275,46 +277,37 @@ export interface UserContract extends BaseContract {
 
   getSelfInfo(
     overrides?: CallOverrides
-  ): Promise<UserContract.UserSelfInfoStructOutput>;
+  ): Promise<StoreContact.UserSelfInfoStructOutput>;
 
-  getUserInfo(
-    user_address: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<UserContract.UserBriefInfoStructOutput>;
+  updateAvatar(
+    avatar: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
-  getFollowings(
-    cursor: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<
-    [UserContract.UserSimpleInfoStructOutput[], BigNumber] & {
-      followings_info: UserContract.UserSimpleInfoStructOutput[];
-      length: BigNumber;
-    }
-  >;
+  updateNickname(
+    nickname: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
-  getFollowers(
-    cursor: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<
-    [UserContract.UserSimpleInfoStructOutput[], BigNumber] & {
-      followers_info: UserContract.UserSimpleInfoStructOutput[];
-      length: BigNumber;
-    }
-  >;
-
-  setFollow(
-    target_user: PromiseOrValue<string>,
-    is_follow: PromiseOrValue<boolean>,
+  updateSignature(
+    signature: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   callStatic: {
     admin(overrides?: CallOverrides): Promise<string>;
 
+    renounceAdmin(overrides?: CallOverrides): Promise<void>;
+
+    transferAdmin(
+      new_admin: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     register(
       nickname: PromiseOrValue<string>,
       overrides?: CallOverrides
-    ): Promise<UserContract.UserSelfInfoStructOutput>;
+    ): Promise<void>;
 
     isRegistered(
       user_address: PromiseOrValue<string>,
@@ -323,44 +316,46 @@ export interface UserContract extends BaseContract {
 
     getSelfInfo(
       overrides?: CallOverrides
-    ): Promise<UserContract.UserSelfInfoStructOutput>;
+    ): Promise<StoreContact.UserSelfInfoStructOutput>;
 
-    getUserInfo(
-      user_address: PromiseOrValue<string>,
+    updateAvatar(
+      avatar: PromiseOrValue<string>,
       overrides?: CallOverrides
-    ): Promise<UserContract.UserBriefInfoStructOutput>;
+    ): Promise<void>;
 
-    getFollowings(
-      cursor: PromiseOrValue<string>,
+    updateNickname(
+      nickname: PromiseOrValue<string>,
       overrides?: CallOverrides
-    ): Promise<
-      [UserContract.UserSimpleInfoStructOutput[], BigNumber] & {
-        followings_info: UserContract.UserSimpleInfoStructOutput[];
-        length: BigNumber;
-      }
-    >;
+    ): Promise<void>;
 
-    getFollowers(
-      cursor: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<
-      [UserContract.UserSimpleInfoStructOutput[], BigNumber] & {
-        followers_info: UserContract.UserSimpleInfoStructOutput[];
-        length: BigNumber;
-      }
-    >;
-
-    setFollow(
-      target_user: PromiseOrValue<string>,
-      is_follow: PromiseOrValue<boolean>,
+    updateSignature(
+      signature: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
   };
 
-  filters: {};
+  filters: {
+    "AdminTransferred(address,address)"(
+      old_admin?: PromiseOrValue<string> | null,
+      new_admin?: PromiseOrValue<string> | null
+    ): AdminTransferredEventFilter;
+    AdminTransferred(
+      old_admin?: PromiseOrValue<string> | null,
+      new_admin?: PromiseOrValue<string> | null
+    ): AdminTransferredEventFilter;
+  };
 
   estimateGas: {
     admin(overrides?: CallOverrides): Promise<BigNumber>;
+
+    renounceAdmin(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    transferAdmin(
+      new_admin: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     register(
       nickname: PromiseOrValue<string>,
@@ -374,30 +369,33 @@ export interface UserContract extends BaseContract {
 
     getSelfInfo(overrides?: CallOverrides): Promise<BigNumber>;
 
-    getUserInfo(
-      user_address: PromiseOrValue<string>,
-      overrides?: CallOverrides
+    updateAvatar(
+      avatar: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    getFollowings(
-      cursor: PromiseOrValue<string>,
-      overrides?: CallOverrides
+    updateNickname(
+      nickname: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    getFollowers(
-      cursor: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    setFollow(
-      target_user: PromiseOrValue<string>,
-      is_follow: PromiseOrValue<boolean>,
+    updateSignature(
+      signature: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
     admin(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    renounceAdmin(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    transferAdmin(
+      new_admin: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     register(
       nickname: PromiseOrValue<string>,
@@ -411,24 +409,18 @@ export interface UserContract extends BaseContract {
 
     getSelfInfo(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    getUserInfo(
-      user_address: PromiseOrValue<string>,
-      overrides?: CallOverrides
+    updateAvatar(
+      avatar: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    getFollowings(
-      cursor: PromiseOrValue<string>,
-      overrides?: CallOverrides
+    updateNickname(
+      nickname: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    getFollowers(
-      cursor: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    setFollow(
-      target_user: PromiseOrValue<string>,
-      is_follow: PromiseOrValue<boolean>,
+    updateSignature(
+      signature: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
   };

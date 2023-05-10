@@ -40,7 +40,7 @@ module.exports = {
     "no-extra-parens": 1, // 非必要的括号
     "no-empty": 1, // 块语句中的内容不能为空
     "no-use-before-define": [1, "nofunc"], // 未定义前不能使用
-    "complexity": [1, 10], // 循环复杂度
+    "complexity": [1, 16], // 循环复杂度
     "@typescript-eslint/no-unused-vars": 1, // 不能有声明后未被使用的变量或参数
     //错误
     "comma-dangle": [2, "never"], // 对象字面量项尾不能有逗号

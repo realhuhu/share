@@ -8,6 +8,10 @@ module.exports = {
     development: {
       url: "https://testnet.seutools.com/rpc",
       network_id: "*"
+    },
+    update: {
+      url: "https://testnet.seutools.com/rpc",
+      network_id: "*"
     }
   },
   contracts_directory: "./src/assets/eth/contracts",

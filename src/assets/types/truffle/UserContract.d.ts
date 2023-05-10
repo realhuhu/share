@@ -10,10 +10,47 @@ export interface UserContractContract
   "new"(meta?: Truffle.TransactionDetails): Promise<UserContractInstance>;
 }
 
-type AllEvents = never;
+export interface AdminTransferred {
+  name: "AdminTransferred";
+  args: {
+    old_admin: string;
+    new_admin: string;
+    0: string;
+    1: string;
+  };
+}
+
+type AllEvents = AdminTransferred;
 
 export interface UserContractInstance extends Truffle.ContractInstance {
   admin(txDetails?: Truffle.TransactionDetails): Promise<string>;
+
+  renounceAdmin: {
+    (txDetails?: Truffle.TransactionDetails): Promise<
+      Truffle.TransactionResponse<AllEvents>
+    >;
+    call(txDetails?: Truffle.TransactionDetails): Promise<void>;
+    sendTransaction(txDetails?: Truffle.TransactionDetails): Promise<string>;
+    estimateGas(txDetails?: Truffle.TransactionDetails): Promise<number>;
+  };
+
+  transferAdmin: {
+    (new_admin: string, txDetails?: Truffle.TransactionDetails): Promise<
+      Truffle.TransactionResponse<AllEvents>
+    >;
+    call(
+      new_admin: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<void>;
+    sendTransaction(
+      new_admin: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<string>;
+    estimateGas(
+      new_admin: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<number>;
+  };
 
   register: {
     (nickname: string, txDetails?: Truffle.TransactionDetails): Promise<
@@ -22,17 +59,7 @@ export interface UserContractInstance extends Truffle.ContractInstance {
     call(
       nickname: string,
       txDetails?: Truffle.TransactionDetails
-    ): Promise<{
-      avatar: string;
-      nickname: string;
-      signature: string;
-      login_timestamp: BN;
-      following_num: BN;
-      follower_num: BN;
-      ID: BN;
-      major: string;
-      heart: BN;
-    }>;
+    ): Promise<void>;
     sendTransaction(
       nickname: string,
       txDetails?: Truffle.TransactionDetails
@@ -51,65 +78,100 @@ export interface UserContractInstance extends Truffle.ContractInstance {
   getSelfInfo(
     txDetails?: Truffle.TransactionDetails
   ): Promise<{
-    avatar: string;
-    nickname: string;
-    signature: string;
-    login_timestamp: BN;
-    following_num: BN;
-    follower_num: BN;
     ID: BN;
-    major: string;
+    coins: BN;
     heart: BN;
-  }>;
-
-  getUserInfo(
-    user_address: string,
-    txDetails?: Truffle.TransactionDetails
-  ): Promise<{
+    experience: BN;
+    follower_num: BN;
+    following_num: BN;
+    login_timestamp: BN;
+    uploaded_file_num: BN;
+    major: string;
     avatar: string;
     nickname: string;
     signature: string;
-    login_timestamp: BN;
-    following_num: BN;
-    follower_num: BN;
-    heart: BN;
   }>;
 
-  getFollowings(
-    cursor: string,
-    txDetails?: Truffle.TransactionDetails
-  ): Promise<{ 0: { avatar: string; nickname: string }[]; 1: BN }>;
-
-  getFollowers(
-    cursor: string,
-    txDetails?: Truffle.TransactionDetails
-  ): Promise<{ 0: { avatar: string; nickname: string }[]; 1: BN }>;
-
-  setFollow: {
-    (
-      target_user: string,
-      is_follow: boolean,
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<Truffle.TransactionResponse<AllEvents>>;
-    call(
-      target_user: string,
-      is_follow: boolean,
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<void>;
+  updateAvatar: {
+    (avatar: string, txDetails?: Truffle.TransactionDetails): Promise<
+      Truffle.TransactionResponse<AllEvents>
+    >;
+    call(avatar: string, txDetails?: Truffle.TransactionDetails): Promise<void>;
     sendTransaction(
-      target_user: string,
-      is_follow: boolean,
+      avatar: string,
       txDetails?: Truffle.TransactionDetails
     ): Promise<string>;
     estimateGas(
-      target_user: string,
-      is_follow: boolean,
+      avatar: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<number>;
+  };
+
+  updateNickname: {
+    (nickname: string, txDetails?: Truffle.TransactionDetails): Promise<
+      Truffle.TransactionResponse<AllEvents>
+    >;
+    call(
+      nickname: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<void>;
+    sendTransaction(
+      nickname: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<string>;
+    estimateGas(
+      nickname: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<number>;
+  };
+
+  updateSignature: {
+    (signature: string, txDetails?: Truffle.TransactionDetails): Promise<
+      Truffle.TransactionResponse<AllEvents>
+    >;
+    call(
+      signature: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<void>;
+    sendTransaction(
+      signature: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<string>;
+    estimateGas(
+      signature: string,
       txDetails?: Truffle.TransactionDetails
     ): Promise<number>;
   };
 
   methods: {
     admin(txDetails?: Truffle.TransactionDetails): Promise<string>;
+
+    renounceAdmin: {
+      (txDetails?: Truffle.TransactionDetails): Promise<
+        Truffle.TransactionResponse<AllEvents>
+      >;
+      call(txDetails?: Truffle.TransactionDetails): Promise<void>;
+      sendTransaction(txDetails?: Truffle.TransactionDetails): Promise<string>;
+      estimateGas(txDetails?: Truffle.TransactionDetails): Promise<number>;
+    };
+
+    transferAdmin: {
+      (new_admin: string, txDetails?: Truffle.TransactionDetails): Promise<
+        Truffle.TransactionResponse<AllEvents>
+      >;
+      call(
+        new_admin: string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<void>;
+      sendTransaction(
+        new_admin: string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<string>;
+      estimateGas(
+        new_admin: string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<number>;
+    };
 
     register: {
       (nickname: string, txDetails?: Truffle.TransactionDetails): Promise<
@@ -118,17 +180,7 @@ export interface UserContractInstance extends Truffle.ContractInstance {
       call(
         nickname: string,
         txDetails?: Truffle.TransactionDetails
-      ): Promise<{
-        avatar: string;
-        nickname: string;
-        signature: string;
-        login_timestamp: BN;
-        following_num: BN;
-        follower_num: BN;
-        ID: BN;
-        major: string;
-        heart: BN;
-      }>;
+      ): Promise<void>;
       sendTransaction(
         nickname: string,
         txDetails?: Truffle.TransactionDetails
@@ -147,59 +199,70 @@ export interface UserContractInstance extends Truffle.ContractInstance {
     getSelfInfo(
       txDetails?: Truffle.TransactionDetails
     ): Promise<{
-      avatar: string;
-      nickname: string;
-      signature: string;
-      login_timestamp: BN;
-      following_num: BN;
-      follower_num: BN;
       ID: BN;
-      major: string;
+      coins: BN;
       heart: BN;
-    }>;
-
-    getUserInfo(
-      user_address: string,
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<{
+      experience: BN;
+      follower_num: BN;
+      following_num: BN;
+      login_timestamp: BN;
+      uploaded_file_num: BN;
+      major: string;
       avatar: string;
       nickname: string;
       signature: string;
-      login_timestamp: BN;
-      following_num: BN;
-      follower_num: BN;
-      heart: BN;
     }>;
 
-    getFollowings(
-      cursor: string,
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<{ 0: { avatar: string; nickname: string }[]; 1: BN }>;
-
-    getFollowers(
-      cursor: string,
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<{ 0: { avatar: string; nickname: string }[]; 1: BN }>;
-
-    setFollow: {
-      (
-        target_user: string,
-        is_follow: boolean,
-        txDetails?: Truffle.TransactionDetails
-      ): Promise<Truffle.TransactionResponse<AllEvents>>;
+    updateAvatar: {
+      (avatar: string, txDetails?: Truffle.TransactionDetails): Promise<
+        Truffle.TransactionResponse<AllEvents>
+      >;
       call(
-        target_user: string,
-        is_follow: boolean,
+        avatar: string,
         txDetails?: Truffle.TransactionDetails
       ): Promise<void>;
       sendTransaction(
-        target_user: string,
-        is_follow: boolean,
+        avatar: string,
         txDetails?: Truffle.TransactionDetails
       ): Promise<string>;
       estimateGas(
-        target_user: string,
-        is_follow: boolean,
+        avatar: string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<number>;
+    };
+
+    updateNickname: {
+      (nickname: string, txDetails?: Truffle.TransactionDetails): Promise<
+        Truffle.TransactionResponse<AllEvents>
+      >;
+      call(
+        nickname: string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<void>;
+      sendTransaction(
+        nickname: string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<string>;
+      estimateGas(
+        nickname: string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<number>;
+    };
+
+    updateSignature: {
+      (signature: string, txDetails?: Truffle.TransactionDetails): Promise<
+        Truffle.TransactionResponse<AllEvents>
+      >;
+      call(
+        signature: string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<void>;
+      sendTransaction(
+        signature: string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<string>;
+      estimateGas(
+        signature: string,
         txDetails?: Truffle.TransactionDetails
       ): Promise<number>;
     };

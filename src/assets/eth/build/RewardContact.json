@@ -1,0 +1,199 @@
+{
+  "contractName": "RewardContact",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "old_admin",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "new_admin",
+          "type": "address"
+        }
+      ],
+      "name": "AdminTransferred",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "admin",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "renounceAdmin",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "new_admin",
+          "type": "address"
+        }
+      ],
+      "name": "transferAdmin",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.19+commit.7dd6d404\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"old_admin\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"new_admin\",\"type\":\"address\"}],\"name\":\"AdminTransferred\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"admin\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceAdmin\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"new_admin\",\"type\":\"address\"}],\"name\":\"transferAdmin\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/src/assets/eth/contracts/implementations/Reward.sol\":\"RewardContact\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/src/assets/eth/contracts/implementations/Reward.sol\":{\"keccak256\":\"0xb2c36a8350dc87e80fd9907be24bade27a0c39c9ac79b544b24fcda8441ef66d\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://4f34f1a5d5fca67e933293fc5268958d6f93af48a656970cfe277ac604bc31ce\",\"dweb:/ipfs/Qmb9CAq6uaHfH9mFuk2kPqfguQ7UQpRmzqGrrBzywRyRnW\"]},\"project:/src/assets/eth/contracts/implementations/base/Admin.sol\":{\"keccak256\":\"0x18b0bb276441a44343571f85e14ae623d91a093dc5093144292cdcfa536e147c\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://6d0ea147167292aba7ef5f239e1c169a82c16d20694496ee267177fc6166dce6\",\"dweb:/ipfs/QmZMVeaahCA4qFRN51hgGrtH6BU2JrXNN4Ew8JeM74StMv\"]},\"project:/src/assets/eth/contracts/implementations/base/Base.sol\":{\"keccak256\":\"0x057a8913ae6196e74c14b1f36a4868a84f4c42a1abf598fd8de91586131ed20c\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://0b9946878caa98dd5b1f3f051bd715035eac428bc56aac0dd12d3d952fccf4db\",\"dweb:/ipfs/QmSjwxFs6Gtmtj84AEASqggQWjTQ8PFivSGLm4x9HzKrLM\"]},\"project:/src/assets/eth/contracts/implementations/base/Store.sol\":{\"keccak256\":\"0xd7b988d0160726d30ac75ce07c4293e385915ab887f529bf9b8df9c75ba8c66e\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://d7aa90c4730a50d8850ad847a68ab3449588d35dbdd6da6b2139a2b8fb14869a\",\"dweb:/ipfs/QmPrbrefaV8ocHK8Xf4PX3wNviquaKLFCbt7HU2CUr9Jne\"]},\"project:/src/assets/eth/contracts/utils/AddressLinkedList.sol\":{\"keccak256\":\"0xad95a257810b7cd38d1b307d747d10b3467bb5320bdcf7531910d994851c855d\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://0a42ef438d55fd39c3543d83319e87a4ef59188861dc91e2ec7d0769bbffbe32\",\"dweb:/ipfs/Qmc2UTFUxyU8RNcdfC4ny86NfXmzZfcDo48mrCnm3z7D3z\"]},\"project:/src/assets/eth/contracts/utils/AddressOrderedMap.sol\":{\"keccak256\":\"0xba4cd020dd75b1a4808617c6e71e5a201aedd843710769874779e727b9d8bdfa\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://07c0029577e7bd5c0d9c677612700e47107852c2d74261c3b2bf13596a94a6da\",\"dweb:/ipfs/QmPrBReuvKe7ecuGkFqCNf7m6NWzrW7p1wf7qME6Nt7vps\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "//SPDX-License-Identifier: GPL-3.0\r\npragma solidity ^0.8.17;\r\n\r\nimport \"./base/Base.sol\";\r\n\r\ninterface RewardInterface {\r\n\r\n}\r\n\r\nabstract contract RewardContact is BaseContact {\r\n\r\n}\r\n",
+  "sourcePath": "F:\\OurChain\\OurShare\\src\\assets\\eth\\contracts\\implementations\\Reward.sol",
+  "ast": {
+    "absolutePath": "project:/src/assets/eth/contracts/implementations/Reward.sol",
+    "exportedSymbols": {
+      "AddressLinkedList": [
+        2103
+      ],
+      "AddressOrderedMap": [
+        2642
+      ],
+      "AdminContract": [
+        773
+      ],
+      "AdminInterface": [
+        698
+      ],
+      "BaseContact": [
+        825
+      ],
+      "RewardContact": [
+        293
+      ],
+      "RewardInterface": [
+        290
+      ],
+      "StoreContact": [
+        1166
+      ]
+    },
+    "id": 294,
+    "license": "GPL-3.0",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 288,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".17"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "36:24:2"
+      },
+      {
+        "absolutePath": "project:/src/assets/eth/contracts/implementations/base/Base.sol",
+        "file": "./base/Base.sol",
+        "id": 289,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 294,
+        "sourceUnit": 826,
+        "src": "64:25:2",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "RewardInterface",
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "fullyImplemented": true,
+        "id": 290,
+        "linearizedBaseContracts": [
+          290
+        ],
+        "name": "RewardInterface",
+        "nameLocation": "103:15:2",
+        "nodeType": "ContractDefinition",
+        "nodes": [],
+        "scope": 294,
+        "src": "93:32:2",
+        "usedErrors": []
+      },
+      {
+        "abstract": true,
+        "baseContracts": [
+          {
+            "baseName": {
+              "id": 291,
+              "name": "BaseContact",
+              "nameLocations": [
+                "164:11:2"
+              ],
+              "nodeType": "IdentifierPath",
+              "referencedDeclaration": 825,
+              "src": "164:11:2"
+            },
+            "id": 292,
+            "nodeType": "InheritanceSpecifier",
+            "src": "164:11:2"
+          }
+        ],
+        "canonicalName": "RewardContact",
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "fullyImplemented": true,
+        "id": 293,
+        "linearizedBaseContracts": [
+          293,
+          825,
+          1166,
+          773
+        ],
+        "name": "RewardContact",
+        "nameLocation": "147:13:2",
+        "nodeType": "ContractDefinition",
+        "nodes": [],
+        "scope": 294,
+        "src": "129:53:2",
+        "usedErrors": []
+      }
+    ],
+    "src": "36:148:2"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.19+commit.7dd6d404.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.13",
+  "updatedAt": "2023-05-10T08:36:39.776Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}

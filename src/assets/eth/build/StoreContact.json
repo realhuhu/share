@@ -1,0 +1,4437 @@
+{
+  "contractName": "StoreContact",
+  "abi": [],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.19+commit.7dd6d404\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/src/assets/eth/contracts/implementations/base/Store.sol\":\"StoreContact\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/src/assets/eth/contracts/implementations/base/Store.sol\":{\"keccak256\":\"0xd7b988d0160726d30ac75ce07c4293e385915ab887f529bf9b8df9c75ba8c66e\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://d7aa90c4730a50d8850ad847a68ab3449588d35dbdd6da6b2139a2b8fb14869a\",\"dweb:/ipfs/QmPrbrefaV8ocHK8Xf4PX3wNviquaKLFCbt7HU2CUr9Jne\"]},\"project:/src/assets/eth/contracts/utils/AddressLinkedList.sol\":{\"keccak256\":\"0xad95a257810b7cd38d1b307d747d10b3467bb5320bdcf7531910d994851c855d\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://0a42ef438d55fd39c3543d83319e87a4ef59188861dc91e2ec7d0769bbffbe32\",\"dweb:/ipfs/Qmc2UTFUxyU8RNcdfC4ny86NfXmzZfcDo48mrCnm3z7D3z\"]},\"project:/src/assets/eth/contracts/utils/AddressOrderedMap.sol\":{\"keccak256\":\"0xba4cd020dd75b1a4808617c6e71e5a201aedd843710769874779e727b9d8bdfa\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://07c0029577e7bd5c0d9c677612700e47107852c2d74261c3b2bf13596a94a6da\",\"dweb:/ipfs/QmPrBReuvKe7ecuGkFqCNf7m6NWzrW7p1wf7qME6Nt7vps\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "// SPDX-License-Identifier: GPL-3.0\r\npragma solidity ^0.8.17;\r\n\r\nimport \"../../utils/AddressLinkedList.sol\";\r\nimport \"../../utils/AddressOrderedMap.sol\";\r\n\r\n\r\nabstract contract StoreContact {\r\n    using AddressLinkedList for AddressLinkedList.T;\r\n    using AddressOrderedMap for AddressOrderedMap.T;\r\n\r\n    /* 用户相关模型 */\r\n    //用户全部信息\r\n    struct UserInfo {\r\n        uint ID;//校园卡ID\r\n        uint pits;//坑位数\r\n        uint coins;//硬币数\r\n        uint heart;//热心值\r\n        uint experience;//经验值\r\n        uint login_timestamp;//注册时间\r\n\r\n        string major;//专业\r\n        string avatar;//头像\r\n        string nickname;//昵称\r\n        string signature;//简介\r\n\r\n        AddressLinkedList.T medals;//获得的勋章\r\n        AddressLinkedList.T rewards;//我的悬赏\r\n        AddressLinkedList.T comments;//我的评论\r\n        AddressLinkedList.T followers;//我的粉丝\r\n        AddressLinkedList.T followings;//我的关注\r\n        AddressOrderedMap.T up_messages;//我的悬赏或评论被点赞消息\r\n        AddressLinkedList.T marked_rewards;//我关注的悬赏\r\n        AddressLinkedList.T uploaded_files;//已上传的文件\r\n        AddressOrderedMap.T reply_messages;//我的悬赏或评论被回复消息\r\n        AddressLinkedList.T purchased_files;//已购买的文件\r\n        AddressOrderedMap.T following_upload_messages;//我的关注上传文件消息\r\n        AddressOrderedMap.T marked_reward_solved_messages;//关注的悬赏被解决消息\r\n    }\r\n\r\n    //个人信息摘要\r\n    struct UserSelfInfo {\r\n        uint ID;//校园卡ID\r\n        uint coins;//硬币数\r\n        uint heart;//热心值\r\n        uint experience;//经验值\r\n        uint follower_num;//粉丝数\r\n        uint following_num;//关注数\r\n        uint login_timestamp;//注册时间\r\n        uint uploaded_file_num;//我上传的文件数\r\n\r\n        string major;//专业\r\n        string avatar;//头像\r\n        string nickname;//用户名\r\n        string signature;//简介\r\n    }\r\n\r\n    //其他用户信息\r\n    struct UserBriefInfo {\r\n        string avatar;//头像\r\n        string nickname;//用户名\r\n        string signature;//简介\r\n        uint experience;//经验值\r\n        uint login_timestamp;//登录时间\r\n        uint follower_num;//粉丝数\r\n        uint medal_num;//勋章数\r\n        string major;//专业\r\n        uint heart;//热心值\r\n    }\r\n\r\n    //卡片用户信息\r\n    struct UserSimpleInfo {\r\n        string avatar;//头像\r\n        string nickname;//用户名\r\n        string signature;//简介\r\n        uint experience;//经验值\r\n        uint follower_num;//粉丝数\r\n        string major;//专业\r\n        uint heart;//热心值\r\n    }\r\n\r\n    //用户表\r\n    struct UserStore {\r\n        AddressLinkedList.T user_index;//用户地址\r\n        mapping(address => UserInfo) user_info;//用户信息\r\n\r\n        AddressOrderedMap.T _user_by_heart;//热心值索引\r\n        AddressOrderedMap.T _user_by_follower_num;//粉丝数索引\r\n        AddressOrderedMap.T _user_by_medal_num;//奖牌数索引\r\n    }\r\n\r\n    UserStore users;//所有用户\r\n\r\n    /* 文件相关模型 */\r\n    //文件全部信息\r\n    struct File {\r\n        address ipfs_address;//ipfs 地址\r\n        address owner;//上传者\r\n        string title;//标题\r\n        string description;//描述\r\n        bytes[][3] images;//图片\r\n        uint upload_timestamp;//上传时间\r\n        uint price;//价格\r\n        mapping(address => bool) buyers;//已购买的用户\r\n        uint buyer_num;//购买量\r\n    }\r\n\r\n    //文件表\r\n    struct FileStore {\r\n        AddressLinkedList.T file_index;//文件地址\r\n        mapping(address => File) file_info;//文件信息\r\n\r\n        AddressOrderedMap.T _file_by_price;//价格索引\r\n        AddressOrderedMap.T _file_by_buyer_num;//购买量索引\r\n    }\r\n\r\n    FileStore files;//所有文件\r\n\r\n    /* 悬赏相关模型 */\r\n    //悬赏全部信息\r\n    struct Reward {\r\n        address author;//作者\r\n        string title;//标题\r\n        string description;//描述\r\n        string content;//内容\r\n        bytes[][3] images;//图片\r\n        uint create_timestamp;//上传时间\r\n        uint update_timestamp;//更新时间\r\n        uint remuneration;//酬金\r\n        uint view_num;//浏览次数\r\n        uint up_num;//点赞次数\r\n        uint down_num;//点踩次数\r\n        address approved_comment;//被采纳的评论\r\n        AddressLinkedList.T comment_index;//评论地址\r\n        mapping(address => Comment) comment_info;//评论信息\r\n        AddressOrderedMap.T _comments_by_up_num;//评论按点赞排序\r\n    }\r\n\r\n    //评论\r\n    struct Comment {\r\n        address author;//作者\r\n        string content;//内容\r\n        bytes[][3] images;//图片\r\n        uint comment_timestamp;//评论时间\r\n        uint up_num;//点赞次数\r\n        uint down_num;//点踩次数\r\n        AddressLinkedList.T sub_comment_index;//子评论\r\n    }\r\n\r\n    //子评论\r\n    struct SubComment {\r\n        address author;//作者\r\n        string content;//内容\r\n        uint comment_timestamp;//评论时间\r\n        address target;//被回复的子评论\r\n        uint up_num;//点赞次数\r\n        uint down_num;//点踩次数\r\n    }\r\n\r\n    //悬赏表\r\n    struct RewardStore {\r\n        AddressLinkedList.T reward_index;//悬赏地址\r\n        mapping(address => Reward) reward_info;//悬赏信息\r\n\r\n        AddressOrderedMap.T _reward_by_update_timestamp;//悬赏按更新时间排序\r\n        AddressOrderedMap.T _reward_by_view_num;//悬赏按浏览人数排序\r\n        AddressOrderedMap.T _reward_by_up_num;//悬赏按点赞数排序\r\n        AddressOrderedMap.T _reward_by_comment_num;//悬赏按评论数排序\r\n    }\r\n\r\n    RewardStore rewards;//所有悬赏\r\n\r\n    /* 消息模型 */\r\n    //关注用户上传文件\r\n    struct FollowingUploadMessage {\r\n        address user;//上传者\r\n        address file;//文件地址\r\n    }\r\n\r\n    //关注的悬赏被解决\r\n    struct MarkedRewardSolvedMessage {\r\n        address user;//评论者\r\n        address reward;//所属悬赏\r\n        address comment;//所属评论\r\n    }\r\n\r\n    //悬赏或评论被回复\r\n    struct ReplyMessage {\r\n        address user;//评论者\r\n        uint target_type;//评论类型 0:悬赏 1:评论\r\n        address reward;//所属悬赏\r\n        address comment;//所属评论\r\n    }\r\n\r\n    //悬赏或评论被点赞\r\n    struct UpMessage {\r\n        address user;//点赞者\r\n        uint target_type;//点赞类型 0:悬赏 1:评论\r\n        address reward;//所属悬赏\r\n        address comment;//所属评论\r\n    }\r\n\r\n    //消息表\r\n    struct MessageStore {\r\n        mapping(address => FollowingUploadMessage) following_upload;//上传文件消息\r\n        mapping(address => MarkedRewardSolvedMessage) marked_reward_solved;//悬赏被解决消息\r\n        mapping(address => ReplyMessage) reply;//悬赏或评论被回复消息\r\n        mapping(address => UpMessage) up;//悬赏或评论被点赞消息\r\n    }\r\n\r\n    MessageStore messages;//所有消息\r\n}\r\n",
+  "sourcePath": "F:\\OurChain\\OurShare\\src\\assets\\eth\\contracts\\implementations\\base\\Store.sol",
+  "ast": {
+    "absolutePath": "project:/src/assets/eth/contracts/implementations/base/Store.sol",
+    "exportedSymbols": {
+      "AddressLinkedList": [
+        2103
+      ],
+      "AddressOrderedMap": [
+        2642
+      ],
+      "StoreContact": [
+        1166
+      ]
+    },
+    "id": 1167,
+    "license": "GPL-3.0",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 827,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".17"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "37:24:6"
+      },
+      {
+        "absolutePath": "project:/src/assets/eth/contracts/utils/AddressLinkedList.sol",
+        "file": "../../utils/AddressLinkedList.sol",
+        "id": 828,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 1167,
+        "sourceUnit": 2104,
+        "src": "65:43:6",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "project:/src/assets/eth/contracts/utils/AddressOrderedMap.sol",
+        "file": "../../utils/AddressOrderedMap.sol",
+        "id": 829,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 1167,
+        "sourceUnit": 2643,
+        "src": "110:43:6",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": true,
+        "baseContracts": [],
+        "canonicalName": "StoreContact",
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "fullyImplemented": true,
+        "id": 1166,
+        "linearizedBaseContracts": [
+          1166
+        ],
+        "name": "StoreContact",
+        "nameLocation": "177:12:6",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "global": false,
+            "id": 833,
+            "libraryName": {
+              "id": 830,
+              "name": "AddressLinkedList",
+              "nameLocations": [
+                "203:17:6"
+              ],
+              "nodeType": "IdentifierPath",
+              "referencedDeclaration": 2103,
+              "src": "203:17:6"
+            },
+            "nodeType": "UsingForDirective",
+            "src": "197:48:6",
+            "typeName": {
+              "id": 832,
+              "nodeType": "UserDefinedTypeName",
+              "pathNode": {
+                "id": 831,
+                "name": "AddressLinkedList.T",
+                "nameLocations": [
+                  "225:17:6",
+                  "243:1:6"
+                ],
+                "nodeType": "IdentifierPath",
+                "referencedDeclaration": 1181,
+                "src": "225:19:6"
+              },
+              "referencedDeclaration": 1181,
+              "src": "225:19:6",
+              "typeDescriptions": {
+                "typeIdentifier": "t_struct$_T_$1181_storage_ptr",
+                "typeString": "struct AddressLinkedList.T"
+              }
+            }
+          },
+          {
+            "global": false,
+            "id": 837,
+            "libraryName": {
+              "id": 834,
+              "name": "AddressOrderedMap",
+              "nameLocations": [
+                "257:17:6"
+              ],
+              "nodeType": "IdentifierPath",
+              "referencedDeclaration": 2642,
+              "src": "257:17:6"
+            },
+            "nodeType": "UsingForDirective",
+            "src": "251:48:6",
+            "typeName": {
+              "id": 836,
+              "nodeType": "UserDefinedTypeName",
+              "pathNode": {
+                "id": 835,
+                "name": "AddressOrderedMap.T",
+                "nameLocations": [
+                  "279:17:6",
+                  "297:1:6"
+                ],
+                "nodeType": "IdentifierPath",
+                "referencedDeclaration": 2118,
+                "src": "279:19:6"
+              },
+              "referencedDeclaration": 2118,
+              "src": "279:19:6",
+              "typeDescriptions": {
+                "typeIdentifier": "t_struct$_T_$2118_storage_ptr",
+                "typeString": "struct AddressOrderedMap.T"
+              }
+            }
+          },
+          {
+            "canonicalName": "StoreContact.UserInfo",
+            "id": 894,
+            "members": [
+              {
+                "constant": false,
+                "id": 839,
+                "mutability": "mutable",
+                "name": "ID",
+                "nameLocation": "395:2:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 894,
+                "src": "390:7:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 838,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "390:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 841,
+                "mutability": "mutable",
+                "name": "pits",
+                "nameLocation": "426:4:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 894,
+                "src": "421:9:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 840,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "421:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 843,
+                "mutability": "mutable",
+                "name": "coins",
+                "nameLocation": "457:5:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 894,
+                "src": "452:10:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 842,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "452:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 845,
+                "mutability": "mutable",
+                "name": "heart",
+                "nameLocation": "489:5:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 894,
+                "src": "484:10:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 844,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "484:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 847,
+                "mutability": "mutable",
+                "name": "experience",
+                "nameLocation": "521:10:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 894,
+                "src": "516:15:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 846,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "516:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 849,
+                "mutability": "mutable",
+                "name": "login_timestamp",
+                "nameLocation": "558:15:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 894,
+                "src": "553:20:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 848,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "553:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 851,
+                "mutability": "mutable",
+                "name": "major",
+                "nameLocation": "607:5:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 894,
+                "src": "600:12:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 850,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "600:6:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 853,
+                "mutability": "mutable",
+                "name": "avatar",
+                "nameLocation": "638:6:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 894,
+                "src": "631:13:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 852,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "631:6:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 855,
+                "mutability": "mutable",
+                "name": "nickname",
+                "nameLocation": "670:8:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 894,
+                "src": "663:15:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 854,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "663:6:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 857,
+                "mutability": "mutable",
+                "name": "signature",
+                "nameLocation": "704:9:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 894,
+                "src": "697:16:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 856,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "697:6:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 860,
+                "mutability": "mutable",
+                "name": "medals",
+                "nameLocation": "754:6:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 894,
+                "src": "734:26:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_T_$1181_storage_ptr",
+                  "typeString": "struct AddressLinkedList.T"
+                },
+                "typeName": {
+                  "id": 859,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 858,
+                    "name": "AddressLinkedList.T",
+                    "nameLocations": [
+                      "734:17:6",
+                      "752:1:6"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 1181,
+                    "src": "734:19:6"
+                  },
+                  "referencedDeclaration": 1181,
+                  "src": "734:19:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_T_$1181_storage_ptr",
+                    "typeString": "struct AddressLinkedList.T"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 863,
+                "mutability": "mutable",
+                "name": "rewards",
+                "nameLocation": "808:7:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 894,
+                "src": "788:27:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_T_$1181_storage_ptr",
+                  "typeString": "struct AddressLinkedList.T"
+                },
+                "typeName": {
+                  "id": 862,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 861,
+                    "name": "AddressLinkedList.T",
+                    "nameLocations": [
+                      "788:17:6",
+                      "806:1:6"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 1181,
+                    "src": "788:19:6"
+                  },
+                  "referencedDeclaration": 1181,
+                  "src": "788:19:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_T_$1181_storage_ptr",
+                    "typeString": "struct AddressLinkedList.T"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 866,
+                "mutability": "mutable",
+                "name": "comments",
+                "nameLocation": "860:8:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 894,
+                "src": "840:28:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_T_$1181_storage_ptr",
+                  "typeString": "struct AddressLinkedList.T"
+                },
+                "typeName": {
+                  "id": 865,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 864,
+                    "name": "AddressLinkedList.T",
+                    "nameLocations": [
+                      "840:17:6",
+                      "858:1:6"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 1181,
+                    "src": "840:19:6"
+                  },
+                  "referencedDeclaration": 1181,
+                  "src": "840:19:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_T_$1181_storage_ptr",
+                    "typeString": "struct AddressLinkedList.T"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 869,
+                "mutability": "mutable",
+                "name": "followers",
+                "nameLocation": "913:9:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 894,
+                "src": "893:29:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_T_$1181_storage_ptr",
+                  "typeString": "struct AddressLinkedList.T"
+                },
+                "typeName": {
+                  "id": 868,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 867,
+                    "name": "AddressLinkedList.T",
+                    "nameLocations": [
+                      "893:17:6",
+                      "911:1:6"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 1181,
+                    "src": "893:19:6"
+                  },
+                  "referencedDeclaration": 1181,
+                  "src": "893:19:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_T_$1181_storage_ptr",
+                    "typeString": "struct AddressLinkedList.T"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 872,
+                "mutability": "mutable",
+                "name": "followings",
+                "nameLocation": "967:10:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 894,
+                "src": "947:30:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_T_$1181_storage_ptr",
+                  "typeString": "struct AddressLinkedList.T"
+                },
+                "typeName": {
+                  "id": 871,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 870,
+                    "name": "AddressLinkedList.T",
+                    "nameLocations": [
+                      "947:17:6",
+                      "965:1:6"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 1181,
+                    "src": "947:19:6"
+                  },
+                  "referencedDeclaration": 1181,
+                  "src": "947:19:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_T_$1181_storage_ptr",
+                    "typeString": "struct AddressLinkedList.T"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 875,
+                "mutability": "mutable",
+                "name": "up_messages",
+                "nameLocation": "1022:11:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 894,
+                "src": "1002:31:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_T_$2118_storage_ptr",
+                  "typeString": "struct AddressOrderedMap.T"
+                },
+                "typeName": {
+                  "id": 874,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 873,
+                    "name": "AddressOrderedMap.T",
+                    "nameLocations": [
+                      "1002:17:6",
+                      "1020:1:6"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 2118,
+                    "src": "1002:19:6"
+                  },
+                  "referencedDeclaration": 2118,
+                  "src": "1002:19:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_T_$2118_storage_ptr",
+                    "typeString": "struct AddressOrderedMap.T"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 878,
+                "mutability": "mutable",
+                "name": "marked_rewards",
+                "nameLocation": "1102:14:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 894,
+                "src": "1082:34:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_T_$1181_storage_ptr",
+                  "typeString": "struct AddressLinkedList.T"
+                },
+                "typeName": {
+                  "id": 877,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 876,
+                    "name": "AddressLinkedList.T",
+                    "nameLocations": [
+                      "1082:17:6",
+                      "1100:1:6"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 1181,
+                    "src": "1082:19:6"
+                  },
+                  "referencedDeclaration": 1181,
+                  "src": "1082:19:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_T_$1181_storage_ptr",
+                    "typeString": "struct AddressLinkedList.T"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 881,
+                "mutability": "mutable",
+                "name": "uploaded_files",
+                "nameLocation": "1167:14:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 894,
+                "src": "1147:34:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_T_$1181_storage_ptr",
+                  "typeString": "struct AddressLinkedList.T"
+                },
+                "typeName": {
+                  "id": 880,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 879,
+                    "name": "AddressLinkedList.T",
+                    "nameLocations": [
+                      "1147:17:6",
+                      "1165:1:6"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 1181,
+                    "src": "1147:19:6"
+                  },
+                  "referencedDeclaration": 1181,
+                  "src": "1147:19:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_T_$1181_storage_ptr",
+                    "typeString": "struct AddressLinkedList.T"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 884,
+                "mutability": "mutable",
+                "name": "reply_messages",
+                "nameLocation": "1232:14:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 894,
+                "src": "1212:34:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_T_$2118_storage_ptr",
+                  "typeString": "struct AddressOrderedMap.T"
+                },
+                "typeName": {
+                  "id": 883,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 882,
+                    "name": "AddressOrderedMap.T",
+                    "nameLocations": [
+                      "1212:17:6",
+                      "1230:1:6"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 2118,
+                    "src": "1212:19:6"
+                  },
+                  "referencedDeclaration": 2118,
+                  "src": "1212:19:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_T_$2118_storage_ptr",
+                    "typeString": "struct AddressOrderedMap.T"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 887,
+                "mutability": "mutable",
+                "name": "purchased_files",
+                "nameLocation": "1315:15:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 894,
+                "src": "1295:35:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_T_$1181_storage_ptr",
+                  "typeString": "struct AddressLinkedList.T"
+                },
+                "typeName": {
+                  "id": 886,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 885,
+                    "name": "AddressLinkedList.T",
+                    "nameLocations": [
+                      "1295:17:6",
+                      "1313:1:6"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 1181,
+                    "src": "1295:19:6"
+                  },
+                  "referencedDeclaration": 1181,
+                  "src": "1295:19:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_T_$1181_storage_ptr",
+                    "typeString": "struct AddressLinkedList.T"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 890,
+                "mutability": "mutable",
+                "name": "following_upload_messages",
+                "nameLocation": "1381:25:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 894,
+                "src": "1361:45:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_T_$2118_storage_ptr",
+                  "typeString": "struct AddressOrderedMap.T"
+                },
+                "typeName": {
+                  "id": 889,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 888,
+                    "name": "AddressOrderedMap.T",
+                    "nameLocations": [
+                      "1361:17:6",
+                      "1379:1:6"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 2118,
+                    "src": "1361:19:6"
+                  },
+                  "referencedDeclaration": 2118,
+                  "src": "1361:19:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_T_$2118_storage_ptr",
+                    "typeString": "struct AddressOrderedMap.T"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 893,
+                "mutability": "mutable",
+                "name": "marked_reward_solved_messages",
+                "nameLocation": "1469:29:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 894,
+                "src": "1449:49:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_T_$2118_storage_ptr",
+                  "typeString": "struct AddressOrderedMap.T"
+                },
+                "typeName": {
+                  "id": 892,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 891,
+                    "name": "AddressOrderedMap.T",
+                    "nameLocations": [
+                      "1449:17:6",
+                      "1467:1:6"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 2118,
+                    "src": "1449:19:6"
+                  },
+                  "referencedDeclaration": 2118,
+                  "src": "1449:19:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_T_$2118_storage_ptr",
+                    "typeString": "struct AddressOrderedMap.T"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "UserInfo",
+            "nameLocation": "370:8:6",
+            "nodeType": "StructDefinition",
+            "scope": 1166,
+            "src": "363:1175:6",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "StoreContact.UserSelfInfo",
+            "id": 919,
+            "members": [
+              {
+                "constant": false,
+                "id": 896,
+                "mutability": "mutable",
+                "name": "ID",
+                "nameLocation": "1608:2:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 919,
+                "src": "1603:7:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 895,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "1603:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 898,
+                "mutability": "mutable",
+                "name": "coins",
+                "nameLocation": "1639:5:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 919,
+                "src": "1634:10:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 897,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "1634:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 900,
+                "mutability": "mutable",
+                "name": "heart",
+                "nameLocation": "1671:5:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 919,
+                "src": "1666:10:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 899,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "1666:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 902,
+                "mutability": "mutable",
+                "name": "experience",
+                "nameLocation": "1703:10:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 919,
+                "src": "1698:15:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 901,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "1698:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 904,
+                "mutability": "mutable",
+                "name": "follower_num",
+                "nameLocation": "1740:12:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 919,
+                "src": "1735:17:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 903,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "1735:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 906,
+                "mutability": "mutable",
+                "name": "following_num",
+                "nameLocation": "1779:13:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 919,
+                "src": "1774:18:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 905,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "1774:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 908,
+                "mutability": "mutable",
+                "name": "login_timestamp",
+                "nameLocation": "1819:15:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 919,
+                "src": "1814:20:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 907,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "1814:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 910,
+                "mutability": "mutable",
+                "name": "uploaded_file_num",
+                "nameLocation": "1864:17:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 919,
+                "src": "1859:22:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 909,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "1859:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 912,
+                "mutability": "mutable",
+                "name": "major",
+                "nameLocation": "1924:5:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 919,
+                "src": "1917:12:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 911,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "1917:6:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 914,
+                "mutability": "mutable",
+                "name": "avatar",
+                "nameLocation": "1955:6:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 919,
+                "src": "1948:13:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 913,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "1948:6:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 916,
+                "mutability": "mutable",
+                "name": "nickname",
+                "nameLocation": "1987:8:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 919,
+                "src": "1980:15:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 915,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "1980:6:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 918,
+                "mutability": "mutable",
+                "name": "signature",
+                "nameLocation": "2024:9:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 919,
+                "src": "2017:16:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 917,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "2017:6:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "UserSelfInfo",
+            "nameLocation": "1579:12:6",
+            "nodeType": "StructDefinition",
+            "scope": 1166,
+            "src": "1572:477:6",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "StoreContact.UserBriefInfo",
+            "id": 938,
+            "members": [
+              {
+                "constant": false,
+                "id": 921,
+                "mutability": "mutable",
+                "name": "avatar",
+                "nameLocation": "2122:6:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 938,
+                "src": "2115:13:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 920,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "2115:6:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 923,
+                "mutability": "mutable",
+                "name": "nickname",
+                "nameLocation": "2154:8:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 938,
+                "src": "2147:15:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 922,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "2147:6:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 925,
+                "mutability": "mutable",
+                "name": "signature",
+                "nameLocation": "2191:9:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 938,
+                "src": "2184:16:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 924,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "2184:6:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 927,
+                "mutability": "mutable",
+                "name": "experience",
+                "nameLocation": "2224:10:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 938,
+                "src": "2219:15:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 926,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "2219:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 929,
+                "mutability": "mutable",
+                "name": "login_timestamp",
+                "nameLocation": "2261:15:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 938,
+                "src": "2256:20:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 928,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "2256:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 931,
+                "mutability": "mutable",
+                "name": "follower_num",
+                "nameLocation": "2306:12:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 938,
+                "src": "2301:17:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 930,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "2301:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 933,
+                "mutability": "mutable",
+                "name": "medal_num",
+                "nameLocation": "2345:9:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 938,
+                "src": "2340:14:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 932,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "2340:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 935,
+                "mutability": "mutable",
+                "name": "major",
+                "nameLocation": "2383:5:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 938,
+                "src": "2376:12:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 934,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "2376:6:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 937,
+                "mutability": "mutable",
+                "name": "heart",
+                "nameLocation": "2412:5:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 938,
+                "src": "2407:10:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 936,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "2407:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "UserBriefInfo",
+            "nameLocation": "2090:13:6",
+            "nodeType": "StructDefinition",
+            "scope": 1166,
+            "src": "2083:353:6",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "StoreContact.UserSimpleInfo",
+            "id": 953,
+            "members": [
+              {
+                "constant": false,
+                "id": 940,
+                "mutability": "mutable",
+                "name": "avatar",
+                "nameLocation": "2510:6:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 953,
+                "src": "2503:13:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 939,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "2503:6:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 942,
+                "mutability": "mutable",
+                "name": "nickname",
+                "nameLocation": "2542:8:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 953,
+                "src": "2535:15:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 941,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "2535:6:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 944,
+                "mutability": "mutable",
+                "name": "signature",
+                "nameLocation": "2579:9:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 953,
+                "src": "2572:16:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 943,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "2572:6:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 946,
+                "mutability": "mutable",
+                "name": "experience",
+                "nameLocation": "2612:10:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 953,
+                "src": "2607:15:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 945,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "2607:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 948,
+                "mutability": "mutable",
+                "name": "follower_num",
+                "nameLocation": "2649:12:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 953,
+                "src": "2644:17:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 947,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "2644:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 950,
+                "mutability": "mutable",
+                "name": "major",
+                "nameLocation": "2690:5:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 953,
+                "src": "2683:12:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 949,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "2683:6:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 952,
+                "mutability": "mutable",
+                "name": "heart",
+                "nameLocation": "2719:5:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 953,
+                "src": "2714:10:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 951,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "2714:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "UserSimpleInfo",
+            "nameLocation": "2477:14:6",
+            "nodeType": "StructDefinition",
+            "scope": 1166,
+            "src": "2470:273:6",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "StoreContact.UserStore",
+            "id": 971,
+            "members": [
+              {
+                "constant": false,
+                "id": 956,
+                "mutability": "mutable",
+                "name": "user_index",
+                "nameLocation": "2816:10:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 971,
+                "src": "2796:30:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_T_$1181_storage_ptr",
+                  "typeString": "struct AddressLinkedList.T"
+                },
+                "typeName": {
+                  "id": 955,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 954,
+                    "name": "AddressLinkedList.T",
+                    "nameLocations": [
+                      "2796:17:6",
+                      "2814:1:6"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 1181,
+                    "src": "2796:19:6"
+                  },
+                  "referencedDeclaration": 1181,
+                  "src": "2796:19:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_T_$1181_storage_ptr",
+                    "typeString": "struct AddressLinkedList.T"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 961,
+                "mutability": "mutable",
+                "name": "user_info",
+                "nameLocation": "2880:9:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 971,
+                "src": "2851:38:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_mapping$_t_address_$_t_struct$_UserInfo_$894_storage_$",
+                  "typeString": "mapping(address => struct StoreContact.UserInfo)"
+                },
+                "typeName": {
+                  "id": 960,
+                  "keyName": "",
+                  "keyNameLocation": "-1:-1:-1",
+                  "keyType": {
+                    "id": 957,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2859:7:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "nodeType": "Mapping",
+                  "src": "2851:28:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_mapping$_t_address_$_t_struct$_UserInfo_$894_storage_$",
+                    "typeString": "mapping(address => struct StoreContact.UserInfo)"
+                  },
+                  "valueName": "",
+                  "valueNameLocation": "-1:-1:-1",
+                  "valueType": {
+                    "id": 959,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 958,
+                      "name": "UserInfo",
+                      "nameLocations": [
+                        "2870:8:6"
+                      ],
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 894,
+                      "src": "2870:8:6"
+                    },
+                    "referencedDeclaration": 894,
+                    "src": "2870:8:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_UserInfo_$894_storage_ptr",
+                      "typeString": "struct StoreContact.UserInfo"
+                    }
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 964,
+                "mutability": "mutable",
+                "name": "_user_by_heart",
+                "nameLocation": "2936:14:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 971,
+                "src": "2916:34:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_T_$2118_storage_ptr",
+                  "typeString": "struct AddressOrderedMap.T"
+                },
+                "typeName": {
+                  "id": 963,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 962,
+                    "name": "AddressOrderedMap.T",
+                    "nameLocations": [
+                      "2916:17:6",
+                      "2934:1:6"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 2118,
+                    "src": "2916:19:6"
+                  },
+                  "referencedDeclaration": 2118,
+                  "src": "2916:19:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_T_$2118_storage_ptr",
+                    "typeString": "struct AddressOrderedMap.T"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 967,
+                "mutability": "mutable",
+                "name": "_user_by_follower_num",
+                "nameLocation": "2998:21:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 971,
+                "src": "2978:41:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_T_$2118_storage_ptr",
+                  "typeString": "struct AddressOrderedMap.T"
+                },
+                "typeName": {
+                  "id": 966,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 965,
+                    "name": "AddressOrderedMap.T",
+                    "nameLocations": [
+                      "2978:17:6",
+                      "2996:1:6"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 2118,
+                    "src": "2978:19:6"
+                  },
+                  "referencedDeclaration": 2118,
+                  "src": "2978:19:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_T_$2118_storage_ptr",
+                    "typeString": "struct AddressOrderedMap.T"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 970,
+                "mutability": "mutable",
+                "name": "_user_by_medal_num",
+                "nameLocation": "3067:18:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 971,
+                "src": "3047:38:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_T_$2118_storage_ptr",
+                  "typeString": "struct AddressOrderedMap.T"
+                },
+                "typeName": {
+                  "id": 969,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 968,
+                    "name": "AddressOrderedMap.T",
+                    "nameLocations": [
+                      "3047:17:6",
+                      "3065:1:6"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 2118,
+                    "src": "3047:19:6"
+                  },
+                  "referencedDeclaration": 2118,
+                  "src": "3047:19:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_T_$2118_storage_ptr",
+                    "typeString": "struct AddressOrderedMap.T"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "UserStore",
+            "nameLocation": "2775:9:6",
+            "nodeType": "StructDefinition",
+            "scope": 1166,
+            "src": "2768:342:6",
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 974,
+            "mutability": "mutable",
+            "name": "users",
+            "nameLocation": "3128:5:6",
+            "nodeType": "VariableDeclaration",
+            "scope": 1166,
+            "src": "3118:15:6",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_struct$_UserStore_$971_storage",
+              "typeString": "struct StoreContact.UserStore"
+            },
+            "typeName": {
+              "id": 973,
+              "nodeType": "UserDefinedTypeName",
+              "pathNode": {
+                "id": 972,
+                "name": "UserStore",
+                "nameLocations": [
+                  "3118:9:6"
+                ],
+                "nodeType": "IdentifierPath",
+                "referencedDeclaration": 971,
+                "src": "3118:9:6"
+              },
+              "referencedDeclaration": 971,
+              "src": "3118:9:6",
+              "typeDescriptions": {
+                "typeIdentifier": "t_struct$_UserStore_$971_storage_ptr",
+                "typeString": "struct StoreContact.UserStore"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "canonicalName": "StoreContact.File",
+            "id": 998,
+            "members": [
+              {
+                "constant": false,
+                "id": 976,
+                "mutability": "mutable",
+                "name": "ipfs_address",
+                "nameLocation": "3243:12:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 998,
+                "src": "3235:20:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 975,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "3235:7:6",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 978,
+                "mutability": "mutable",
+                "name": "owner",
+                "nameLocation": "3287:5:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 998,
+                "src": "3279:13:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 977,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "3279:7:6",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 980,
+                "mutability": "mutable",
+                "name": "title",
+                "nameLocation": "3321:5:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 998,
+                "src": "3314:12:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 979,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "3314:6:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 982,
+                "mutability": "mutable",
+                "name": "description",
+                "nameLocation": "3352:11:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 998,
+                "src": "3345:18:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 981,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "3345:6:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 987,
+                "mutability": "mutable",
+                "name": "images",
+                "nameLocation": "3393:6:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 998,
+                "src": "3382:17:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_array$_t_array$_t_bytes_storage_$dyn_storage_$3_storage_ptr",
+                  "typeString": "bytes[][3]"
+                },
+                "typeName": {
+                  "baseType": {
+                    "baseType": {
+                      "id": 983,
+                      "name": "bytes",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "3382:5:6",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bytes_storage_ptr",
+                        "typeString": "bytes"
+                      }
+                    },
+                    "id": 984,
+                    "nodeType": "ArrayTypeName",
+                    "src": "3382:7:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_bytes_storage_$dyn_storage_ptr",
+                      "typeString": "bytes[]"
+                    }
+                  },
+                  "id": 986,
+                  "length": {
+                    "hexValue": "33",
+                    "id": 985,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": true,
+                    "kind": "number",
+                    "lValueRequested": false,
+                    "nodeType": "Literal",
+                    "src": "3390:1:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_rational_3_by_1",
+                      "typeString": "int_const 3"
+                    },
+                    "value": "3"
+                  },
+                  "nodeType": "ArrayTypeName",
+                  "src": "3382:10:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_array$_t_bytes_storage_$dyn_storage_$3_storage_ptr",
+                    "typeString": "bytes[][3]"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 989,
+                "mutability": "mutable",
+                "name": "upload_timestamp",
+                "nameLocation": "3423:16:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 998,
+                "src": "3418:21:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 988,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "3418:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 991,
+                "mutability": "mutable",
+                "name": "price",
+                "nameLocation": "3469:5:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 998,
+                "src": "3464:10:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 990,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "3464:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 995,
+                "mutability": "mutable",
+                "name": "buyers",
+                "nameLocation": "3518:6:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 998,
+                "src": "3493:31:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_mapping$_t_address_$_t_bool_$",
+                  "typeString": "mapping(address => bool)"
+                },
+                "typeName": {
+                  "id": 994,
+                  "keyName": "",
+                  "keyNameLocation": "-1:-1:-1",
+                  "keyType": {
+                    "id": 992,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3501:7:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "nodeType": "Mapping",
+                  "src": "3493:24:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_mapping$_t_address_$_t_bool_$",
+                    "typeString": "mapping(address => bool)"
+                  },
+                  "valueName": "",
+                  "valueNameLocation": "-1:-1:-1",
+                  "valueType": {
+                    "id": 993,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3512:4:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 997,
+                "mutability": "mutable",
+                "name": "buyer_num",
+                "nameLocation": "3560:9:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 998,
+                "src": "3555:14:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 996,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "3555:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "File",
+            "nameLocation": "3219:4:6",
+            "nodeType": "StructDefinition",
+            "scope": 1166,
+            "src": "3212:376:6",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "StoreContact.FileStore",
+            "id": 1013,
+            "members": [
+              {
+                "constant": false,
+                "id": 1001,
+                "mutability": "mutable",
+                "name": "file_index",
+                "nameLocation": "3661:10:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1013,
+                "src": "3641:30:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_T_$1181_storage_ptr",
+                  "typeString": "struct AddressLinkedList.T"
+                },
+                "typeName": {
+                  "id": 1000,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 999,
+                    "name": "AddressLinkedList.T",
+                    "nameLocations": [
+                      "3641:17:6",
+                      "3659:1:6"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 1181,
+                    "src": "3641:19:6"
+                  },
+                  "referencedDeclaration": 1181,
+                  "src": "3641:19:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_T_$1181_storage_ptr",
+                    "typeString": "struct AddressLinkedList.T"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1006,
+                "mutability": "mutable",
+                "name": "file_info",
+                "nameLocation": "3721:9:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1013,
+                "src": "3696:34:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_mapping$_t_address_$_t_struct$_File_$998_storage_$",
+                  "typeString": "mapping(address => struct StoreContact.File)"
+                },
+                "typeName": {
+                  "id": 1005,
+                  "keyName": "",
+                  "keyNameLocation": "-1:-1:-1",
+                  "keyType": {
+                    "id": 1002,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3704:7:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "nodeType": "Mapping",
+                  "src": "3696:24:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_mapping$_t_address_$_t_struct$_File_$998_storage_$",
+                    "typeString": "mapping(address => struct StoreContact.File)"
+                  },
+                  "valueName": "",
+                  "valueNameLocation": "-1:-1:-1",
+                  "valueType": {
+                    "id": 1004,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 1003,
+                      "name": "File",
+                      "nameLocations": [
+                        "3715:4:6"
+                      ],
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 998,
+                      "src": "3715:4:6"
+                    },
+                    "referencedDeclaration": 998,
+                    "src": "3715:4:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_File_$998_storage_ptr",
+                      "typeString": "struct StoreContact.File"
+                    }
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1009,
+                "mutability": "mutable",
+                "name": "_file_by_price",
+                "nameLocation": "3777:14:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1013,
+                "src": "3757:34:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_T_$2118_storage_ptr",
+                  "typeString": "struct AddressOrderedMap.T"
+                },
+                "typeName": {
+                  "id": 1008,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 1007,
+                    "name": "AddressOrderedMap.T",
+                    "nameLocations": [
+                      "3757:17:6",
+                      "3775:1:6"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 2118,
+                    "src": "3757:19:6"
+                  },
+                  "referencedDeclaration": 2118,
+                  "src": "3757:19:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_T_$2118_storage_ptr",
+                    "typeString": "struct AddressOrderedMap.T"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1012,
+                "mutability": "mutable",
+                "name": "_file_by_buyer_num",
+                "nameLocation": "3836:18:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1013,
+                "src": "3816:38:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_T_$2118_storage_ptr",
+                  "typeString": "struct AddressOrderedMap.T"
+                },
+                "typeName": {
+                  "id": 1011,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 1010,
+                    "name": "AddressOrderedMap.T",
+                    "nameLocations": [
+                      "3816:17:6",
+                      "3834:1:6"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 2118,
+                    "src": "3816:19:6"
+                  },
+                  "referencedDeclaration": 2118,
+                  "src": "3816:19:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_T_$2118_storage_ptr",
+                    "typeString": "struct AddressOrderedMap.T"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "FileStore",
+            "nameLocation": "3620:9:6",
+            "nodeType": "StructDefinition",
+            "scope": 1166,
+            "src": "3613:266:6",
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 1016,
+            "mutability": "mutable",
+            "name": "files",
+            "nameLocation": "3897:5:6",
+            "nodeType": "VariableDeclaration",
+            "scope": 1166,
+            "src": "3887:15:6",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_struct$_FileStore_$1013_storage",
+              "typeString": "struct StoreContact.FileStore"
+            },
+            "typeName": {
+              "id": 1015,
+              "nodeType": "UserDefinedTypeName",
+              "pathNode": {
+                "id": 1014,
+                "name": "FileStore",
+                "nameLocations": [
+                  "3887:9:6"
+                ],
+                "nodeType": "IdentifierPath",
+                "referencedDeclaration": 1013,
+                "src": "3887:9:6"
+              },
+              "referencedDeclaration": 1013,
+              "src": "3887:9:6",
+              "typeDescriptions": {
+                "typeIdentifier": "t_struct$_FileStore_$1013_storage_ptr",
+                "typeString": "struct StoreContact.FileStore"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "canonicalName": "StoreContact.Reward",
+            "id": 1055,
+            "members": [
+              {
+                "constant": false,
+                "id": 1018,
+                "mutability": "mutable",
+                "name": "author",
+                "nameLocation": "4014:6:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1055,
+                "src": "4006:14:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 1017,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "4006:7:6",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1020,
+                "mutability": "mutable",
+                "name": "title",
+                "nameLocation": "4046:5:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1055,
+                "src": "4039:12:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 1019,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "4039:6:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1022,
+                "mutability": "mutable",
+                "name": "description",
+                "nameLocation": "4077:11:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1055,
+                "src": "4070:18:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 1021,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "4070:6:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1024,
+                "mutability": "mutable",
+                "name": "content",
+                "nameLocation": "4114:7:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1055,
+                "src": "4107:14:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 1023,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "4107:6:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1029,
+                "mutability": "mutable",
+                "name": "images",
+                "nameLocation": "4151:6:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1055,
+                "src": "4140:17:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_array$_t_array$_t_bytes_storage_$dyn_storage_$3_storage_ptr",
+                  "typeString": "bytes[][3]"
+                },
+                "typeName": {
+                  "baseType": {
+                    "baseType": {
+                      "id": 1025,
+                      "name": "bytes",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "4140:5:6",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bytes_storage_ptr",
+                        "typeString": "bytes"
+                      }
+                    },
+                    "id": 1026,
+                    "nodeType": "ArrayTypeName",
+                    "src": "4140:7:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_bytes_storage_$dyn_storage_ptr",
+                      "typeString": "bytes[]"
+                    }
+                  },
+                  "id": 1028,
+                  "length": {
+                    "hexValue": "33",
+                    "id": 1027,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": true,
+                    "kind": "number",
+                    "lValueRequested": false,
+                    "nodeType": "Literal",
+                    "src": "4148:1:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_rational_3_by_1",
+                      "typeString": "int_const 3"
+                    },
+                    "value": "3"
+                  },
+                  "nodeType": "ArrayTypeName",
+                  "src": "4140:10:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_array$_t_bytes_storage_$dyn_storage_$3_storage_ptr",
+                    "typeString": "bytes[][3]"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1031,
+                "mutability": "mutable",
+                "name": "create_timestamp",
+                "nameLocation": "4181:16:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1055,
+                "src": "4176:21:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1030,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "4176:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1033,
+                "mutability": "mutable",
+                "name": "update_timestamp",
+                "nameLocation": "4227:16:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1055,
+                "src": "4222:21:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1032,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "4222:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1035,
+                "mutability": "mutable",
+                "name": "remuneration",
+                "nameLocation": "4273:12:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1055,
+                "src": "4268:17:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1034,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "4268:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1037,
+                "mutability": "mutable",
+                "name": "view_num",
+                "nameLocation": "4309:8:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1055,
+                "src": "4304:13:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1036,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "4304:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1039,
+                "mutability": "mutable",
+                "name": "up_num",
+                "nameLocation": "4347:6:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1055,
+                "src": "4342:11:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1038,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "4342:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1041,
+                "mutability": "mutable",
+                "name": "down_num",
+                "nameLocation": "4383:8:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1055,
+                "src": "4378:13:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1040,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "4378:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1043,
+                "mutability": "mutable",
+                "name": "approved_comment",
+                "nameLocation": "4424:16:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1055,
+                "src": "4416:24:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 1042,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "4416:7:6",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1046,
+                "mutability": "mutable",
+                "name": "comment_index",
+                "nameLocation": "4491:13:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1055,
+                "src": "4471:33:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_T_$1181_storage_ptr",
+                  "typeString": "struct AddressLinkedList.T"
+                },
+                "typeName": {
+                  "id": 1045,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 1044,
+                    "name": "AddressLinkedList.T",
+                    "nameLocations": [
+                      "4471:17:6",
+                      "4489:1:6"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 1181,
+                    "src": "4471:19:6"
+                  },
+                  "referencedDeclaration": 1181,
+                  "src": "4471:19:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_T_$1181_storage_ptr",
+                    "typeString": "struct AddressLinkedList.T"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1051,
+                "mutability": "mutable",
+                "name": "comment_info",
+                "nameLocation": "4557:12:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1055,
+                "src": "4529:40:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Comment_$1074_storage_$",
+                  "typeString": "mapping(address => struct StoreContact.Comment)"
+                },
+                "typeName": {
+                  "id": 1050,
+                  "keyName": "",
+                  "keyNameLocation": "-1:-1:-1",
+                  "keyType": {
+                    "id": 1047,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "4537:7:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "nodeType": "Mapping",
+                  "src": "4529:27:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Comment_$1074_storage_$",
+                    "typeString": "mapping(address => struct StoreContact.Comment)"
+                  },
+                  "valueName": "",
+                  "valueNameLocation": "-1:-1:-1",
+                  "valueType": {
+                    "id": 1049,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 1048,
+                      "name": "Comment",
+                      "nameLocations": [
+                        "4548:7:6"
+                      ],
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 1074,
+                      "src": "4548:7:6"
+                    },
+                    "referencedDeclaration": 1074,
+                    "src": "4548:7:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_Comment_$1074_storage_ptr",
+                      "typeString": "struct StoreContact.Comment"
+                    }
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1054,
+                "mutability": "mutable",
+                "name": "_comments_by_up_num",
+                "nameLocation": "4614:19:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1055,
+                "src": "4594:39:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_T_$2118_storage_ptr",
+                  "typeString": "struct AddressOrderedMap.T"
+                },
+                "typeName": {
+                  "id": 1053,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 1052,
+                    "name": "AddressOrderedMap.T",
+                    "nameLocations": [
+                      "4594:17:6",
+                      "4612:1:6"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 2118,
+                    "src": "4594:19:6"
+                  },
+                  "referencedDeclaration": 2118,
+                  "src": "4594:19:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_T_$2118_storage_ptr",
+                    "typeString": "struct AddressOrderedMap.T"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "Reward",
+            "nameLocation": "3988:6:6",
+            "nodeType": "StructDefinition",
+            "scope": 1166,
+            "src": "3981:683:6",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "StoreContact.Comment",
+            "id": 1074,
+            "members": [
+              {
+                "constant": false,
+                "id": 1057,
+                "mutability": "mutable",
+                "name": "author",
+                "nameLocation": "4720:6:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1074,
+                "src": "4712:14:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 1056,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "4712:7:6",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1059,
+                "mutability": "mutable",
+                "name": "content",
+                "nameLocation": "4752:7:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1074,
+                "src": "4745:14:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 1058,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "4745:6:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1064,
+                "mutability": "mutable",
+                "name": "images",
+                "nameLocation": "4789:6:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1074,
+                "src": "4778:17:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_array$_t_array$_t_bytes_storage_$dyn_storage_$3_storage_ptr",
+                  "typeString": "bytes[][3]"
+                },
+                "typeName": {
+                  "baseType": {
+                    "baseType": {
+                      "id": 1060,
+                      "name": "bytes",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "4778:5:6",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bytes_storage_ptr",
+                        "typeString": "bytes"
+                      }
+                    },
+                    "id": 1061,
+                    "nodeType": "ArrayTypeName",
+                    "src": "4778:7:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_bytes_storage_$dyn_storage_ptr",
+                      "typeString": "bytes[]"
+                    }
+                  },
+                  "id": 1063,
+                  "length": {
+                    "hexValue": "33",
+                    "id": 1062,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": true,
+                    "kind": "number",
+                    "lValueRequested": false,
+                    "nodeType": "Literal",
+                    "src": "4786:1:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_rational_3_by_1",
+                      "typeString": "int_const 3"
+                    },
+                    "value": "3"
+                  },
+                  "nodeType": "ArrayTypeName",
+                  "src": "4778:10:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_array$_t_bytes_storage_$dyn_storage_$3_storage_ptr",
+                    "typeString": "bytes[][3]"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1066,
+                "mutability": "mutable",
+                "name": "comment_timestamp",
+                "nameLocation": "4819:17:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1074,
+                "src": "4814:22:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1065,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "4814:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1068,
+                "mutability": "mutable",
+                "name": "up_num",
+                "nameLocation": "4866:6:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1074,
+                "src": "4861:11:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1067,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "4861:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1070,
+                "mutability": "mutable",
+                "name": "down_num",
+                "nameLocation": "4902:8:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1074,
+                "src": "4897:13:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1069,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "4897:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1073,
+                "mutability": "mutable",
+                "name": "sub_comment_index",
+                "nameLocation": "4955:17:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1074,
+                "src": "4935:37:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_T_$1181_storage_ptr",
+                  "typeString": "struct AddressLinkedList.T"
+                },
+                "typeName": {
+                  "id": 1072,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 1071,
+                    "name": "AddressLinkedList.T",
+                    "nameLocations": [
+                      "4935:17:6",
+                      "4953:1:6"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 1181,
+                    "src": "4935:19:6"
+                  },
+                  "referencedDeclaration": 1181,
+                  "src": "4935:19:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_T_$1181_storage_ptr",
+                    "typeString": "struct AddressLinkedList.T"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "Comment",
+            "nameLocation": "4693:7:6",
+            "nodeType": "StructDefinition",
+            "scope": 1166,
+            "src": "4686:305:6",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "StoreContact.SubComment",
+            "id": 1087,
+            "members": [
+              {
+                "constant": false,
+                "id": 1076,
+                "mutability": "mutable",
+                "name": "author",
+                "nameLocation": "5053:6:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1087,
+                "src": "5045:14:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 1075,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "5045:7:6",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1078,
+                "mutability": "mutable",
+                "name": "content",
+                "nameLocation": "5085:7:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1087,
+                "src": "5078:14:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 1077,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "5078:6:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1080,
+                "mutability": "mutable",
+                "name": "comment_timestamp",
+                "nameLocation": "5116:17:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1087,
+                "src": "5111:22:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1079,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "5111:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1082,
+                "mutability": "mutable",
+                "name": "target",
+                "nameLocation": "5166:6:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1087,
+                "src": "5158:14:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 1081,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "5158:7:6",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1084,
+                "mutability": "mutable",
+                "name": "up_num",
+                "nameLocation": "5211:6:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1087,
+                "src": "5206:11:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1083,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "5206:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1086,
+                "mutability": "mutable",
+                "name": "down_num",
+                "nameLocation": "5247:8:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1087,
+                "src": "5242:13:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1085,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "5242:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "SubComment",
+            "nameLocation": "5023:10:6",
+            "nodeType": "StructDefinition",
+            "scope": 1166,
+            "src": "5016:261:6",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "StoreContact.RewardStore",
+            "id": 1108,
+            "members": [
+              {
+                "constant": false,
+                "id": 1090,
+                "mutability": "mutable",
+                "name": "reward_index",
+                "nameLocation": "5352:12:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1108,
+                "src": "5332:32:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_T_$1181_storage_ptr",
+                  "typeString": "struct AddressLinkedList.T"
+                },
+                "typeName": {
+                  "id": 1089,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 1088,
+                    "name": "AddressLinkedList.T",
+                    "nameLocations": [
+                      "5332:17:6",
+                      "5350:1:6"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 1181,
+                    "src": "5332:19:6"
+                  },
+                  "referencedDeclaration": 1181,
+                  "src": "5332:19:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_T_$1181_storage_ptr",
+                    "typeString": "struct AddressLinkedList.T"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1095,
+                "mutability": "mutable",
+                "name": "reward_info",
+                "nameLocation": "5416:11:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1108,
+                "src": "5389:38:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Reward_$1055_storage_$",
+                  "typeString": "mapping(address => struct StoreContact.Reward)"
+                },
+                "typeName": {
+                  "id": 1094,
+                  "keyName": "",
+                  "keyNameLocation": "-1:-1:-1",
+                  "keyType": {
+                    "id": 1091,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "5397:7:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "nodeType": "Mapping",
+                  "src": "5389:26:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Reward_$1055_storage_$",
+                    "typeString": "mapping(address => struct StoreContact.Reward)"
+                  },
+                  "valueName": "",
+                  "valueNameLocation": "-1:-1:-1",
+                  "valueType": {
+                    "id": 1093,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 1092,
+                      "name": "Reward",
+                      "nameLocations": [
+                        "5408:6:6"
+                      ],
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 1055,
+                      "src": "5408:6:6"
+                    },
+                    "referencedDeclaration": 1055,
+                    "src": "5408:6:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_Reward_$1055_storage_ptr",
+                      "typeString": "struct StoreContact.Reward"
+                    }
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1098,
+                "mutability": "mutable",
+                "name": "_reward_by_update_timestamp",
+                "nameLocation": "5474:27:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1108,
+                "src": "5454:47:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_T_$2118_storage_ptr",
+                  "typeString": "struct AddressOrderedMap.T"
+                },
+                "typeName": {
+                  "id": 1097,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 1096,
+                    "name": "AddressOrderedMap.T",
+                    "nameLocations": [
+                      "5454:17:6",
+                      "5472:1:6"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 2118,
+                    "src": "5454:19:6"
+                  },
+                  "referencedDeclaration": 2118,
+                  "src": "5454:19:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_T_$2118_storage_ptr",
+                    "typeString": "struct AddressOrderedMap.T"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1101,
+                "mutability": "mutable",
+                "name": "_reward_by_view_num",
+                "nameLocation": "5561:19:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1108,
+                "src": "5541:39:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_T_$2118_storage_ptr",
+                  "typeString": "struct AddressOrderedMap.T"
+                },
+                "typeName": {
+                  "id": 1100,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 1099,
+                    "name": "AddressOrderedMap.T",
+                    "nameLocations": [
+                      "5541:17:6",
+                      "5559:1:6"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 2118,
+                    "src": "5541:19:6"
+                  },
+                  "referencedDeclaration": 2118,
+                  "src": "5541:19:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_T_$2118_storage_ptr",
+                    "typeString": "struct AddressOrderedMap.T"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1104,
+                "mutability": "mutable",
+                "name": "_reward_by_up_num",
+                "nameLocation": "5640:17:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1108,
+                "src": "5620:37:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_T_$2118_storage_ptr",
+                  "typeString": "struct AddressOrderedMap.T"
+                },
+                "typeName": {
+                  "id": 1103,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 1102,
+                    "name": "AddressOrderedMap.T",
+                    "nameLocations": [
+                      "5620:17:6",
+                      "5638:1:6"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 2118,
+                    "src": "5620:19:6"
+                  },
+                  "referencedDeclaration": 2118,
+                  "src": "5620:19:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_T_$2118_storage_ptr",
+                    "typeString": "struct AddressOrderedMap.T"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1107,
+                "mutability": "mutable",
+                "name": "_reward_by_comment_num",
+                "nameLocation": "5714:22:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1108,
+                "src": "5694:42:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_T_$2118_storage_ptr",
+                  "typeString": "struct AddressOrderedMap.T"
+                },
+                "typeName": {
+                  "id": 1106,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 1105,
+                    "name": "AddressOrderedMap.T",
+                    "nameLocations": [
+                      "5694:17:6",
+                      "5712:1:6"
+                    ],
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 2118,
+                    "src": "5694:19:6"
+                  },
+                  "referencedDeclaration": 2118,
+                  "src": "5694:19:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_T_$2118_storage_ptr",
+                    "typeString": "struct AddressOrderedMap.T"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "RewardStore",
+            "nameLocation": "5309:11:6",
+            "nodeType": "StructDefinition",
+            "scope": 1166,
+            "src": "5302:468:6",
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 1111,
+            "mutability": "mutable",
+            "name": "rewards",
+            "nameLocation": "5790:7:6",
+            "nodeType": "VariableDeclaration",
+            "scope": 1166,
+            "src": "5778:19:6",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_struct$_RewardStore_$1108_storage",
+              "typeString": "struct StoreContact.RewardStore"
+            },
+            "typeName": {
+              "id": 1110,
+              "nodeType": "UserDefinedTypeName",
+              "pathNode": {
+                "id": 1109,
+                "name": "RewardStore",
+                "nameLocations": [
+                  "5778:11:6"
+                ],
+                "nodeType": "IdentifierPath",
+                "referencedDeclaration": 1108,
+                "src": "5778:11:6"
+              },
+              "referencedDeclaration": 1108,
+              "src": "5778:11:6",
+              "typeDescriptions": {
+                "typeIdentifier": "t_struct$_RewardStore_$1108_storage_ptr",
+                "typeString": "struct StoreContact.RewardStore"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "canonicalName": "StoreContact.FollowingUploadMessage",
+            "id": 1116,
+            "members": [
+              {
+                "constant": false,
+                "id": 1113,
+                "mutability": "mutable",
+                "name": "user",
+                "nameLocation": "5925:4:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1116,
+                "src": "5917:12:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 1112,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "5917:7:6",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1115,
+                "mutability": "mutable",
+                "name": "file",
+                "nameLocation": "5959:4:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1116,
+                "src": "5951:12:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 1114,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "5951:7:6",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "FollowingUploadMessage",
+            "nameLocation": "5883:22:6",
+            "nodeType": "StructDefinition",
+            "scope": 1166,
+            "src": "5876:109:6",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "StoreContact.MarkedRewardSolvedMessage",
+            "id": 1123,
+            "members": [
+              {
+                "constant": false,
+                "id": 1118,
+                "mutability": "mutable",
+                "name": "user",
+                "nameLocation": "6077:4:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1123,
+                "src": "6069:12:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 1117,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "6069:7:6",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1120,
+                "mutability": "mutable",
+                "name": "reward",
+                "nameLocation": "6111:6:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1123,
+                "src": "6103:14:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 1119,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "6103:7:6",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1122,
+                "mutability": "mutable",
+                "name": "comment",
+                "nameLocation": "6150:7:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1123,
+                "src": "6142:15:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 1121,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "6142:7:6",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "MarkedRewardSolvedMessage",
+            "nameLocation": "6032:25:6",
+            "nodeType": "StructDefinition",
+            "scope": 1166,
+            "src": "6025:154:6",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "StoreContact.ReplyMessage",
+            "id": 1132,
+            "members": [
+              {
+                "constant": false,
+                "id": 1125,
+                "mutability": "mutable",
+                "name": "user",
+                "nameLocation": "6258:4:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1132,
+                "src": "6250:12:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 1124,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "6250:7:6",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1127,
+                "mutability": "mutable",
+                "name": "target_type",
+                "nameLocation": "6289:11:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1132,
+                "src": "6284:16:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1126,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "6284:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1129,
+                "mutability": "mutable",
+                "name": "reward",
+                "nameLocation": "6351:6:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1132,
+                "src": "6343:14:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 1128,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "6343:7:6",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1131,
+                "mutability": "mutable",
+                "name": "comment",
+                "nameLocation": "6390:7:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1132,
+                "src": "6382:15:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 1130,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "6382:7:6",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "ReplyMessage",
+            "nameLocation": "6226:12:6",
+            "nodeType": "StructDefinition",
+            "scope": 1166,
+            "src": "6219:200:6",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "StoreContact.UpMessage",
+            "id": 1141,
+            "members": [
+              {
+                "constant": false,
+                "id": 1134,
+                "mutability": "mutable",
+                "name": "user",
+                "nameLocation": "6495:4:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1141,
+                "src": "6487:12:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 1133,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "6487:7:6",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1136,
+                "mutability": "mutable",
+                "name": "target_type",
+                "nameLocation": "6526:11:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1141,
+                "src": "6521:16:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1135,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "6521:4:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1138,
+                "mutability": "mutable",
+                "name": "reward",
+                "nameLocation": "6588:6:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1141,
+                "src": "6580:14:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 1137,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "6580:7:6",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1140,
+                "mutability": "mutable",
+                "name": "comment",
+                "nameLocation": "6627:7:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1141,
+                "src": "6619:15:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 1139,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "6619:7:6",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "UpMessage",
+            "nameLocation": "6466:9:6",
+            "nodeType": "StructDefinition",
+            "scope": 1166,
+            "src": "6459:197:6",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "StoreContact.MessageStore",
+            "id": 1162,
+            "members": [
+              {
+                "constant": false,
+                "id": 1146,
+                "mutability": "mutable",
+                "name": "following_upload",
+                "nameLocation": "6755:16:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1162,
+                "src": "6712:59:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_mapping$_t_address_$_t_struct$_FollowingUploadMessage_$1116_storage_$",
+                  "typeString": "mapping(address => struct StoreContact.FollowingUploadMessage)"
+                },
+                "typeName": {
+                  "id": 1145,
+                  "keyName": "",
+                  "keyNameLocation": "-1:-1:-1",
+                  "keyType": {
+                    "id": 1142,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "6720:7:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "nodeType": "Mapping",
+                  "src": "6712:42:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_mapping$_t_address_$_t_struct$_FollowingUploadMessage_$1116_storage_$",
+                    "typeString": "mapping(address => struct StoreContact.FollowingUploadMessage)"
+                  },
+                  "valueName": "",
+                  "valueNameLocation": "-1:-1:-1",
+                  "valueType": {
+                    "id": 1144,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 1143,
+                      "name": "FollowingUploadMessage",
+                      "nameLocations": [
+                        "6731:22:6"
+                      ],
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 1116,
+                      "src": "6731:22:6"
+                    },
+                    "referencedDeclaration": 1116,
+                    "src": "6731:22:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_FollowingUploadMessage_$1116_storage_ptr",
+                      "typeString": "struct StoreContact.FollowingUploadMessage"
+                    }
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1151,
+                "mutability": "mutable",
+                "name": "marked_reward_solved",
+                "nameLocation": "6848:20:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1162,
+                "src": "6802:66:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_mapping$_t_address_$_t_struct$_MarkedRewardSolvedMessage_$1123_storage_$",
+                  "typeString": "mapping(address => struct StoreContact.MarkedRewardSolvedMessage)"
+                },
+                "typeName": {
+                  "id": 1150,
+                  "keyName": "",
+                  "keyNameLocation": "-1:-1:-1",
+                  "keyType": {
+                    "id": 1147,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "6810:7:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "nodeType": "Mapping",
+                  "src": "6802:45:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_mapping$_t_address_$_t_struct$_MarkedRewardSolvedMessage_$1123_storage_$",
+                    "typeString": "mapping(address => struct StoreContact.MarkedRewardSolvedMessage)"
+                  },
+                  "valueName": "",
+                  "valueNameLocation": "-1:-1:-1",
+                  "valueType": {
+                    "id": 1149,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 1148,
+                      "name": "MarkedRewardSolvedMessage",
+                      "nameLocations": [
+                        "6821:25:6"
+                      ],
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 1123,
+                      "src": "6821:25:6"
+                    },
+                    "referencedDeclaration": 1123,
+                    "src": "6821:25:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_MarkedRewardSolvedMessage_$1123_storage_ptr",
+                      "typeString": "struct StoreContact.MarkedRewardSolvedMessage"
+                    }
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1156,
+                "mutability": "mutable",
+                "name": "reply",
+                "nameLocation": "6935:5:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1162,
+                "src": "6902:38:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_mapping$_t_address_$_t_struct$_ReplyMessage_$1132_storage_$",
+                  "typeString": "mapping(address => struct StoreContact.ReplyMessage)"
+                },
+                "typeName": {
+                  "id": 1155,
+                  "keyName": "",
+                  "keyNameLocation": "-1:-1:-1",
+                  "keyType": {
+                    "id": 1152,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "6910:7:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "nodeType": "Mapping",
+                  "src": "6902:32:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_mapping$_t_address_$_t_struct$_ReplyMessage_$1132_storage_$",
+                    "typeString": "mapping(address => struct StoreContact.ReplyMessage)"
+                  },
+                  "valueName": "",
+                  "valueNameLocation": "-1:-1:-1",
+                  "valueType": {
+                    "id": 1154,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 1153,
+                      "name": "ReplyMessage",
+                      "nameLocations": [
+                        "6921:12:6"
+                      ],
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 1132,
+                      "src": "6921:12:6"
+                    },
+                    "referencedDeclaration": 1132,
+                    "src": "6921:12:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_ReplyMessage_$1132_storage_ptr",
+                      "typeString": "struct StoreContact.ReplyMessage"
+                    }
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1161,
+                "mutability": "mutable",
+                "name": "up",
+                "nameLocation": "7013:2:6",
+                "nodeType": "VariableDeclaration",
+                "scope": 1162,
+                "src": "6983:32:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_mapping$_t_address_$_t_struct$_UpMessage_$1141_storage_$",
+                  "typeString": "mapping(address => struct StoreContact.UpMessage)"
+                },
+                "typeName": {
+                  "id": 1160,
+                  "keyName": "",
+                  "keyNameLocation": "-1:-1:-1",
+                  "keyType": {
+                    "id": 1157,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "6991:7:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "nodeType": "Mapping",
+                  "src": "6983:29:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_mapping$_t_address_$_t_struct$_UpMessage_$1141_storage_$",
+                    "typeString": "mapping(address => struct StoreContact.UpMessage)"
+                  },
+                  "valueName": "",
+                  "valueNameLocation": "-1:-1:-1",
+                  "valueType": {
+                    "id": 1159,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 1158,
+                      "name": "UpMessage",
+                      "nameLocations": [
+                        "7002:9:6"
+                      ],
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 1141,
+                      "src": "7002:9:6"
+                    },
+                    "referencedDeclaration": 1141,
+                    "src": "7002:9:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_UpMessage_$1141_storage_ptr",
+                      "typeString": "struct StoreContact.UpMessage"
+                    }
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "MessageStore",
+            "nameLocation": "6688:12:6",
+            "nodeType": "StructDefinition",
+            "scope": 1166,
+            "src": "6681:374:6",
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 1165,
+            "mutability": "mutable",
+            "name": "messages",
+            "nameLocation": "7076:8:6",
+            "nodeType": "VariableDeclaration",
+            "scope": 1166,
+            "src": "7063:21:6",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_struct$_MessageStore_$1162_storage",
+              "typeString": "struct StoreContact.MessageStore"
+            },
+            "typeName": {
+              "id": 1164,
+              "nodeType": "UserDefinedTypeName",
+              "pathNode": {
+                "id": 1163,
+                "name": "MessageStore",
+                "nameLocations": [
+                  "7063:12:6"
+                ],
+                "nodeType": "IdentifierPath",
+                "referencedDeclaration": 1162,
+                "src": "7063:12:6"
+              },
+              "referencedDeclaration": 1162,
+              "src": "7063:12:6",
+              "typeDescriptions": {
+                "typeIdentifier": "t_struct$_MessageStore_$1162_storage_ptr",
+                "typeString": "struct StoreContact.MessageStore"
+              }
+            },
+            "visibility": "internal"
+          }
+        ],
+        "scope": 1167,
+        "src": "159:6943:6",
+        "usedErrors": []
+      }
+    ],
+    "src": "37:7067:6"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.19+commit.7dd6d404.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.13",
+  "updatedAt": "2023-05-10T08:36:39.785Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}
