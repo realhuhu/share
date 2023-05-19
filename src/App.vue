@@ -45,12 +45,6 @@ watch(() => router.currentRoute.value, (new_value, old_value) => {
   }
   page_animation.value = new_value.meta.depth > old_value.meta.depth ? "scale-push" : "scale-pop"
 })
-
-// import {create} from "ipfs-core/dist/index.min.js"
-
-// create().then()
-// const ipfs = await IPFS.create()
-// console.log(ipfs);
 </script>
 
 <style lang="less" scoped>

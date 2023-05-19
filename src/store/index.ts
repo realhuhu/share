@@ -11,6 +11,7 @@ import {ImplementationInterface, ImplementationInterface__factory} from "@/asset
 import OutputAddress from "@/assets/eth/migrations/output.json";
 import {assertNotEmpty} from "@/assets/lib/utils";
 import {head_address, zero_address} from "@/assets/lib/settings";
+import {create, IPFSHTTPClient} from "ipfs-http-client"
 
 type StoreType = ({
   ethereum_connected: false
@@ -35,6 +36,7 @@ type StoreType = ({
 })) & {
   correct_chain_id: string
   ethereum_type: "local" | "metamask" | "other"
+  ipfs: IPFSHTTPClient,
   ethereum_chain_id: Nullable<string>
   show_register_modal: boolean
   show_default_wallet_modal: boolean
@@ -55,7 +57,8 @@ export const UseStore = defineStore("main", {
     show_register_modal: false,//展示授权框
     show_default_wallet_modal: false,//展示自带钱包登录框
 
-    encrypted_private_key: null
+    encrypted_private_key: null,
+    ipfs: create({url: "https://ipfs.seutools.com"})
   }),
   getters: {},
   actions: {
@@ -157,13 +160,6 @@ export const UseStore = defineStore("main", {
       }
     },
     async getCategories() {
-      // try {
-      //   const contract = assertNotEmpty(this.contract, "用户合约未初始化")
-      //   const {category_slice, next} = await contract.getCategorySlice(head_address)
-      //   console.log(category_slice);
-      // } catch (e) {
-      //   console.log(e);
-      // }
       const contract = assertNotEmpty(this.contract, "用户合约未初始化")
       const categories: { category_address: string, name: string; num: number; }[] = []
       let cursor = head_address
