@@ -1,0 +1,391 @@
+{
+	"deploy": {
+		"VM:-": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"main:1": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"ropsten:3": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"rinkeby:4": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"kovan:42": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"goerli:5": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"Custom": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		}
+	},
+	"data": {
+		"bytecode": {
+			"functionDebugData": {},
+			"generatedSources": [],
+			"linkReferences": {},
+			"object": "",
+			"opcodes": "",
+			"sourceMap": ""
+		},
+		"deployedBytecode": {
+			"functionDebugData": {},
+			"generatedSources": [],
+			"immutableReferences": {},
+			"linkReferences": {},
+			"object": "",
+			"opcodes": "",
+			"sourceMap": ""
+		},
+		"gasEstimates": null,
+		"methodIdentifiers": {
+			"addCategory(string)": "2e0dcbf7",
+			"getCategorySlice(address)": "cffa6442",
+			"getSelfInfo()": "7e8e7733",
+			"init()": "e1c7392a",
+			"isRegistered(address)": "c3c5a547",
+			"register(string)": "f2c298be",
+			"renounceAdmin()": "8bad0c0a",
+			"transferAdmin(address)": "75829def",
+			"updateAvatar(string)": "9fe958b9",
+			"updateNickname(string)": "bd2e3b17",
+			"updateSignature(string)": "a389559f",
+			"uploadFile(address,string,string,string[3],uint256)": "058ac5a2"
+		}
+	},
+	"abi": [
+		{
+			"inputs": [
+				{
+					"internalType": "string",
+					"name": "name",
+					"type": "string"
+				}
+			],
+			"name": "addCategory",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "cursor",
+					"type": "address"
+				}
+			],
+			"name": "getCategorySlice",
+			"outputs": [
+				{
+					"components": [
+						{
+							"internalType": "string",
+							"name": "name",
+							"type": "string"
+						},
+						{
+							"internalType": "uint256",
+							"name": "num",
+							"type": "uint256"
+						}
+					],
+					"internalType": "struct StoreContact.Category[10]",
+					"name": "category_slice",
+					"type": "tuple[10]"
+				},
+				{
+					"internalType": "uint256",
+					"name": "length",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "getSelfInfo",
+			"outputs": [
+				{
+					"components": [
+						{
+							"internalType": "uint256",
+							"name": "ID",
+							"type": "uint256"
+						},
+						{
+							"internalType": "uint256",
+							"name": "coins",
+							"type": "uint256"
+						},
+						{
+							"internalType": "uint256",
+							"name": "heart",
+							"type": "uint256"
+						},
+						{
+							"internalType": "uint256",
+							"name": "experience",
+							"type": "uint256"
+						},
+						{
+							"internalType": "uint256",
+							"name": "follower_num",
+							"type": "uint256"
+						},
+						{
+							"internalType": "uint256",
+							"name": "following_num",
+							"type": "uint256"
+						},
+						{
+							"internalType": "uint256",
+							"name": "login_timestamp",
+							"type": "uint256"
+						},
+						{
+							"internalType": "uint256",
+							"name": "uploaded_file_num",
+							"type": "uint256"
+						},
+						{
+							"internalType": "string",
+							"name": "major",
+							"type": "string"
+						},
+						{
+							"internalType": "string",
+							"name": "avatar",
+							"type": "string"
+						},
+						{
+							"internalType": "string",
+							"name": "nickname",
+							"type": "string"
+						},
+						{
+							"internalType": "string",
+							"name": "signature",
+							"type": "string"
+						}
+					],
+					"internalType": "struct StoreContact.UserSelfInfo",
+					"name": "self_info",
+					"type": "tuple"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "init",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "user_address",
+					"type": "address"
+				}
+			],
+			"name": "isRegistered",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "is_registered",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "string",
+					"name": "nickname",
+					"type": "string"
+				}
+			],
+			"name": "register",
+			"outputs": [
+				{
+					"components": [
+						{
+							"internalType": "uint256",
+							"name": "ID",
+							"type": "uint256"
+						},
+						{
+							"internalType": "uint256",
+							"name": "coins",
+							"type": "uint256"
+						},
+						{
+							"internalType": "uint256",
+							"name": "heart",
+							"type": "uint256"
+						},
+						{
+							"internalType": "uint256",
+							"name": "experience",
+							"type": "uint256"
+						},
+						{
+							"internalType": "uint256",
+							"name": "follower_num",
+							"type": "uint256"
+						},
+						{
+							"internalType": "uint256",
+							"name": "following_num",
+							"type": "uint256"
+						},
+						{
+							"internalType": "uint256",
+							"name": "login_timestamp",
+							"type": "uint256"
+						},
+						{
+							"internalType": "uint256",
+							"name": "uploaded_file_num",
+							"type": "uint256"
+						},
+						{
+							"internalType": "string",
+							"name": "major",
+							"type": "string"
+						},
+						{
+							"internalType": "string",
+							"name": "avatar",
+							"type": "string"
+						},
+						{
+							"internalType": "string",
+							"name": "nickname",
+							"type": "string"
+						},
+						{
+							"internalType": "string",
+							"name": "signature",
+							"type": "string"
+						}
+					],
+					"internalType": "struct StoreContact.UserSelfInfo",
+					"name": "self_info",
+					"type": "tuple"
+				}
+			],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "renounceAdmin",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "new_admin",
+					"type": "address"
+				}
+			],
+			"name": "transferAdmin",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "string",
+					"name": "avatar",
+					"type": "string"
+				}
+			],
+			"name": "updateAvatar",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "string",
+					"name": "nickname",
+					"type": "string"
+				}
+			],
+			"name": "updateNickname",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "string",
+					"name": "signature",
+					"type": "string"
+				}
+			],
+			"name": "updateSignature",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "ipfs_address",
+					"type": "address"
+				},
+				{
+					"internalType": "string",
+					"name": "title",
+					"type": "string"
+				},
+				{
+					"internalType": "string",
+					"name": "description",
+					"type": "string"
+				},
+				{
+					"internalType": "string[3]",
+					"name": "images",
+					"type": "string[3]"
+				},
+				{
+					"internalType": "uint256",
+					"name": "price",
+					"type": "uint256"
+				}
+			],
+			"name": "uploadFile",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		}
+	]
+}

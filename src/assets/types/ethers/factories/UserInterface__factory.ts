@@ -16,75 +16,7 @@ const _abi = [
       },
     ],
     name: "register",
-    outputs: [
-      {
-        components: [
-          {
-            internalType: "uint256",
-            name: "ID",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "coins",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "heart",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "experience",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "follower_num",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "following_num",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "login_timestamp",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "uploaded_file_num",
-            type: "uint256",
-          },
-          {
-            internalType: "string",
-            name: "major",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "avatar",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "nickname",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "signature",
-            type: "string",
-          },
-        ],
-        internalType: "struct StoreContact.UserSelfInfo",
-        name: "self_info",
-        type: "tuple",
-      },
-    ],
+    outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },

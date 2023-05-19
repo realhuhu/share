@@ -8,7 +8,9 @@
       </div>
 
       <div class="px-2 pb-2 w-full">
-        <var-button type="success" block @click="register" :disabled="!name">授权</var-button>
+        <var-button type="success" block @click="register" :disabled="!name||uploading">
+          {{ uploading ? "处理中..." : "授权" }}
+        </var-button>
       </div>
 
       <div v-if="store.contracts_connected" class="text-xs text-gray-500 px-2">
@@ -26,15 +28,22 @@ import {ref} from "vue";
 
 const store = UseStore()
 const name = ref<string>()
+const uploading = ref(false)
 
 const register = async () => {
   const nickname = assertNotEmpty(name.value, "昵称不能为空")
   const contract = assertNotEmpty(store.contract, "用户合约未初始化")
-  const res = await contract.register(nickname)
-  await res.wait()
-  const user = assertNotEmpty(store.user, "用户未初始化")
-  await store.refreshUser(user.address)
-  store.show_register_modal = false
+  uploading.value = true
+  try {
+    const res = await contract.register(nickname)
+    await res.wait()
+    uploading.value = false
+    const user = assertNotEmpty(store.user, "用户未初始化")
+    await store.refreshUser(user.address)
+    store.show_register_modal = false
+  } catch {
+    uploading.value = false
+  }
 }
 
 defineOptions({

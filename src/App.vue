@@ -1,12 +1,13 @@
 <template>
 
-  <router-view v-slot="{ Component }">
+  <router-view v-slot="{ Component }" class="md:pl-[64px]">
     <transition :name="page_animation">
       <component v-if="show_help" :is="Component"/>
       <access-help v-else-if="store.ethereum_chain_id"/>
+
     </transition>
   </router-view>
-
+  <home-sidebar class="hidden md:flex"/>
   <register-modal/>
   <default-wallet-modal/>
 </template>
@@ -16,6 +17,7 @@ import {useRoute, useRouter} from "vue-router";
 import {computed, ref, watch} from "vue";
 import {UseStore} from "@/store";
 import AccessHelp from "@/components/fullscreen/AccessHelp.vue";
+import HomeSidebar from "@/components/home/HomeSidebar.vue";
 
 const router = useRouter()
 const route = useRoute()
@@ -43,6 +45,12 @@ watch(() => router.currentRoute.value, (new_value, old_value) => {
   }
   page_animation.value = new_value.meta.depth > old_value.meta.depth ? "scale-push" : "scale-pop"
 })
+
+// import {create} from "ipfs-core/dist/index.min.js"
+
+// create().then()
+// const ipfs = await IPFS.create()
+// console.log(ipfs);
 </script>
 
 <style lang="less" scoped>

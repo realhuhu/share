@@ -88,12 +88,14 @@
           variant="outlined"
           :placeholder="popup_config[popup_type].description"
           size="small"
+          :maxlength="popup_config[popup_type].maxLength"
           v-model="popup_input"/>
         <var-input
           v-else
           class="w-full"
           variant="outlined"
           :placeholder="popup_config[popup_type].description"
+          :maxlength="popup_config[popup_type].maxLength"
           textarea
           v-model="popup_input"/>
         <var-button block type="success" :disabled="!popup_input||uploading" @click="update">
@@ -115,15 +117,18 @@ import {Snackbar} from "@varlet/ui";
 const popup_config_raw = {
   avatar: {
     title: "生成头像",
-    description: "输入字符串，将根据字符串生成随机图像"
+    description: "输入字符串，将根据字符串生成随机图像",
+    maxLength: 10
   },
   nickname: {
     title: "更换昵称",
-    description: "输入新昵称"
+    description: "输入新昵称",
+    maxLength: 10
   },
   signature: {
     title: "修改签名",
-    description: "输入新签名"
+    description: "输入新签名",
+    maxLength: 32
   }
 }
 const uploading = ref(false)
@@ -158,15 +163,19 @@ const update = async () => {
   }
   if (handler) {
     uploading.value = true
-    await handler
-    uploading.value = false
-    show_popup.value = false
-    popup_input.value = undefined
-    Snackbar({
-      content: "需要等待几秒数据更新",
-      type: "success",
-      duration: 2000
-    })
+    try {
+      await handler
+      uploading.value = false
+      show_popup.value = false
+      popup_input.value = undefined
+      Snackbar({
+        content: "需要等待几秒数据更新",
+        type: "success",
+        duration: 2000
+      })
+    } catch {
+      uploading.value = false
+    }
   }
 }
 

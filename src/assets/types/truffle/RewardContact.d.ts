@@ -52,6 +52,15 @@ export interface RewardContactInstance extends Truffle.ContractInstance {
     ): Promise<number>;
   };
 
+  RewardContact_init: {
+    (txDetails?: Truffle.TransactionDetails): Promise<
+      Truffle.TransactionResponse<AllEvents>
+    >;
+    call(txDetails?: Truffle.TransactionDetails): Promise<void>;
+    sendTransaction(txDetails?: Truffle.TransactionDetails): Promise<string>;
+    estimateGas(txDetails?: Truffle.TransactionDetails): Promise<number>;
+  };
+
   methods: {
     admin(txDetails?: Truffle.TransactionDetails): Promise<string>;
 
@@ -80,6 +89,15 @@ export interface RewardContactInstance extends Truffle.ContractInstance {
         new_admin: string,
         txDetails?: Truffle.TransactionDetails
       ): Promise<number>;
+    };
+
+    RewardContact_init: {
+      (txDetails?: Truffle.TransactionDetails): Promise<
+        Truffle.TransactionResponse<AllEvents>
+      >;
+      call(txDetails?: Truffle.TransactionDetails): Promise<void>;
+      sendTransaction(txDetails?: Truffle.TransactionDetails): Promise<string>;
+      estimateGas(txDetails?: Truffle.TransactionDetails): Promise<number>;
     };
   };
 

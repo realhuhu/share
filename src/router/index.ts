@@ -77,6 +77,24 @@ const routes: Array<RouteRecordRaw> = [
       depth: 2,
       auth: true
     }
+  },
+  {
+    path: "/upload-file",
+    name: "upload-file",
+    component: () => import("@/views/UploadFile.vue"),
+    meta: {
+      depth: 99,
+      auth: true
+    }
+  },
+  {
+    path: "/self-upload",
+    name: "self-upload",
+    component: () => import("@/views/SelfUpload.vue"),
+    meta: {
+      depth: 2,
+      auth: true
+    }
   }
 ]
 

@@ -19,7 +19,7 @@ module.exports = {
   migrations_directory: "./src/assets/eth/migrations",
   compilers: {
     solc: {
-      version: "^0.8.0",
+      version: "0.8.17",
       optimizer: {
         enabled: true,
         runs: 200

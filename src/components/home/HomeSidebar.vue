@@ -49,27 +49,20 @@
 
     <div
       class="flex flex-col items-center justify-center w-12 h-12 rounded-xl hover:shadow-around cursor-pointer duration-75  active:bg-gray-100">
-      <i-material-symbols-add class="text-blue-600 w-10 h-8"/>
+      <i-material-symbols-add class="text-blue-600 w-10 h-8" @click="router.push('/upload-file')"/>
     </div>
   </div>
 </template>
 
 
 <script lang="ts" setup>
-import {withDefaults} from "vue"
 import {useRouter} from "vue-router";
 
-interface Props {
-  active: number
-}
 
 const router = useRouter()
-const emits = defineEmits(["update:active"])
-withDefaults(defineProps<Props>(), {active: 0})
 
 const replace = (page: HomePagePath) => {
   router.replace(page)
-  emits("update:active", ["/home/resource", "/home/reward", "/home/favorite", "/home/profile"].indexOf(page))
 }
 
 defineOptions({

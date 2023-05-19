@@ -11,6 +11,141 @@ import type {
 
 const _abi = [
   {
+    inputs: [
+      {
+        internalType: "string",
+        name: "name",
+        type: "string",
+      },
+    ],
+    name: "addCategory",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "cursor",
+        type: "address",
+      },
+    ],
+    name: "getCategorySlice",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "address",
+            name: "category_address",
+            type: "address",
+          },
+          {
+            internalType: "string",
+            name: "name",
+            type: "string",
+          },
+          {
+            internalType: "uint256",
+            name: "num",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct StoreContact.Category[10]",
+        name: "category_slice",
+        type: "tuple[10]",
+      },
+      {
+        internalType: "address",
+        name: "next",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "cursor",
+        type: "address",
+      },
+      {
+        internalType: "bool",
+        name: "reverse",
+        type: "bool",
+      },
+    ],
+    name: "getSelfFileInfos",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "address",
+            name: "file_address",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "ipfs_address",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "owner",
+            type: "address",
+          },
+          {
+            internalType: "string",
+            name: "title",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "description",
+            type: "string",
+          },
+          {
+            internalType: "address",
+            name: "category",
+            type: "address",
+          },
+          {
+            internalType: "string[3]",
+            name: "images",
+            type: "string[3]",
+          },
+          {
+            internalType: "uint256",
+            name: "upload_timestamp",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "price",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "buyer_num",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct StoreContact.FileInfo[10]",
+        name: "file_infos",
+        type: "tuple[10]",
+      },
+      {
+        internalType: "address",
+        name: "next",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "getSelfInfo",
     outputs: [
@@ -113,75 +248,7 @@ const _abi = [
       },
     ],
     name: "register",
-    outputs: [
-      {
-        components: [
-          {
-            internalType: "uint256",
-            name: "ID",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "coins",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "heart",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "experience",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "follower_num",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "following_num",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "login_timestamp",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "uploaded_file_num",
-            type: "uint256",
-          },
-          {
-            internalType: "string",
-            name: "major",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "avatar",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "nickname",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "signature",
-            type: "string",
-          },
-        ],
-        internalType: "struct StoreContact.UserSelfInfo",
-        name: "self_info",
-        type: "tuple",
-      },
-    ],
+    outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },
@@ -262,9 +329,14 @@ const _abi = [
         type: "string",
       },
       {
-        internalType: "bytes[][3]",
+        internalType: "address",
+        name: "category",
+        type: "address",
+      },
+      {
+        internalType: "string[3]",
         name: "images",
-        type: "bytes[][3]",
+        type: "string[3]",
       },
       {
         internalType: "uint256",

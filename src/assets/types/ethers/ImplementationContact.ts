@@ -28,6 +28,59 @@ import type {
 } from "./common";
 
 export declare namespace StoreContact {
+  export type CategoryStruct = {
+    category_address: PromiseOrValue<string>;
+    name: PromiseOrValue<string>;
+    num: PromiseOrValue<BigNumberish>;
+  };
+
+  export type CategoryStructOutput = [string, string, BigNumber] & {
+    category_address: string;
+    name: string;
+    num: BigNumber;
+  };
+
+  export type FileInfoStruct = {
+    file_address: PromiseOrValue<string>;
+    ipfs_address: PromiseOrValue<string>;
+    owner: PromiseOrValue<string>;
+    title: PromiseOrValue<string>;
+    description: PromiseOrValue<string>;
+    category: PromiseOrValue<string>;
+    images: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<string>
+    ];
+    upload_timestamp: PromiseOrValue<BigNumberish>;
+    price: PromiseOrValue<BigNumberish>;
+    buyer_num: PromiseOrValue<BigNumberish>;
+  };
+
+  export type FileInfoStructOutput = [
+    string,
+    string,
+    string,
+    string,
+    string,
+    string,
+    [string, string, string],
+    BigNumber,
+    BigNumber,
+    BigNumber
+  ] & {
+    file_address: string;
+    ipfs_address: string;
+    owner: string;
+    title: string;
+    description: string;
+    category: string;
+    images: [string, string, string];
+    upload_timestamp: BigNumber;
+    price: BigNumber;
+    buyer_num: BigNumber;
+  };
+
   export type UserSelfInfoStruct = {
     ID: PromiseOrValue<BigNumberish>;
     coins: PromiseOrValue<BigNumberish>;
@@ -74,7 +127,11 @@ export declare namespace StoreContact {
 
 export interface ImplementationContactInterface extends utils.Interface {
   functions: {
+    "RewardContact_init()": FunctionFragment;
+    "addCategory(string)": FunctionFragment;
     "admin()": FunctionFragment;
+    "getCategorySlice(address)": FunctionFragment;
+    "getSelfFileInfos(address,bool)": FunctionFragment;
     "getSelfInfo()": FunctionFragment;
     "isRegistered(address)": FunctionFragment;
     "register(string)": FunctionFragment;
@@ -83,13 +140,17 @@ export interface ImplementationContactInterface extends utils.Interface {
     "updateAvatar(string)": FunctionFragment;
     "updateNickname(string)": FunctionFragment;
     "updateSignature(string)": FunctionFragment;
-    "uploadFile(address,string,string,bytes[][3],uint256)": FunctionFragment;
+    "uploadFile(address,string,string,address,string[3],uint256)": FunctionFragment;
     "init()": FunctionFragment;
   };
 
   getFunction(
     nameOrSignatureOrTopic:
+      | "RewardContact_init"
+      | "addCategory"
       | "admin"
+      | "getCategorySlice"
+      | "getSelfFileInfos"
       | "getSelfInfo"
       | "isRegistered"
       | "register"
@@ -102,7 +163,23 @@ export interface ImplementationContactInterface extends utils.Interface {
       | "init"
   ): FunctionFragment;
 
+  encodeFunctionData(
+    functionFragment: "RewardContact_init",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "addCategory",
+    values: [PromiseOrValue<string>]
+  ): string;
   encodeFunctionData(functionFragment: "admin", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "getCategorySlice",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getSelfFileInfos",
+    values: [PromiseOrValue<string>, PromiseOrValue<boolean>]
+  ): string;
   encodeFunctionData(
     functionFragment: "getSelfInfo",
     values?: undefined
@@ -141,17 +218,30 @@ export interface ImplementationContactInterface extends utils.Interface {
       PromiseOrValue<string>,
       PromiseOrValue<string>,
       PromiseOrValue<string>,
-      [
-        PromiseOrValue<BytesLike>[],
-        PromiseOrValue<BytesLike>[],
-        PromiseOrValue<BytesLike>[]
-      ],
+      PromiseOrValue<string>,
+      [PromiseOrValue<string>, PromiseOrValue<string>, PromiseOrValue<string>],
       PromiseOrValue<BigNumberish>
     ]
   ): string;
   encodeFunctionData(functionFragment: "init", values?: undefined): string;
 
+  decodeFunctionResult(
+    functionFragment: "RewardContact_init",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "addCategory",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "admin", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getCategorySlice",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getSelfFileInfos",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "getSelfInfo",
     data: BytesLike
@@ -230,7 +320,37 @@ export interface ImplementationContact extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    RewardContact_init(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    addCategory(
+      name: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     admin(overrides?: CallOverrides): Promise<[string]>;
+
+    getCategorySlice(
+      cursor: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<
+      [StoreContact.CategoryStructOutput[], string] & {
+        category_slice: StoreContact.CategoryStructOutput[];
+        next: string;
+      }
+    >;
+
+    getSelfFileInfos(
+      cursor: PromiseOrValue<string>,
+      reverse: PromiseOrValue<boolean>,
+      overrides?: CallOverrides
+    ): Promise<
+      [StoreContact.FileInfoStructOutput[], string] & {
+        file_infos: StoreContact.FileInfoStructOutput[];
+        next: string;
+      }
+    >;
 
     getSelfInfo(
       overrides?: CallOverrides
@@ -278,10 +398,11 @@ export interface ImplementationContact extends BaseContract {
       ipfs_address: PromiseOrValue<string>,
       title: PromiseOrValue<string>,
       description: PromiseOrValue<string>,
+      category: PromiseOrValue<string>,
       images: [
-        PromiseOrValue<BytesLike>[],
-        PromiseOrValue<BytesLike>[],
-        PromiseOrValue<BytesLike>[]
+        PromiseOrValue<string>,
+        PromiseOrValue<string>,
+        PromiseOrValue<string>
       ],
       price: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -292,7 +413,37 @@ export interface ImplementationContact extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
+  RewardContact_init(
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  addCategory(
+    name: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   admin(overrides?: CallOverrides): Promise<string>;
+
+  getCategorySlice(
+    cursor: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<
+    [StoreContact.CategoryStructOutput[], string] & {
+      category_slice: StoreContact.CategoryStructOutput[];
+      next: string;
+    }
+  >;
+
+  getSelfFileInfos(
+    cursor: PromiseOrValue<string>,
+    reverse: PromiseOrValue<boolean>,
+    overrides?: CallOverrides
+  ): Promise<
+    [StoreContact.FileInfoStructOutput[], string] & {
+      file_infos: StoreContact.FileInfoStructOutput[];
+      next: string;
+    }
+  >;
 
   getSelfInfo(
     overrides?: CallOverrides
@@ -336,10 +487,11 @@ export interface ImplementationContact extends BaseContract {
     ipfs_address: PromiseOrValue<string>,
     title: PromiseOrValue<string>,
     description: PromiseOrValue<string>,
+    category: PromiseOrValue<string>,
     images: [
-      PromiseOrValue<BytesLike>[],
-      PromiseOrValue<BytesLike>[],
-      PromiseOrValue<BytesLike>[]
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<string>
     ],
     price: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -350,7 +502,35 @@ export interface ImplementationContact extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    RewardContact_init(overrides?: CallOverrides): Promise<void>;
+
+    addCategory(
+      name: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     admin(overrides?: CallOverrides): Promise<string>;
+
+    getCategorySlice(
+      cursor: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<
+      [StoreContact.CategoryStructOutput[], string] & {
+        category_slice: StoreContact.CategoryStructOutput[];
+        next: string;
+      }
+    >;
+
+    getSelfFileInfos(
+      cursor: PromiseOrValue<string>,
+      reverse: PromiseOrValue<boolean>,
+      overrides?: CallOverrides
+    ): Promise<
+      [StoreContact.FileInfoStructOutput[], string] & {
+        file_infos: StoreContact.FileInfoStructOutput[];
+        next: string;
+      }
+    >;
 
     getSelfInfo(
       overrides?: CallOverrides
@@ -392,10 +572,11 @@ export interface ImplementationContact extends BaseContract {
       ipfs_address: PromiseOrValue<string>,
       title: PromiseOrValue<string>,
       description: PromiseOrValue<string>,
+      category: PromiseOrValue<string>,
       images: [
-        PromiseOrValue<BytesLike>[],
-        PromiseOrValue<BytesLike>[],
-        PromiseOrValue<BytesLike>[]
+        PromiseOrValue<string>,
+        PromiseOrValue<string>,
+        PromiseOrValue<string>
       ],
       price: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -416,7 +597,27 @@ export interface ImplementationContact extends BaseContract {
   };
 
   estimateGas: {
+    RewardContact_init(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    addCategory(
+      name: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     admin(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getCategorySlice(
+      cursor: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getSelfFileInfos(
+      cursor: PromiseOrValue<string>,
+      reverse: PromiseOrValue<boolean>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getSelfInfo(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -458,10 +659,11 @@ export interface ImplementationContact extends BaseContract {
       ipfs_address: PromiseOrValue<string>,
       title: PromiseOrValue<string>,
       description: PromiseOrValue<string>,
+      category: PromiseOrValue<string>,
       images: [
-        PromiseOrValue<BytesLike>[],
-        PromiseOrValue<BytesLike>[],
-        PromiseOrValue<BytesLike>[]
+        PromiseOrValue<string>,
+        PromiseOrValue<string>,
+        PromiseOrValue<string>
       ],
       price: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -473,7 +675,27 @@ export interface ImplementationContact extends BaseContract {
   };
 
   populateTransaction: {
+    RewardContact_init(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    addCategory(
+      name: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     admin(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getCategorySlice(
+      cursor: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getSelfFileInfos(
+      cursor: PromiseOrValue<string>,
+      reverse: PromiseOrValue<boolean>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     getSelfInfo(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -515,10 +737,11 @@ export interface ImplementationContact extends BaseContract {
       ipfs_address: PromiseOrValue<string>,
       title: PromiseOrValue<string>,
       description: PromiseOrValue<string>,
+      category: PromiseOrValue<string>,
       images: [
-        PromiseOrValue<BytesLike>[],
-        PromiseOrValue<BytesLike>[],
-        PromiseOrValue<BytesLike>[]
+        PromiseOrValue<string>,
+        PromiseOrValue<string>,
+        PromiseOrValue<string>
       ],
       price: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }

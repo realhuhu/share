@@ -52,12 +52,36 @@ export interface FileContactInstance extends Truffle.ContractInstance {
     ): Promise<number>;
   };
 
+  addCategory: {
+    (name: string, txDetails?: Truffle.TransactionDetails): Promise<
+      Truffle.TransactionResponse<AllEvents>
+    >;
+    call(name: string, txDetails?: Truffle.TransactionDetails): Promise<void>;
+    sendTransaction(
+      name: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<string>;
+    estimateGas(
+      name: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<number>;
+  };
+
+  getCategorySlice(
+    cursor: string,
+    txDetails?: Truffle.TransactionDetails
+  ): Promise<{
+    0: { category_address: string; name: string; num: BN }[];
+    1: string;
+  }>;
+
   uploadFile: {
     (
       ipfs_address: string,
       title: string,
       description: string,
-      images: string[][],
+      category: string,
+      images: string[],
       price: number | BN | string,
       txDetails?: Truffle.TransactionDetails
     ): Promise<Truffle.TransactionResponse<AllEvents>>;
@@ -65,7 +89,8 @@ export interface FileContactInstance extends Truffle.ContractInstance {
       ipfs_address: string,
       title: string,
       description: string,
-      images: string[][],
+      category: string,
+      images: string[],
       price: number | BN | string,
       txDetails?: Truffle.TransactionDetails
     ): Promise<void>;
@@ -73,7 +98,8 @@ export interface FileContactInstance extends Truffle.ContractInstance {
       ipfs_address: string,
       title: string,
       description: string,
-      images: string[][],
+      category: string,
+      images: string[],
       price: number | BN | string,
       txDetails?: Truffle.TransactionDetails
     ): Promise<string>;
@@ -81,11 +107,32 @@ export interface FileContactInstance extends Truffle.ContractInstance {
       ipfs_address: string,
       title: string,
       description: string,
-      images: string[][],
+      category: string,
+      images: string[],
       price: number | BN | string,
       txDetails?: Truffle.TransactionDetails
     ): Promise<number>;
   };
+
+  getSelfFileInfos(
+    cursor: string,
+    reverse: boolean,
+    txDetails?: Truffle.TransactionDetails
+  ): Promise<{
+    0: {
+      file_address: string;
+      ipfs_address: string;
+      owner: string;
+      title: string;
+      description: string;
+      category: string;
+      images: string[];
+      upload_timestamp: BN;
+      price: BN;
+      buyer_num: BN;
+    }[];
+    1: string;
+  }>;
 
   methods: {
     admin(txDetails?: Truffle.TransactionDetails): Promise<string>;
@@ -117,12 +164,36 @@ export interface FileContactInstance extends Truffle.ContractInstance {
       ): Promise<number>;
     };
 
+    addCategory: {
+      (name: string, txDetails?: Truffle.TransactionDetails): Promise<
+        Truffle.TransactionResponse<AllEvents>
+      >;
+      call(name: string, txDetails?: Truffle.TransactionDetails): Promise<void>;
+      sendTransaction(
+        name: string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<string>;
+      estimateGas(
+        name: string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<number>;
+    };
+
+    getCategorySlice(
+      cursor: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<{
+      0: { category_address: string; name: string; num: BN }[];
+      1: string;
+    }>;
+
     uploadFile: {
       (
         ipfs_address: string,
         title: string,
         description: string,
-        images: string[][],
+        category: string,
+        images: string[],
         price: number | BN | string,
         txDetails?: Truffle.TransactionDetails
       ): Promise<Truffle.TransactionResponse<AllEvents>>;
@@ -130,7 +201,8 @@ export interface FileContactInstance extends Truffle.ContractInstance {
         ipfs_address: string,
         title: string,
         description: string,
-        images: string[][],
+        category: string,
+        images: string[],
         price: number | BN | string,
         txDetails?: Truffle.TransactionDetails
       ): Promise<void>;
@@ -138,7 +210,8 @@ export interface FileContactInstance extends Truffle.ContractInstance {
         ipfs_address: string,
         title: string,
         description: string,
-        images: string[][],
+        category: string,
+        images: string[],
         price: number | BN | string,
         txDetails?: Truffle.TransactionDetails
       ): Promise<string>;
@@ -146,11 +219,32 @@ export interface FileContactInstance extends Truffle.ContractInstance {
         ipfs_address: string,
         title: string,
         description: string,
-        images: string[][],
+        category: string,
+        images: string[],
         price: number | BN | string,
         txDetails?: Truffle.TransactionDetails
       ): Promise<number>;
     };
+
+    getSelfFileInfos(
+      cursor: string,
+      reverse: boolean,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<{
+      0: {
+        file_address: string;
+        ipfs_address: string;
+        owner: string;
+        title: string;
+        description: string;
+        category: string;
+        images: string[];
+        upload_timestamp: BN;
+        price: BN;
+        buyer_num: BN;
+      }[];
+      1: string;
+    }>;
   };
 
   getPastEvents(event: string): Promise<EventData[]>;

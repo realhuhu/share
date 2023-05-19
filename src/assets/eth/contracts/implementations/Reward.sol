@@ -8,5 +8,8 @@ interface RewardInterface {
 }
 
 abstract contract RewardContact is BaseContact {
+    function RewardContact_init()
+    external {
 
+    }
 }

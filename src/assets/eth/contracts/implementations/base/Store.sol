@@ -12,6 +12,8 @@ abstract contract StoreContact {
     /* 用户相关模型 */
     //用户全部信息
     struct UserInfo {
+        address user_address;
+
         uint ID;//校园卡ID
         uint pits;//坑位数
         uint coins;//硬币数
@@ -94,14 +96,31 @@ abstract contract StoreContact {
     /* 文件相关模型 */
     //文件全部信息
     struct File {
+        address file_address;
+
         address ipfs_address;//ipfs 地址
         address owner;//上传者
         string title;//标题
         string description;//描述
-        bytes[][3] images;//图片
+        address category;//分类
+        string[3] images;//图片
         uint upload_timestamp;//上传时间
         uint price;//价格
         mapping(address => bool) buyers;//已购买的用户
+        uint buyer_num;//购买量
+    }
+
+    struct FileInfo {
+        address file_address;
+
+        address ipfs_address;//ipfs 地址
+        address owner;//上传者
+        string title;//标题
+        string description;//描述
+        address category;//分类
+        string[3] images;//图片
+        uint upload_timestamp;//上传时间
+        uint price;//价格
         uint buyer_num;//购买量
     }
 
@@ -114,16 +133,31 @@ abstract contract StoreContact {
         AddressOrderedMap.T _file_by_buyer_num;//购买量索引
     }
 
+    struct Category {
+        address category_address;
+
+        string name;
+        uint num;
+    }
+
+    struct CategoryStore {
+        AddressLinkedList.T category_index;
+        mapping(address => Category) category_info;
+    }
+
+    CategoryStore categories;//分类
     FileStore files;//所有文件
 
     /* 悬赏相关模型 */
     //悬赏全部信息
     struct Reward {
+        address reward;
+
         address author;//作者
         string title;//标题
         string description;//描述
         string content;//内容
-        bytes[][3] images;//图片
+        string[3] images;//图片
         uint create_timestamp;//上传时间
         uint update_timestamp;//更新时间
         uint remuneration;//酬金
@@ -138,17 +172,21 @@ abstract contract StoreContact {
 
     //评论
     struct Comment {
+        address comment_address;
+
         address author;//作者
         string content;//内容
-        bytes[][3] images;//图片
+        string[3] images;//图片
         uint comment_timestamp;//评论时间
         uint up_num;//点赞次数
         uint down_num;//点踩次数
         AddressLinkedList.T sub_comment_index;//子评论
+        mapping(address => SubComment) sub_comment_info;//子评论信息
     }
 
     //子评论
     struct SubComment {
+        address sub_comment_address;
         address author;//作者
         string content;//内容
         uint comment_timestamp;//评论时间

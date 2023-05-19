@@ -4,7 +4,7 @@ pragma solidity ^0.8.17;
 import "./base/Base.sol";
 
 interface UserInterface {
-    function register(string memory nickname) external returns (StoreContact.UserSelfInfo memory self_info);
+    function register(string memory nickname) external;
 
     function isRegistered(address user_address) external view returns (bool is_registered);
 
@@ -27,7 +27,7 @@ interface UserInterface {
     //    function setFollow(address target_user, bool is_follow) external;
 }
 
-abstract contract UserContract is BaseContact {
+abstract contract UserContract is BaseContact, UserInterface {
     using AddressLinkedList for AddressLinkedList.T;
     using AddressOrderedMap for AddressOrderedMap.T;
 
@@ -41,13 +41,15 @@ abstract contract UserContract is BaseContact {
 
     //注册账号
     function register(string memory nickname)
-    _notRegistered_(msg.sender)
     external {
+        _notRegistered_(msg.sender);
+        _stringRange_(nickname, 1, 10);
         UserInfo storage user_info = users.user_info[msg.sender];
 
         user_info.pits = 2;
         user_info.login_timestamp = block.timestamp;
         user_info.nickname = nickname;
+        user_info.user_address = msg.sender;
 
         user_info.medals.init();
         user_info.rewards.init();
@@ -99,24 +101,27 @@ abstract contract UserContract is BaseContact {
 
     //更新头像
     function updateAvatar(string memory avatar)
-    _registered_(msg.sender)
     external {
+        _registered_(msg.sender);
+        _stringRange_(avatar, 1, 10);
         UserInfo storage user_info = users.user_info[msg.sender];
         user_info.avatar = avatar;
     }
 
-    //更新头像
+    //更新姓名
     function updateNickname(string memory nickname)
-    _registered_(msg.sender)
     external {
+        _registered_(msg.sender);
+        _stringRange_(nickname, 1, 10);
         UserInfo storage user_info = users.user_info[msg.sender];
         user_info.nickname = nickname;
     }
 
-    //更新头像
+    //更新签名
     function updateSignature(string memory signature)
-    _registered_(msg.sender)
     external {
+        _registered_(msg.sender);
+        _stringRange_(signature, 1, 32);
         UserInfo storage user_info = users.user_info[msg.sender];
         user_info.signature = signature;
     }

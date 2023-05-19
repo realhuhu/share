@@ -4,11 +4,10 @@
       <home-navbar class="md:hidden" v-model:active="navbar_active"/>
     </transition>
 
-    <home-sidebar class="hidden md:flex" v-model:active="navbar_active"/>
 
     <router-view v-slot="{ Component }">
       <transition :name="page_animation || undefined" @after-enter="page_animation=undefined">
-        <component class="pt-12 md:ml-16 md:pt-0" :is="Component"/>
+        <component class="pt-12 md:pt-0" :is="Component"/>
       </transition>
     </router-view>
   </div>
@@ -16,8 +15,6 @@
 
 
 <script lang="ts" setup>
-import HomeNavbar from "@/components/home/HomeNavbar.vue";
-import HomeSidebar from "@/components/home/HomeSidebar.vue";
 import {ref, watch, ComponentPublicInstance} from "vue"
 
 interface VM extends ComponentPublicInstance {

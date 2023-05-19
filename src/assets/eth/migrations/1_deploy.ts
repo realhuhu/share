@@ -31,8 +31,12 @@ module.exports = async (
     await deployer.deploy(OurShare);
     const our_share = await OurShare.deployed();
     await our_share.setImplementation(implementation.address)
-
-    await (await artifacts.require("ImplementationInterface").at(our_share.address)).init()
+    const ImplementationInterface = await artifacts.require("ImplementationInterface").at(our_share.address)
+    await ImplementationInterface.init()
+    await ImplementationInterface.addCategory("电子书")
+    await ImplementationInterface.addCategory("24考研")
+    await ImplementationInterface.addCategory("mooc答案")
+    await ImplementationInterface.addCategory("其它")
 
     fs.writeFileSync(path.join(__dirname, "output.json"), JSON.stringify({
       "address": our_share.address

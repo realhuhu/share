@@ -232,7 +232,7 @@ export interface UserInterface extends BaseContract {
     register(
       nickname: PromiseOrValue<string>,
       overrides?: CallOverrides
-    ): Promise<StoreContact.UserSelfInfoStructOutput>;
+    ): Promise<void>;
 
     isRegistered(
       user_address: PromiseOrValue<string>,

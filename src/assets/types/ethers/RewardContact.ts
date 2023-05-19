@@ -31,10 +31,15 @@ export interface RewardContactInterface extends utils.Interface {
     "admin()": FunctionFragment;
     "renounceAdmin()": FunctionFragment;
     "transferAdmin(address)": FunctionFragment;
+    "RewardContact_init()": FunctionFragment;
   };
 
   getFunction(
-    nameOrSignatureOrTopic: "admin" | "renounceAdmin" | "transferAdmin"
+    nameOrSignatureOrTopic:
+      | "admin"
+      | "renounceAdmin"
+      | "transferAdmin"
+      | "RewardContact_init"
   ): FunctionFragment;
 
   encodeFunctionData(functionFragment: "admin", values?: undefined): string;
@@ -46,6 +51,10 @@ export interface RewardContactInterface extends utils.Interface {
     functionFragment: "transferAdmin",
     values: [PromiseOrValue<string>]
   ): string;
+  encodeFunctionData(
+    functionFragment: "RewardContact_init",
+    values?: undefined
+  ): string;
 
   decodeFunctionResult(functionFragment: "admin", data: BytesLike): Result;
   decodeFunctionResult(
@@ -54,6 +63,10 @@ export interface RewardContactInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "transferAdmin",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "RewardContact_init",
     data: BytesLike
   ): Result;
 
@@ -113,6 +126,10 @@ export interface RewardContact extends BaseContract {
       new_admin: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
+
+    RewardContact_init(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
   };
 
   admin(overrides?: CallOverrides): Promise<string>;
@@ -126,6 +143,10 @@ export interface RewardContact extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  RewardContact_init(
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   callStatic: {
     admin(overrides?: CallOverrides): Promise<string>;
 
@@ -135,6 +156,8 @@ export interface RewardContact extends BaseContract {
       new_admin: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    RewardContact_init(overrides?: CallOverrides): Promise<void>;
   };
 
   filters: {
@@ -159,6 +182,10 @@ export interface RewardContact extends BaseContract {
       new_admin: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
+
+    RewardContact_init(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -170,6 +197,10 @@ export interface RewardContact extends BaseContract {
 
     transferAdmin(
       new_admin: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    RewardContact_init(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
   };

@@ -16,6 +16,49 @@ type AllEvents = never;
 
 export interface ImplementationInterfaceInstance
   extends Truffle.ContractInstance {
+  addCategory: {
+    (name: string, txDetails?: Truffle.TransactionDetails): Promise<
+      Truffle.TransactionResponse<AllEvents>
+    >;
+    call(name: string, txDetails?: Truffle.TransactionDetails): Promise<void>;
+    sendTransaction(
+      name: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<string>;
+    estimateGas(
+      name: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<number>;
+  };
+
+  getCategorySlice(
+    cursor: string,
+    txDetails?: Truffle.TransactionDetails
+  ): Promise<{
+    0: { category_address: string; name: string; num: BN }[];
+    1: string;
+  }>;
+
+  getSelfFileInfos(
+    cursor: string,
+    reverse: boolean,
+    txDetails?: Truffle.TransactionDetails
+  ): Promise<{
+    0: {
+      file_address: string;
+      ipfs_address: string;
+      owner: string;
+      title: string;
+      description: string;
+      category: string;
+      images: string[];
+      upload_timestamp: BN;
+      price: BN;
+      buyer_num: BN;
+    }[];
+    1: string;
+  }>;
+
   getSelfInfo(
     txDetails?: Truffle.TransactionDetails
   ): Promise<{
@@ -45,20 +88,7 @@ export interface ImplementationInterfaceInstance
     call(
       nickname: string,
       txDetails?: Truffle.TransactionDetails
-    ): Promise<{
-      ID: BN;
-      coins: BN;
-      heart: BN;
-      experience: BN;
-      follower_num: BN;
-      following_num: BN;
-      login_timestamp: BN;
-      uploaded_file_num: BN;
-      major: string;
-      avatar: string;
-      nickname: string;
-      signature: string;
-    }>;
+    ): Promise<void>;
     sendTransaction(
       nickname: string,
       txDetails?: Truffle.TransactionDetails
@@ -152,7 +182,8 @@ export interface ImplementationInterfaceInstance
       ipfs_address: string,
       title: string,
       description: string,
-      images: string[][],
+      category: string,
+      images: string[],
       price: number | BN | string,
       txDetails?: Truffle.TransactionDetails
     ): Promise<Truffle.TransactionResponse<AllEvents>>;
@@ -160,7 +191,8 @@ export interface ImplementationInterfaceInstance
       ipfs_address: string,
       title: string,
       description: string,
-      images: string[][],
+      category: string,
+      images: string[],
       price: number | BN | string,
       txDetails?: Truffle.TransactionDetails
     ): Promise<void>;
@@ -168,7 +200,8 @@ export interface ImplementationInterfaceInstance
       ipfs_address: string,
       title: string,
       description: string,
-      images: string[][],
+      category: string,
+      images: string[],
       price: number | BN | string,
       txDetails?: Truffle.TransactionDetails
     ): Promise<string>;
@@ -176,7 +209,8 @@ export interface ImplementationInterfaceInstance
       ipfs_address: string,
       title: string,
       description: string,
-      images: string[][],
+      category: string,
+      images: string[],
       price: number | BN | string,
       txDetails?: Truffle.TransactionDetails
     ): Promise<number>;
@@ -192,6 +226,49 @@ export interface ImplementationInterfaceInstance
   };
 
   methods: {
+    addCategory: {
+      (name: string, txDetails?: Truffle.TransactionDetails): Promise<
+        Truffle.TransactionResponse<AllEvents>
+      >;
+      call(name: string, txDetails?: Truffle.TransactionDetails): Promise<void>;
+      sendTransaction(
+        name: string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<string>;
+      estimateGas(
+        name: string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<number>;
+    };
+
+    getCategorySlice(
+      cursor: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<{
+      0: { category_address: string; name: string; num: BN }[];
+      1: string;
+    }>;
+
+    getSelfFileInfos(
+      cursor: string,
+      reverse: boolean,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<{
+      0: {
+        file_address: string;
+        ipfs_address: string;
+        owner: string;
+        title: string;
+        description: string;
+        category: string;
+        images: string[];
+        upload_timestamp: BN;
+        price: BN;
+        buyer_num: BN;
+      }[];
+      1: string;
+    }>;
+
     getSelfInfo(
       txDetails?: Truffle.TransactionDetails
     ): Promise<{
@@ -221,20 +298,7 @@ export interface ImplementationInterfaceInstance
       call(
         nickname: string,
         txDetails?: Truffle.TransactionDetails
-      ): Promise<{
-        ID: BN;
-        coins: BN;
-        heart: BN;
-        experience: BN;
-        follower_num: BN;
-        following_num: BN;
-        login_timestamp: BN;
-        uploaded_file_num: BN;
-        major: string;
-        avatar: string;
-        nickname: string;
-        signature: string;
-      }>;
+      ): Promise<void>;
       sendTransaction(
         nickname: string,
         txDetails?: Truffle.TransactionDetails
@@ -331,7 +395,8 @@ export interface ImplementationInterfaceInstance
         ipfs_address: string,
         title: string,
         description: string,
-        images: string[][],
+        category: string,
+        images: string[],
         price: number | BN | string,
         txDetails?: Truffle.TransactionDetails
       ): Promise<Truffle.TransactionResponse<AllEvents>>;
@@ -339,7 +404,8 @@ export interface ImplementationInterfaceInstance
         ipfs_address: string,
         title: string,
         description: string,
-        images: string[][],
+        category: string,
+        images: string[],
         price: number | BN | string,
         txDetails?: Truffle.TransactionDetails
       ): Promise<void>;
@@ -347,7 +413,8 @@ export interface ImplementationInterfaceInstance
         ipfs_address: string,
         title: string,
         description: string,
-        images: string[][],
+        category: string,
+        images: string[],
         price: number | BN | string,
         txDetails?: Truffle.TransactionDetails
       ): Promise<string>;
@@ -355,7 +422,8 @@ export interface ImplementationInterfaceInstance
         ipfs_address: string,
         title: string,
         description: string,
-        images: string[][],
+        category: string,
+        images: string[],
         price: number | BN | string,
         txDetails?: Truffle.TransactionDetails
       ): Promise<number>;

@@ -48,7 +48,7 @@
       <var-divider margin="0" dashed/>
     </div>
     <div class="flex justify-between items-center px-12 md:px-24 ">
-      <div class="flex flex-col justify-center items-center">
+      <div class="flex flex-col justify-center items-center cursor-pointer p-2 hover:text-blue-500" @click="router.push('/self-upload')">
         <div>{{ user.raw_data.uploaded_file_num }}</div>
         <div class="text-sm text-gray-500">我的上传</div>
       </div>

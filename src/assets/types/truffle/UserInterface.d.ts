@@ -20,20 +20,7 @@ export interface UserInterfaceInstance extends Truffle.ContractInstance {
     call(
       nickname: string,
       txDetails?: Truffle.TransactionDetails
-    ): Promise<{
-      ID: BN;
-      coins: BN;
-      heart: BN;
-      experience: BN;
-      follower_num: BN;
-      following_num: BN;
-      login_timestamp: BN;
-      uploaded_file_num: BN;
-      major: string;
-      avatar: string;
-      nickname: string;
-      signature: string;
-    }>;
+    ): Promise<void>;
     sendTransaction(
       nickname: string,
       txDetails?: Truffle.TransactionDetails
@@ -125,20 +112,7 @@ export interface UserInterfaceInstance extends Truffle.ContractInstance {
       call(
         nickname: string,
         txDetails?: Truffle.TransactionDetails
-      ): Promise<{
-        ID: BN;
-        coins: BN;
-        heart: BN;
-        experience: BN;
-        follower_num: BN;
-        following_num: BN;
-        login_timestamp: BN;
-        uploaded_file_num: BN;
-        major: string;
-        avatar: string;
-        nickname: string;
-        signature: string;
-      }>;
+      ): Promise<void>;
       sendTransaction(
         nickname: string,
         txDetails?: Truffle.TransactionDetails

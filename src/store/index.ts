@@ -7,10 +7,10 @@ import "@varlet/ui/es/snackbar/style/index"
 import "@varlet/ui/es/dialog/style/index"
 import Identicon from "identicon.js"
 
-
 import {ImplementationInterface, ImplementationInterface__factory} from "@/assets/types/ethers";
 import OutputAddress from "@/assets/eth/migrations/output.json";
 import {assertNotEmpty} from "@/assets/lib/utils";
+import {head_address, zero_address} from "@/assets/lib/settings";
 
 type StoreType = ({
   ethereum_connected: false
@@ -18,14 +18,17 @@ type StoreType = ({
   contracts_connected: false
   contract: null
   user: null
+  categories: null
 } | ({
   contracts_connected: false
   contract: null
   user: null
+  categories: null
 } | {
   contracts_connected: true
   contract: ImplementationInterface,
   user: User
+  categories: { category_address: string, name: string; num: number; }[]
 }) & ({
   ethereum_connected: true
   provider: Web3Provider
@@ -47,6 +50,7 @@ export const UseStore = defineStore("main", {
     contract: null,//用户合约
     contracts_connected: false,//是否已连接全部合约
     user: null,//用户信息
+    categories: null,
 
     show_register_modal: false,//展示授权框
     show_default_wallet_modal: false,//展示自带钱包登录框
@@ -147,13 +151,41 @@ export const UseStore = defineStore("main", {
 
       //如果链ID正确，连接合约并初始化User
       if (this.ethereum_chain_id === this.correct_chain_id) {
-        this.connectContracts(toRaw(<Web3Provider>this.provider))
+        await this.connectContracts(toRaw(<Web3Provider>this.provider))
         await this.refreshUser(address)
         this.contracts_connected = true
       }
     },
-    connectContracts(provider: Web3Provider) {
+    async getCategories() {
+      // try {
+      //   const contract = assertNotEmpty(this.contract, "用户合约未初始化")
+      //   const {category_slice, next} = await contract.getCategorySlice(head_address)
+      //   console.log(category_slice);
+      // } catch (e) {
+      //   console.log(e);
+      // }
+      const contract = assertNotEmpty(this.contract, "用户合约未初始化")
+      const categories: { category_address: string, name: string; num: number; }[] = []
+      let cursor = head_address
+      while (cursor !== zero_address) {
+        const {category_slice, next} = await contract.getCategorySlice(cursor)
+        cursor = next
+        for (const category of category_slice) {
+          cursor = category.category_address
+          if (cursor === zero_address) break;
+          categories.push({
+            category_address: category.category_address,
+            name: category.name,
+            num: category.num.toNumber()
+          })
+        }
+      }
+
+      this.categories = categories
+    },
+    async connectContracts(provider: Web3Provider) {
       this.contract = ImplementationInterface__factory.connect(OutputAddress.address, provider.getSigner())
+      await this.getCategories()
     },
     async refreshUser(address: Address) {
       const contract = assertNotEmpty(this.contract, "用户合约未初始化")

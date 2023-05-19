@@ -23,29 +23,114 @@ import type {
   PromiseOrValue,
 } from "./common";
 
-export interface FileInterfaceInterface extends utils.Interface {
-  functions: {
-    "uploadFile(address,string,string,bytes[][3],uint256)": FunctionFragment;
+export declare namespace StoreContact {
+  export type CategoryStruct = {
+    category_address: PromiseOrValue<string>;
+    name: PromiseOrValue<string>;
+    num: PromiseOrValue<BigNumberish>;
   };
 
-  getFunction(nameOrSignatureOrTopic: "uploadFile"): FunctionFragment;
+  export type CategoryStructOutput = [string, string, BigNumber] & {
+    category_address: string;
+    name: string;
+    num: BigNumber;
+  };
 
+  export type FileInfoStruct = {
+    file_address: PromiseOrValue<string>;
+    ipfs_address: PromiseOrValue<string>;
+    owner: PromiseOrValue<string>;
+    title: PromiseOrValue<string>;
+    description: PromiseOrValue<string>;
+    category: PromiseOrValue<string>;
+    images: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<string>
+    ];
+    upload_timestamp: PromiseOrValue<BigNumberish>;
+    price: PromiseOrValue<BigNumberish>;
+    buyer_num: PromiseOrValue<BigNumberish>;
+  };
+
+  export type FileInfoStructOutput = [
+    string,
+    string,
+    string,
+    string,
+    string,
+    string,
+    [string, string, string],
+    BigNumber,
+    BigNumber,
+    BigNumber
+  ] & {
+    file_address: string;
+    ipfs_address: string;
+    owner: string;
+    title: string;
+    description: string;
+    category: string;
+    images: [string, string, string];
+    upload_timestamp: BigNumber;
+    price: BigNumber;
+    buyer_num: BigNumber;
+  };
+}
+
+export interface FileInterfaceInterface extends utils.Interface {
+  functions: {
+    "addCategory(string)": FunctionFragment;
+    "getCategorySlice(address)": FunctionFragment;
+    "uploadFile(address,string,string,address,string[3],uint256)": FunctionFragment;
+    "getSelfFileInfos(address,bool)": FunctionFragment;
+  };
+
+  getFunction(
+    nameOrSignatureOrTopic:
+      | "addCategory"
+      | "getCategorySlice"
+      | "uploadFile"
+      | "getSelfFileInfos"
+  ): FunctionFragment;
+
+  encodeFunctionData(
+    functionFragment: "addCategory",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getCategorySlice",
+    values: [PromiseOrValue<string>]
+  ): string;
   encodeFunctionData(
     functionFragment: "uploadFile",
     values: [
       PromiseOrValue<string>,
       PromiseOrValue<string>,
       PromiseOrValue<string>,
-      [
-        PromiseOrValue<BytesLike>[],
-        PromiseOrValue<BytesLike>[],
-        PromiseOrValue<BytesLike>[]
-      ],
+      PromiseOrValue<string>,
+      [PromiseOrValue<string>, PromiseOrValue<string>, PromiseOrValue<string>],
       PromiseOrValue<BigNumberish>
     ]
   ): string;
+  encodeFunctionData(
+    functionFragment: "getSelfFileInfos",
+    values: [PromiseOrValue<string>, PromiseOrValue<boolean>]
+  ): string;
 
+  decodeFunctionResult(
+    functionFragment: "addCategory",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getCategorySlice",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "uploadFile", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getSelfFileInfos",
+    data: BytesLike
+  ): Result;
 
   events: {};
 }
@@ -77,77 +162,192 @@ export interface FileInterface extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    addCategory(
+      name: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    getCategorySlice(
+      cursor: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<
+      [StoreContact.CategoryStructOutput[], string] & {
+        category_slice: StoreContact.CategoryStructOutput[];
+        next: string;
+      }
+    >;
+
     uploadFile(
       ipfs_address: PromiseOrValue<string>,
       title: PromiseOrValue<string>,
       description: PromiseOrValue<string>,
+      category: PromiseOrValue<string>,
       images: [
-        PromiseOrValue<BytesLike>[],
-        PromiseOrValue<BytesLike>[],
-        PromiseOrValue<BytesLike>[]
+        PromiseOrValue<string>,
+        PromiseOrValue<string>,
+        PromiseOrValue<string>
       ],
       price: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
+
+    getSelfFileInfos(
+      cursor: PromiseOrValue<string>,
+      reverse: PromiseOrValue<boolean>,
+      overrides?: CallOverrides
+    ): Promise<
+      [StoreContact.FileInfoStructOutput[], string] & {
+        file_infos: StoreContact.FileInfoStructOutput[];
+        next: string;
+      }
+    >;
   };
+
+  addCategory(
+    name: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  getCategorySlice(
+    cursor: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<
+    [StoreContact.CategoryStructOutput[], string] & {
+      category_slice: StoreContact.CategoryStructOutput[];
+      next: string;
+    }
+  >;
 
   uploadFile(
     ipfs_address: PromiseOrValue<string>,
     title: PromiseOrValue<string>,
     description: PromiseOrValue<string>,
+    category: PromiseOrValue<string>,
     images: [
-      PromiseOrValue<BytesLike>[],
-      PromiseOrValue<BytesLike>[],
-      PromiseOrValue<BytesLike>[]
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<string>
     ],
     price: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  getSelfFileInfos(
+    cursor: PromiseOrValue<string>,
+    reverse: PromiseOrValue<boolean>,
+    overrides?: CallOverrides
+  ): Promise<
+    [StoreContact.FileInfoStructOutput[], string] & {
+      file_infos: StoreContact.FileInfoStructOutput[];
+      next: string;
+    }
+  >;
+
   callStatic: {
+    addCategory(
+      name: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    getCategorySlice(
+      cursor: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<
+      [StoreContact.CategoryStructOutput[], string] & {
+        category_slice: StoreContact.CategoryStructOutput[];
+        next: string;
+      }
+    >;
+
     uploadFile(
       ipfs_address: PromiseOrValue<string>,
       title: PromiseOrValue<string>,
       description: PromiseOrValue<string>,
+      category: PromiseOrValue<string>,
       images: [
-        PromiseOrValue<BytesLike>[],
-        PromiseOrValue<BytesLike>[],
-        PromiseOrValue<BytesLike>[]
+        PromiseOrValue<string>,
+        PromiseOrValue<string>,
+        PromiseOrValue<string>
       ],
       price: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    getSelfFileInfos(
+      cursor: PromiseOrValue<string>,
+      reverse: PromiseOrValue<boolean>,
+      overrides?: CallOverrides
+    ): Promise<
+      [StoreContact.FileInfoStructOutput[], string] & {
+        file_infos: StoreContact.FileInfoStructOutput[];
+        next: string;
+      }
+    >;
   };
 
   filters: {};
 
   estimateGas: {
+    addCategory(
+      name: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    getCategorySlice(
+      cursor: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     uploadFile(
       ipfs_address: PromiseOrValue<string>,
       title: PromiseOrValue<string>,
       description: PromiseOrValue<string>,
+      category: PromiseOrValue<string>,
       images: [
-        PromiseOrValue<BytesLike>[],
-        PromiseOrValue<BytesLike>[],
-        PromiseOrValue<BytesLike>[]
+        PromiseOrValue<string>,
+        PromiseOrValue<string>,
+        PromiseOrValue<string>
       ],
       price: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
+
+    getSelfFileInfos(
+      cursor: PromiseOrValue<string>,
+      reverse: PromiseOrValue<boolean>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
+    addCategory(
+      name: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    getCategorySlice(
+      cursor: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     uploadFile(
       ipfs_address: PromiseOrValue<string>,
       title: PromiseOrValue<string>,
       description: PromiseOrValue<string>,
+      category: PromiseOrValue<string>,
       images: [
-        PromiseOrValue<BytesLike>[],
-        PromiseOrValue<BytesLike>[],
-        PromiseOrValue<BytesLike>[]
+        PromiseOrValue<string>,
+        PromiseOrValue<string>,
+        PromiseOrValue<string>
       ],
       price: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    getSelfFileInfos(
+      cursor: PromiseOrValue<string>,
+      reverse: PromiseOrValue<boolean>,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };
 }

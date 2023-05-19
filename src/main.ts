@@ -16,3 +16,4 @@ app.use(pinia)
 app.mount("#app")
 
 import "default-passive-events"
+import "@varlet/touch-emulator"
