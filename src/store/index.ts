@@ -10,7 +10,7 @@ import Identicon from "identicon.js"
 import {ImplementationInterface, ImplementationInterface__factory} from "@/assets/types/ethers";
 import OutputAddress from "@/assets/eth/migrations/output.json";
 import {assertNotEmpty} from "@/assets/lib/utils";
-import {head_address, zero_address} from "@/assets/lib/settings";
+import {head_address, ipfs_url, zero_address} from "@/assets/lib/settings";
 import {create, IPFSHTTPClient} from "ipfs-http-client"
 
 type StoreType = ({
@@ -58,7 +58,7 @@ export const UseStore = defineStore("main", {
     show_default_wallet_modal: false,//展示自带钱包登录框
 
     encrypted_private_key: null,
-    ipfs: create({url: "https://ipfs.seutools.com"})
+    ipfs: create({url: ipfs_url})
   }),
   getters: {},
   actions: {

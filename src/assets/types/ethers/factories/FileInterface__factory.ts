@@ -64,9 +64,9 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "address",
+        internalType: "string",
         name: "ipfs_address",
-        type: "address",
+        type: "string",
       },
       {
         internalType: "string",
@@ -122,9 +122,9 @@ const _abi = [
             type: "address",
           },
           {
-            internalType: "address",
+            internalType: "string",
             name: "ipfs_address",
-            type: "address",
+            type: "string",
           },
           {
             internalType: "address",

@@ -9,19 +9,20 @@
       </template>
     </var-app-bar>
 
-    <div class=" flex items-center justify-center md:mt-16">
-      <div class="w-[720px] flex flex-col gap-4 pt-4 rounded-xl">
-        <var-list
-          :finished="finished"
-          v-model:loading="loading"
-          @load="load"
-          :immediate-check="false"
-        >
-          <div v-for="(file_info,k) in files" :key="k">
-            <file-card :file_info="file_info as StoreContact.FileInfoStructOutput"/>
-          </div>
-        </var-list>
-      </div>
+    <div class=" flex flex-col items-center justify-center md:mt-16 gap-4 rounded-xl">
+      <var-list
+        class="w-[720px] max-w-full p-3"
+        :finished="finished"
+        v-model:loading="loading"
+        @load="load"
+        :immediate-check="false"
+      >
+        <div v-for="(file_info,k) in files" :key="k" class="my-3">
+          <transition  enter-active-class="animate__animated animate__fadeInRight" appear>
+            <file-card class="shadow-around" :file_info="file_info as StoreContact.FileInfoStructOutput"/>
+          </transition>
+        </div>
+      </var-list>
     </div>
   </div>
 </template>

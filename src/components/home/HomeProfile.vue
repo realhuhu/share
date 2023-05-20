@@ -39,7 +39,6 @@
 <script lang="ts" setup>
 import {UseStore} from "@/store";
 import {useRouter} from "vue-router";
-import SelfCard from "@/components/userCard/selfCard.vue";
 
 const store = UseStore()
 const router = useRouter()

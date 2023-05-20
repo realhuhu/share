@@ -98,7 +98,7 @@ abstract contract StoreContact {
     struct File {
         address file_address;
 
-        address ipfs_address;//ipfs 地址
+        string ipfs_address;//ipfs 地址
         address owner;//上传者
         string title;//标题
         string description;//描述
@@ -113,7 +113,7 @@ abstract contract StoreContact {
     struct FileInfo {
         address file_address;
 
-        address ipfs_address;//ipfs 地址
+        string ipfs_address;//ipfs 地址
         address owner;//上传者
         string title;//标题
         string description;//描述

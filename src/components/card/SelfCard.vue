@@ -89,7 +89,7 @@ const store = UseStore()
 const router = useRouter()
 
 defineOptions({
-  name: "selfCard"
+  name: "SelfCard"
 })
 </script>
 

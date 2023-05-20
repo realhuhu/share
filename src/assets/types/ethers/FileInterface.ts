@@ -82,7 +82,7 @@ export interface FileInterfaceInterface extends utils.Interface {
   functions: {
     "addCategory(string)": FunctionFragment;
     "getCategorySlice(address)": FunctionFragment;
-    "uploadFile(address,string,string,address,string[3],uint256)": FunctionFragment;
+    "uploadFile(string,string,string,address,string[3],uint256)": FunctionFragment;
     "getSelfFileInfos(address,bool)": FunctionFragment;
   };
 

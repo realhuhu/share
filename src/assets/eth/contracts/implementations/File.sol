@@ -8,7 +8,7 @@ interface FileInterface {
 
     function getCategorySlice(address cursor) external view returns (StoreContact.Category[10] memory category_slice, address next);
 
-    function uploadFile(address ipfs_address, string memory title, string memory description, address category, string[3] memory images, uint price) external;
+    function uploadFile(string memory ipfs_address, string memory title, string memory description, address category, string[3] memory images, uint price) external;
 
     function getSelfFileInfos(address cursor, bool reverse) external view returns (StoreContact.FileInfo[10] memory file_infos, address next);
 }
@@ -47,7 +47,7 @@ abstract contract FileContact is BaseContact, FileInterface {
 
 
     function uploadFile(
-        address ipfs_address,
+        string memory ipfs_address,
         string memory title,
         string memory description,
         address category,

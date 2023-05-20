@@ -140,7 +140,7 @@ export interface ImplementationContactInterface extends utils.Interface {
     "updateAvatar(string)": FunctionFragment;
     "updateNickname(string)": FunctionFragment;
     "updateSignature(string)": FunctionFragment;
-    "uploadFile(address,string,string,address,string[3],uint256)": FunctionFragment;
+    "uploadFile(string,string,string,address,string[3],uint256)": FunctionFragment;
     "init()": FunctionFragment;
   };
 
