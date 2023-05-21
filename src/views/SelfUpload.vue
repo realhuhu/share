@@ -18,8 +18,11 @@
         :immediate-check="false"
       >
         <div v-for="(file_info,k) in files" :key="k" class="my-3">
-          <transition  enter-active-class="animate__animated animate__fadeInRight" appear>
-            <file-card class="shadow-around" :file_info="file_info as StoreContact.FileInfoStructOutput"/>
+          <transition enter-active-class="animate__animated animate__fadeIn" appear>
+            <div class="flex flex-col justify-center items-end">
+              <div class="text-gray-500">{{ date(file_info.upload_timestamp.toNumber()) }}</div>
+              <file-card class="shadow-around" :file_info="file_info as StoreContact.FileInfoStructOutput"/>
+            </div>
           </transition>
         </div>
       </var-list>
@@ -31,7 +34,7 @@
 <script lang="ts" setup>
 import {UseStore} from "@/store";
 import {ref} from "vue";
-import {assertNotEmpty} from "@/assets/lib/utils";
+import {assertNotEmpty, DateParser} from "@/assets/lib/utils";
 import {safeBack} from "@/router";
 import {head_address, tail_address, zero_address} from "@/assets/lib/settings";
 import {StoreContact} from "@/assets/types/ethers/ImplementationContact";
@@ -56,6 +59,8 @@ const load = async () => {
   }
   loading.value = false
 }
+
+const date = (timestamp: number) => new DateParser(timestamp).all()
 
 load()
 

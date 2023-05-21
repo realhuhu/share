@@ -82,6 +82,16 @@ library AddressOrderedMap {
         length = self._keys.length;
     }
 
+    function getNext(T storage self, address key)
+    public view returns (address next){
+        next = self._keys.getNext(key);
+    }
+
+    function getPrev(T storage self, address key)
+    public view returns (address prev){
+        prev = self._keys.getPrev(key);
+    }
+
     function getKeys(T storage self, address cursor, bool reverse)
     public view returns (address[10] memory keys) {
         address[10] memory results = self._keys.slice(cursor, reverse);

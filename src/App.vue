@@ -1,12 +1,11 @@
 <template>
-
   <router-view v-slot="{ Component }" class="md:pl-[64px]">
     <transition :name="page_animation">
-      <component v-if="show_help" :is="Component"/>
-      <access-help v-else-if="store.ethereum_chain_id"/>
-
+      <component v-if="show" :is="Component"/>
+      <access-help v-else/>
     </transition>
   </router-view>
+
   <home-sidebar class="hidden md:flex"/>
   <register-modal/>
   <default-wallet-modal/>
@@ -26,7 +25,7 @@ const page_animation = ref<PageAnimation>()
 
 store.connectEthereum()
 
-const show_help = computed(() => {
+const show = computed(() => {
   if (store.ethereum_type === "metamask") {
     if (store.ethereum_chain_id !== store.correct_chain_id) return false
     if (route.meta.auth && !store.contracts_connected) return false
@@ -34,12 +33,12 @@ const show_help = computed(() => {
   return true
 })
 
-watch(show_help, (new_value: boolean) => {
-  if (window.innerWidth <= 768) page_animation.value = !new_value ? "scale-push" : "scale-pop"
+watch(show, (new_value: boolean) => {
+  if (store.is_mobile) page_animation.value = !new_value ? "scale-push" : "scale-pop"
 })
 
 watch(() => router.currentRoute.value, (new_value, old_value) => {
-  if (window.innerWidth >= 768 || old_value.path === "/") {
+  if (!store.is_mobile || old_value.path === "/") {
     page_animation.value = undefined
     return
   }

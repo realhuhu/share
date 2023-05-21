@@ -46,6 +46,26 @@ const _abi = [
       {
         components: [
           {
+            internalType: "string",
+            name: "major",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "avatar",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "nickname",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "signature",
+            type: "string",
+          },
+          {
             internalType: "uint256",
             name: "ID",
             type: "uint256",
@@ -84,26 +104,6 @@ const _abi = [
             internalType: "uint256",
             name: "uploaded_file_num",
             type: "uint256",
-          },
-          {
-            internalType: "string",
-            name: "major",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "avatar",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "nickname",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "signature",
-            type: "string",
           },
         ],
         internalType: "struct StoreContact.UserSelfInfo",

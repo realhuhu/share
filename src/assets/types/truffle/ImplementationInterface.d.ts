@@ -39,22 +39,57 @@ export interface ImplementationInterfaceInstance
     1: string;
   }>;
 
+  getFileInfos(
+    cursor: string,
+    category: string,
+    order: number | BN | string,
+    reverse: boolean,
+    txDetails?: Truffle.TransactionDetails
+  ): Promise<{
+    0: {
+      owner: string;
+      category: string;
+      file_address: string;
+      is_buy: boolean;
+      name: string;
+      title: string;
+      description: string;
+      ipfs_address: string;
+      images: string[];
+      price: BN;
+      up_num: BN;
+      down_num: BN;
+      buyer_num: BN;
+      comment_num: BN;
+      up_and_down: BN;
+      upload_timestamp: BN;
+    }[];
+    1: string;
+    2: boolean;
+  }>;
+
   getSelfFileInfos(
     cursor: string,
     reverse: boolean,
     txDetails?: Truffle.TransactionDetails
   ): Promise<{
     0: {
-      file_address: string;
-      ipfs_address: string;
       owner: string;
+      category: string;
+      file_address: string;
+      is_buy: boolean;
+      name: string;
       title: string;
       description: string;
-      category: string;
+      ipfs_address: string;
       images: string[];
-      upload_timestamp: BN;
       price: BN;
+      up_num: BN;
+      down_num: BN;
       buyer_num: BN;
+      comment_num: BN;
+      up_and_down: BN;
+      upload_timestamp: BN;
     }[];
     1: string;
   }>;
@@ -62,6 +97,10 @@ export interface ImplementationInterfaceInstance
   getSelfInfo(
     txDetails?: Truffle.TransactionDetails
   ): Promise<{
+    major: string;
+    avatar: string;
+    nickname: string;
+    signature: string;
     ID: BN;
     coins: BN;
     heart: BN;
@@ -70,10 +109,6 @@ export interface ImplementationInterfaceInstance
     following_num: BN;
     login_timestamp: BN;
     uploaded_file_num: BN;
-    major: string;
-    avatar: string;
-    nickname: string;
-    signature: string;
   }>;
 
   isRegistered(
@@ -180,6 +215,7 @@ export interface ImplementationInterfaceInstance
   uploadFile: {
     (
       ipfs_address: string,
+      name: string,
       title: string,
       description: string,
       category: string,
@@ -189,6 +225,7 @@ export interface ImplementationInterfaceInstance
     ): Promise<Truffle.TransactionResponse<AllEvents>>;
     call(
       ipfs_address: string,
+      name: string,
       title: string,
       description: string,
       category: string,
@@ -198,6 +235,7 @@ export interface ImplementationInterfaceInstance
     ): Promise<void>;
     sendTransaction(
       ipfs_address: string,
+      name: string,
       title: string,
       description: string,
       category: string,
@@ -207,6 +245,7 @@ export interface ImplementationInterfaceInstance
     ): Promise<string>;
     estimateGas(
       ipfs_address: string,
+      name: string,
       title: string,
       description: string,
       category: string,
@@ -249,22 +288,57 @@ export interface ImplementationInterfaceInstance
       1: string;
     }>;
 
+    getFileInfos(
+      cursor: string,
+      category: string,
+      order: number | BN | string,
+      reverse: boolean,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<{
+      0: {
+        owner: string;
+        category: string;
+        file_address: string;
+        is_buy: boolean;
+        name: string;
+        title: string;
+        description: string;
+        ipfs_address: string;
+        images: string[];
+        price: BN;
+        up_num: BN;
+        down_num: BN;
+        buyer_num: BN;
+        comment_num: BN;
+        up_and_down: BN;
+        upload_timestamp: BN;
+      }[];
+      1: string;
+      2: boolean;
+    }>;
+
     getSelfFileInfos(
       cursor: string,
       reverse: boolean,
       txDetails?: Truffle.TransactionDetails
     ): Promise<{
       0: {
-        file_address: string;
-        ipfs_address: string;
         owner: string;
+        category: string;
+        file_address: string;
+        is_buy: boolean;
+        name: string;
         title: string;
         description: string;
-        category: string;
+        ipfs_address: string;
         images: string[];
-        upload_timestamp: BN;
         price: BN;
+        up_num: BN;
+        down_num: BN;
         buyer_num: BN;
+        comment_num: BN;
+        up_and_down: BN;
+        upload_timestamp: BN;
       }[];
       1: string;
     }>;
@@ -272,6 +346,10 @@ export interface ImplementationInterfaceInstance
     getSelfInfo(
       txDetails?: Truffle.TransactionDetails
     ): Promise<{
+      major: string;
+      avatar: string;
+      nickname: string;
+      signature: string;
       ID: BN;
       coins: BN;
       heart: BN;
@@ -280,10 +358,6 @@ export interface ImplementationInterfaceInstance
       following_num: BN;
       login_timestamp: BN;
       uploaded_file_num: BN;
-      major: string;
-      avatar: string;
-      nickname: string;
-      signature: string;
     }>;
 
     isRegistered(
@@ -393,6 +467,7 @@ export interface ImplementationInterfaceInstance
     uploadFile: {
       (
         ipfs_address: string,
+        name: string,
         title: string,
         description: string,
         category: string,
@@ -402,6 +477,7 @@ export interface ImplementationInterfaceInstance
       ): Promise<Truffle.TransactionResponse<AllEvents>>;
       call(
         ipfs_address: string,
+        name: string,
         title: string,
         description: string,
         category: string,
@@ -411,6 +487,7 @@ export interface ImplementationInterfaceInstance
       ): Promise<void>;
       sendTransaction(
         ipfs_address: string,
+        name: string,
         title: string,
         description: string,
         category: string,
@@ -420,6 +497,7 @@ export interface ImplementationInterfaceInstance
       ): Promise<string>;
       estimateGas(
         ipfs_address: string,
+        name: string,
         title: string,
         description: string,
         category: string,

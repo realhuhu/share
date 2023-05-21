@@ -24,7 +24,7 @@
             <div
               class="flex flex-col justify-center items-center py-2 cursor-pointer hover:shadow-around"
               @click="router.push('/create-eth-account')"
-              v-ripple
+              ripple
             >
               <i-logos-ethereum-color class="h-8 md:h-12"/>
               <div class="font-thin text-xs md:text-sm">以太坊账户</div>

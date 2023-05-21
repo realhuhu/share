@@ -70,6 +70,11 @@ const _abi = [
       },
       {
         internalType: "string",
+        name: "name",
+        type: "string",
+      },
+      {
+        internalType: "string",
         name: "title",
         type: "string",
       },
@@ -118,18 +123,28 @@ const _abi = [
         components: [
           {
             internalType: "address",
+            name: "owner",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "category",
+            type: "address",
+          },
+          {
+            internalType: "address",
             name: "file_address",
             type: "address",
           },
           {
-            internalType: "string",
-            name: "ipfs_address",
-            type: "string",
+            internalType: "bool",
+            name: "is_buy",
+            type: "bool",
           },
           {
-            internalType: "address",
-            name: "owner",
-            type: "address",
+            internalType: "string",
+            name: "name",
+            type: "string",
           },
           {
             internalType: "string",
@@ -142,9 +157,9 @@ const _abi = [
             type: "string",
           },
           {
-            internalType: "address",
-            name: "category",
-            type: "address",
+            internalType: "string",
+            name: "ipfs_address",
+            type: "string",
           },
           {
             internalType: "string[3]",
@@ -153,17 +168,37 @@ const _abi = [
           },
           {
             internalType: "uint256",
-            name: "upload_timestamp",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
             name: "price",
             type: "uint256",
           },
           {
             internalType: "uint256",
+            name: "up_num",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "down_num",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
             name: "buyer_num",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "comment_num",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "up_and_down",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "upload_timestamp",
             type: "uint256",
           },
         ],
@@ -175,6 +210,132 @@ const _abi = [
         internalType: "address",
         name: "next",
         type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "cursor",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "category",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "order",
+        type: "uint256",
+      },
+      {
+        internalType: "bool",
+        name: "reverse",
+        type: "bool",
+      },
+    ],
+    name: "getFileInfos",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "address",
+            name: "owner",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "category",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "file_address",
+            type: "address",
+          },
+          {
+            internalType: "bool",
+            name: "is_buy",
+            type: "bool",
+          },
+          {
+            internalType: "string",
+            name: "name",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "title",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "description",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "ipfs_address",
+            type: "string",
+          },
+          {
+            internalType: "string[3]",
+            name: "images",
+            type: "string[3]",
+          },
+          {
+            internalType: "uint256",
+            name: "price",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "up_num",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "down_num",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "buyer_num",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "comment_num",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "up_and_down",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "upload_timestamp",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct StoreContact.FileInfo[10]",
+        name: "file_infos",
+        type: "tuple[10]",
+      },
+      {
+        internalType: "address",
+        name: "next",
+        type: "address",
+      },
+      {
+        internalType: "bool",
+        name: "finished",
+        type: "bool",
       },
     ],
     stateMutability: "view",

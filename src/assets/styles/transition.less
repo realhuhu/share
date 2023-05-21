@@ -4,8 +4,8 @@
   left: 0;
   z-index: 1;
   width: 100vw;
-  height: 100vh;
-  overflow: visible;
+  //height: 100vh;
+  //overflow: visible;
 }
 
 .animate__animated {
@@ -14,7 +14,7 @@
 
 // switch-left
 .switch-left-leave-active, .switch-left-enter-active {
-  transition: all 0.3s;
+  transition: all 3s;
 }
 
 .switch-left-leave-from {
@@ -29,6 +29,7 @@
 
 .switch-left-enter-from {
   transform: translateX(100%);
+  .animate__clear();
 }
 
 .switch-left-enter-to {
@@ -37,7 +38,7 @@
 
 // switch-right
 .switch-right-leave-active, .switch-right-enter-active {
-  transition: all 0.3s;
+  transition: all 3s;
 }
 
 .switch-right-leave-from {
@@ -52,6 +53,7 @@
 
 .switch-right-enter-from {
   transform: translateX(-100%);
+  .animate__clear();
 }
 
 .switch-right-enter-to {

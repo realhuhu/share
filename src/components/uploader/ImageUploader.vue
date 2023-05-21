@@ -2,7 +2,7 @@
   <var-uploader
     v-model="images"
     :maxlength="3"
-    :previewed="previewed"
+    :previewed="store.is_mobile"
     :maxsize="5*1024*1024"
     @after-read="readImage"
     @remove="removeImage"
@@ -14,7 +14,7 @@
 <script lang="ts" setup>
 
 import {Snackbar, VarFile} from "@varlet/ui";
-import {computed, ref} from "vue";
+import {ref} from "vue";
 import {UseStore} from "@/store";
 
 defineProps(["images"])
@@ -22,7 +22,6 @@ const emits = defineEmits(["update:images"])
 
 const store = UseStore()
 const images = ref<VarFile[]>([])
-const previewed = computed(() => window.innerWidth < 768)
 const cache = ref<Record<number, string>>({})
 const readImage = async (image: VarFile) => {
   if (!image.file) {
@@ -52,6 +51,8 @@ const readImage = async (image: VarFile) => {
       path: image.name,
       content: buffer
     })
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     cache.value[image.id] = res.cid.toString()
     image.state = "success"
     const result = Object.values(cache.value)
@@ -72,6 +73,8 @@ const readImage = async (image: VarFile) => {
 
 
 const removeImage = async (image: VarFile) => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   delete cache.value[image.id]
   const result = Object.values(cache.value)
   const length = result.length

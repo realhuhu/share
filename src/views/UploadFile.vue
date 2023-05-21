@@ -13,14 +13,10 @@
       <div class="w-screen md:w-[720px] flex flex-col gap-4 md:shadow-around md:p-12 p-5 rounded-3xl">
 
         <var-divider>上传文件</var-divider>
-        <file-uploader ref="file_uploader" v-model:file="ipfs_address"/>
+        <file-uploader ref="file_uploader" v-model:file="ipfs_address" v-model:name="name"/>
         <var-input variant="outlined" placeholder="标题" :maxlength="64" v-model="title"/>
         <var-input variant="outlined" placeholder="文件描述..." :maxlength="512" resize textarea v-model="description"/>
-
-        <var-select v-if="store.categories" placeholder="分类" variant="outlined" v-model="category">
-          <var-option v-for="category in store.categories" :label="category.name"
-                      :value="category.category_address" :key="category.category_address"/>
-        </var-select>
+        <category-select-bar v-model="category"/>
 
         <div class="flex justify-center items-center gap-6 pr-6 pt-4">
           <div class="w-16 font-bold md:text-lg text-gray-500">图片:</div>
@@ -43,7 +39,7 @@
 
         <div class="md:p-12 pt-4">
           <var-button block type="success" @click="upload" :disabled="!valid()||uploading">
-            {{ uploading ? "处理中..." : "上传"}}
+            {{ uploading ? "处理中..." : "上传" }}
           </var-button>
         </div>
       </div>
@@ -61,6 +57,7 @@ import ImageUploader from "@/components/uploader/ImageUploader.vue";
 
 const store = UseStore()
 const ipfs_address = ref<string>()
+const name = ref<string>()
 const title = ref<string>()
 const description = ref<string>()
 const category = ref<Address>()
@@ -70,10 +67,10 @@ const uploading = ref(false)
 const file_uploader = ref()
 const image_uploader = ref()
 
-const valid = () => Boolean(title.value && description.value && price.value && category.value && ipfs_address.value)
+const valid = () => Boolean(title.value && description.value && price.value && category.value && ipfs_address.value && name.value)
 
 const upload = async () => {
-  if (!(title.value && description.value && price.value && category.value && ipfs_address.value)) {
+  if (!(title.value && description.value && price.value && category.value && ipfs_address.value && name.value)) {
     return
   }
 
@@ -82,6 +79,7 @@ const upload = async () => {
   try {
     await contract.uploadFile(
       ipfs_address.value,
+      name.value,
       title.value,
       description.value,
       category.value,

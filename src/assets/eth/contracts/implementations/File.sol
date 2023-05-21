@@ -8,9 +8,11 @@ interface FileInterface {
 
     function getCategorySlice(address cursor) external view returns (StoreContact.Category[10] memory category_slice, address next);
 
-    function uploadFile(string memory ipfs_address, string memory title, string memory description, address category, string[3] memory images, uint price) external;
+    function uploadFile(string memory ipfs_address, string memory name, string memory title, string memory description, address category, string[3] memory images, uint price) external;
 
     function getSelfFileInfos(address cursor, bool reverse) external view returns (StoreContact.FileInfo[10] memory file_infos, address next);
+
+    function getFileInfos(address cursor, address category, uint order, bool reverse) external view returns (StoreContact.FileInfo[10] memory file_infos, address next, bool finished);
 }
 
 abstract contract FileContact is BaseContact, FileInterface {
@@ -48,6 +50,7 @@ abstract contract FileContact is BaseContact, FileInterface {
 
     function uploadFile(
         string memory ipfs_address,
+        string memory name,
         string memory title,
         string memory description,
         address category,
@@ -64,19 +67,29 @@ abstract contract FileContact is BaseContact, FileInterface {
         address file_address = toAddress(keccak256(abi.encodePacked(title)));
         File storage file_info = files.file_info[file_address];
 
-        file_info.file_address = file_address;
-        file_info.ipfs_address = ipfs_address;
         file_info.owner = msg.sender;
+        file_info.category = category;
+        file_info.file_address = file_address;
+
+        file_info.name = name;
         file_info.title = title;
         file_info.description = description;
-        file_info.category = category;
+        file_info.ipfs_address = ipfs_address;
+
         file_info.images = images;
-        file_info.upload_timestamp = block.timestamp;
+
         file_info.price = price;
-        file_info.buyer_num = 0;
+        file_info.upload_timestamp = block.timestamp;
+
+        file_info.buyers[msg.sender] = true;
+
+        file_info.comment_index.init();
+
         files.file_index.append(file_address);
         files._file_by_price.update(AddressOrderedMap.Item(file_address, price));
         files._file_by_buyer_num.update(AddressOrderedMap.Item(file_address, 0));
+
+        categories.category_info[category].num++;
 
         address message_address = toAddress(keccak256(abi.encodePacked(file_address)));
         FollowingUploadMessage storage message = messages.following_upload[message_address];
@@ -97,14 +110,26 @@ abstract contract FileContact is BaseContact, FileInterface {
 
     function _toFileInfo(File storage file)
     internal view returns (FileInfo memory file_info){
-        file_info.file_address = file.file_address;
-        file_info.ipfs_address = file.ipfs_address;
         file_info.owner = file.owner;
+        file_info.category = file.category;
+        file_info.file_address = file.file_address;
+
+        file_info.is_buy = file.buyers[msg.sender];
+
+        file_info.name = file.name;
         file_info.title = file.title;
         file_info.description = file.description;
+        file_info.ipfs_address = file.ipfs_address;
+
         file_info.images = file.images;
-        file_info.upload_timestamp = file.upload_timestamp;
+
         file_info.price = file.price;
+        file_info.up_num = file.up_num;
+        file_info.down_num = file.down_num;
+        file_info.buyer_num = file.buyer_num;
+        file_info.comment_num = file.comment_index.length;
+        file_info.up_and_down = file.up_and_downs[msg.sender];
+        file_info.upload_timestamp = file.upload_timestamp;
     }
 
     function getSelfFileInfos(address cursor, bool reverse)
@@ -117,6 +142,48 @@ abstract contract FileContact is BaseContact, FileInterface {
             if (next == address(0x0)) break;
             file_infos[i] = _toFileInfo(files.file_info[next]);
         }
+    }
 
+    function getFileInfos(address cursor, address category, uint order, bool reverse)
+    external view returns (StoreContact.FileInfo[10] memory file_infos, address next, bool finished){
+        FileInfo memory file_info;
+        uint index = 0;
+        while (index < 10) {
+            if (reverse) {
+                if (cursor == address(0x1)) {
+                    finished = true;
+                    break;
+                }
+
+                if (order == 1) {
+                    cursor = files._file_by_price.getPrev(cursor);
+                } else if (order == 2) {
+                    cursor = files._file_by_buyer_num.getPrev(cursor);
+                } else {
+                    cursor = files.file_index.getPrev(cursor);
+                }
+            } else {
+                if (cursor == address(0x2)) {
+                    finished = true;
+                    break;
+                }
+
+                if (order == 1) {
+                    cursor = files._file_by_price.getNext(cursor);
+                } else if (order == 2) {
+                    cursor = files._file_by_buyer_num.getNext(cursor);
+                } else {
+                    cursor = files.file_index.getNext(cursor);
+                }
+            }
+
+            file_info = _toFileInfo(files.file_info[cursor]);
+            if (file_info.category == category || category == address(0x0)) {
+                file_infos[index] = file_info;
+                index++;
+            }
+
+            next = cursor;
+        }
     }
 }

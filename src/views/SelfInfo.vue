@@ -45,7 +45,7 @@
           <var-divider margin="0"/>
 
           <div class="flex justify-between items-center min-h-[40px] px-2 cursor-pointer hover:bg-gray-100 duration-75"
-               v-ripple @click="edit('signature')">
+               ripple @click="edit('signature')">
             <div class="w-32">签名</div>
             <div class="flex justify-end items-center gap-2">
               <div class="text-gray-500">{{ store!.user!.raw_data!.signature || "还没有签名..." }}</div>

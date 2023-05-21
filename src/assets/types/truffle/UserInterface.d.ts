@@ -39,6 +39,10 @@ export interface UserInterfaceInstance extends Truffle.ContractInstance {
   getSelfInfo(
     txDetails?: Truffle.TransactionDetails
   ): Promise<{
+    major: string;
+    avatar: string;
+    nickname: string;
+    signature: string;
     ID: BN;
     coins: BN;
     heart: BN;
@@ -47,10 +51,6 @@ export interface UserInterfaceInstance extends Truffle.ContractInstance {
     following_num: BN;
     login_timestamp: BN;
     uploaded_file_num: BN;
-    major: string;
-    avatar: string;
-    nickname: string;
-    signature: string;
   }>;
 
   updateAvatar: {
@@ -131,6 +131,10 @@ export interface UserInterfaceInstance extends Truffle.ContractInstance {
     getSelfInfo(
       txDetails?: Truffle.TransactionDetails
     ): Promise<{
+      major: string;
+      avatar: string;
+      nickname: string;
+      signature: string;
       ID: BN;
       coins: BN;
       heart: BN;
@@ -139,10 +143,6 @@ export interface UserInterfaceInstance extends Truffle.ContractInstance {
       following_num: BN;
       login_timestamp: BN;
       uploaded_file_num: BN;
-      major: string;
-      avatar: string;
-      nickname: string;
-      signature: string;
     }>;
 
     updateAvatar: {

@@ -14,8 +14,6 @@
 
 
 <script lang="ts" setup>
-import SearchBar from "@/components/utils/SearchBar.vue";
-
 defineOptions({
   name: "HomeHeader"
 })

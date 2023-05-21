@@ -25,6 +25,10 @@ import type {
 
 export declare namespace StoreContact {
   export type UserSelfInfoStruct = {
+    major: PromiseOrValue<string>;
+    avatar: PromiseOrValue<string>;
+    nickname: PromiseOrValue<string>;
+    signature: PromiseOrValue<string>;
     ID: PromiseOrValue<BigNumberish>;
     coins: PromiseOrValue<BigNumberish>;
     heart: PromiseOrValue<BigNumberish>;
@@ -33,26 +37,26 @@ export declare namespace StoreContact {
     following_num: PromiseOrValue<BigNumberish>;
     login_timestamp: PromiseOrValue<BigNumberish>;
     uploaded_file_num: PromiseOrValue<BigNumberish>;
-    major: PromiseOrValue<string>;
-    avatar: PromiseOrValue<string>;
-    nickname: PromiseOrValue<string>;
-    signature: PromiseOrValue<string>;
   };
 
   export type UserSelfInfoStructOutput = [
-    BigNumber,
-    BigNumber,
-    BigNumber,
-    BigNumber,
-    BigNumber,
-    BigNumber,
-    BigNumber,
-    BigNumber,
     string,
     string,
     string,
-    string
+    string,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber
   ] & {
+    major: string;
+    avatar: string;
+    nickname: string;
+    signature: string;
     ID: BigNumber;
     coins: BigNumber;
     heart: BigNumber;
@@ -61,10 +65,6 @@ export declare namespace StoreContact {
     following_num: BigNumber;
     login_timestamp: BigNumber;
     uploaded_file_num: BigNumber;
-    major: string;
-    avatar: string;
-    nickname: string;
-    signature: string;
   };
 }
 

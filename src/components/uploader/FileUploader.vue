@@ -38,8 +38,8 @@ import {Snackbar, VarFile} from "@varlet/ui";
 import {computed, ref} from "vue";
 import {UseStore} from "@/store";
 
-defineProps(["file"])
-const emits = defineEmits(["update:file"])
+defineProps(["file", "name"])
+const emits = defineEmits(["update:file", "update:name"])
 
 const store = UseStore()
 const file = ref<VarFile>()
@@ -67,6 +67,7 @@ const clearFile = () => {
     uploading: false
   }
   emits("update:file", undefined)
+  emits("update:name", undefined)
 }
 
 const readFile = async (uploaded_file: VarFile) => {
@@ -97,7 +98,7 @@ const readFile = async (uploaded_file: VarFile) => {
   }
 
   const res = await store.ipfs.add({
-    path: uploaded_file.name,
+    path: "/",
     content: buffer
   }, {
     progress: (bytes: number) => {
@@ -117,6 +118,7 @@ const readFile = async (uploaded_file: VarFile) => {
   const cid = res.cid.toString()
 
   emits("update:file", cid)
+  emits("update:name", uploaded_file.name)
 }
 
 defineExpose({clearFile})

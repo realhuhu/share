@@ -41,25 +41,33 @@ export declare namespace StoreContact {
   };
 
   export type FileInfoStruct = {
-    file_address: PromiseOrValue<string>;
-    ipfs_address: PromiseOrValue<string>;
     owner: PromiseOrValue<string>;
+    category: PromiseOrValue<string>;
+    file_address: PromiseOrValue<string>;
+    is_buy: PromiseOrValue<boolean>;
+    name: PromiseOrValue<string>;
     title: PromiseOrValue<string>;
     description: PromiseOrValue<string>;
-    category: PromiseOrValue<string>;
+    ipfs_address: PromiseOrValue<string>;
     images: [
       PromiseOrValue<string>,
       PromiseOrValue<string>,
       PromiseOrValue<string>
     ];
-    upload_timestamp: PromiseOrValue<BigNumberish>;
     price: PromiseOrValue<BigNumberish>;
+    up_num: PromiseOrValue<BigNumberish>;
+    down_num: PromiseOrValue<BigNumberish>;
     buyer_num: PromiseOrValue<BigNumberish>;
+    comment_num: PromiseOrValue<BigNumberish>;
+    up_and_down: PromiseOrValue<BigNumberish>;
+    upload_timestamp: PromiseOrValue<BigNumberish>;
   };
 
   export type FileInfoStructOutput = [
     string,
     string,
+    string,
+    boolean,
     string,
     string,
     string,
@@ -67,18 +75,28 @@ export declare namespace StoreContact {
     [string, string, string],
     BigNumber,
     BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
     BigNumber
   ] & {
-    file_address: string;
-    ipfs_address: string;
     owner: string;
+    category: string;
+    file_address: string;
+    is_buy: boolean;
+    name: string;
     title: string;
     description: string;
-    category: string;
+    ipfs_address: string;
     images: [string, string, string];
-    upload_timestamp: BigNumber;
     price: BigNumber;
+    up_num: BigNumber;
+    down_num: BigNumber;
     buyer_num: BigNumber;
+    comment_num: BigNumber;
+    up_and_down: BigNumber;
+    upload_timestamp: BigNumber;
   };
 }
 
@@ -89,8 +107,9 @@ export interface FileContactInterface extends utils.Interface {
     "transferAdmin(address)": FunctionFragment;
     "addCategory(string)": FunctionFragment;
     "getCategorySlice(address)": FunctionFragment;
-    "uploadFile(string,string,string,address,string[3],uint256)": FunctionFragment;
+    "uploadFile(string,string,string,string,address,string[3],uint256)": FunctionFragment;
     "getSelfFileInfos(address,bool)": FunctionFragment;
+    "getFileInfos(address,address,uint256,bool)": FunctionFragment;
   };
 
   getFunction(
@@ -102,6 +121,7 @@ export interface FileContactInterface extends utils.Interface {
       | "getCategorySlice"
       | "uploadFile"
       | "getSelfFileInfos"
+      | "getFileInfos"
   ): FunctionFragment;
 
   encodeFunctionData(functionFragment: "admin", values?: undefined): string;
@@ -128,6 +148,7 @@ export interface FileContactInterface extends utils.Interface {
       PromiseOrValue<string>,
       PromiseOrValue<string>,
       PromiseOrValue<string>,
+      PromiseOrValue<string>,
       [PromiseOrValue<string>, PromiseOrValue<string>, PromiseOrValue<string>],
       PromiseOrValue<BigNumberish>
     ]
@@ -135,6 +156,15 @@ export interface FileContactInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "getSelfFileInfos",
     values: [PromiseOrValue<string>, PromiseOrValue<boolean>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getFileInfos",
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<boolean>
+    ]
   ): string;
 
   decodeFunctionResult(functionFragment: "admin", data: BytesLike): Result;
@@ -157,6 +187,10 @@ export interface FileContactInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "uploadFile", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getSelfFileInfos",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getFileInfos",
     data: BytesLike
   ): Result;
 
@@ -234,6 +268,7 @@ export interface FileContact extends BaseContract {
 
     uploadFile(
       ipfs_address: PromiseOrValue<string>,
+      name: PromiseOrValue<string>,
       title: PromiseOrValue<string>,
       description: PromiseOrValue<string>,
       category: PromiseOrValue<string>,
@@ -254,6 +289,20 @@ export interface FileContact extends BaseContract {
       [StoreContact.FileInfoStructOutput[], string] & {
         file_infos: StoreContact.FileInfoStructOutput[];
         next: string;
+      }
+    >;
+
+    getFileInfos(
+      cursor: PromiseOrValue<string>,
+      category: PromiseOrValue<string>,
+      order: PromiseOrValue<BigNumberish>,
+      reverse: PromiseOrValue<boolean>,
+      overrides?: CallOverrides
+    ): Promise<
+      [StoreContact.FileInfoStructOutput[], string, boolean] & {
+        file_infos: StoreContact.FileInfoStructOutput[];
+        next: string;
+        finished: boolean;
       }
     >;
   };
@@ -286,6 +335,7 @@ export interface FileContact extends BaseContract {
 
   uploadFile(
     ipfs_address: PromiseOrValue<string>,
+    name: PromiseOrValue<string>,
     title: PromiseOrValue<string>,
     description: PromiseOrValue<string>,
     category: PromiseOrValue<string>,
@@ -306,6 +356,20 @@ export interface FileContact extends BaseContract {
     [StoreContact.FileInfoStructOutput[], string] & {
       file_infos: StoreContact.FileInfoStructOutput[];
       next: string;
+    }
+  >;
+
+  getFileInfos(
+    cursor: PromiseOrValue<string>,
+    category: PromiseOrValue<string>,
+    order: PromiseOrValue<BigNumberish>,
+    reverse: PromiseOrValue<boolean>,
+    overrides?: CallOverrides
+  ): Promise<
+    [StoreContact.FileInfoStructOutput[], string, boolean] & {
+      file_infos: StoreContact.FileInfoStructOutput[];
+      next: string;
+      finished: boolean;
     }
   >;
 
@@ -336,6 +400,7 @@ export interface FileContact extends BaseContract {
 
     uploadFile(
       ipfs_address: PromiseOrValue<string>,
+      name: PromiseOrValue<string>,
       title: PromiseOrValue<string>,
       description: PromiseOrValue<string>,
       category: PromiseOrValue<string>,
@@ -356,6 +421,20 @@ export interface FileContact extends BaseContract {
       [StoreContact.FileInfoStructOutput[], string] & {
         file_infos: StoreContact.FileInfoStructOutput[];
         next: string;
+      }
+    >;
+
+    getFileInfos(
+      cursor: PromiseOrValue<string>,
+      category: PromiseOrValue<string>,
+      order: PromiseOrValue<BigNumberish>,
+      reverse: PromiseOrValue<boolean>,
+      overrides?: CallOverrides
+    ): Promise<
+      [StoreContact.FileInfoStructOutput[], string, boolean] & {
+        file_infos: StoreContact.FileInfoStructOutput[];
+        next: string;
+        finished: boolean;
       }
     >;
   };
@@ -395,6 +474,7 @@ export interface FileContact extends BaseContract {
 
     uploadFile(
       ipfs_address: PromiseOrValue<string>,
+      name: PromiseOrValue<string>,
       title: PromiseOrValue<string>,
       description: PromiseOrValue<string>,
       category: PromiseOrValue<string>,
@@ -409,6 +489,14 @@ export interface FileContact extends BaseContract {
 
     getSelfFileInfos(
       cursor: PromiseOrValue<string>,
+      reverse: PromiseOrValue<boolean>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getFileInfos(
+      cursor: PromiseOrValue<string>,
+      category: PromiseOrValue<string>,
+      order: PromiseOrValue<BigNumberish>,
       reverse: PromiseOrValue<boolean>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -438,6 +526,7 @@ export interface FileContact extends BaseContract {
 
     uploadFile(
       ipfs_address: PromiseOrValue<string>,
+      name: PromiseOrValue<string>,
       title: PromiseOrValue<string>,
       description: PromiseOrValue<string>,
       category: PromiseOrValue<string>,
@@ -452,6 +541,14 @@ export interface FileContact extends BaseContract {
 
     getSelfFileInfos(
       cursor: PromiseOrValue<string>,
+      reverse: PromiseOrValue<boolean>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getFileInfos(
+      cursor: PromiseOrValue<string>,
+      category: PromiseOrValue<string>,
+      order: PromiseOrValue<BigNumberish>,
       reverse: PromiseOrValue<boolean>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;

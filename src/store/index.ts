@@ -41,6 +41,7 @@ type StoreType = ({
   show_register_modal: boolean
   show_default_wallet_modal: boolean
   encrypted_private_key: Nullable<string>
+  is_mobile: boolean,
 }
 export const UseStore = defineStore("main", {
   state: (): StoreType => ({
@@ -58,7 +59,8 @@ export const UseStore = defineStore("main", {
     show_default_wallet_modal: false,//展示自带钱包登录框
 
     encrypted_private_key: null,
-    ipfs: create({url: ipfs_url})
+    ipfs: create({url: ipfs_url}),
+    is_mobile: window.innerWidth < 768
   }),
   getters: {},
   actions: {
@@ -82,12 +84,14 @@ export const UseStore = defineStore("main", {
           break
         case "metamask":
           const inter = setInterval(async () => {
-            this.ethereum_chain_id = window.ethereum.chainId
-            if (this.ethereum_chain_id) {
+            if (window.ethereum.chainId) {
               //调取MetaMask登录，初始化provider
               const address_list = await this.connectMetaMask()
-              //若正常登录MetaMask，尝试连接合约并初始化User
-              if (address_list) await this.afterMetaMaskLogin(address_list[0])
+              if (address_list) {
+                this.ethereum_chain_id = window.ethereum.chainId
+                //若正常登录MetaMask，尝试连接合约并初始化User
+                if (address_list) await this.afterMetaMaskLogin(address_list[0])
+              }
               clearInterval(inter)
             }
           }, 50)
@@ -177,7 +181,10 @@ export const UseStore = defineStore("main", {
         }
       }
 
-      this.categories = categories
+      this.categories = [
+        {category_address: zero_address, name: "全部", num: categories.map(x => x.num).reduce((a, b) => a + b)},
+        ...categories
+      ]
     },
     async connectContracts(provider: Web3Provider) {
       this.contract = ImplementationInterface__factory.connect(OutputAddress.address, provider.getSigner())
@@ -205,14 +212,5 @@ export const UseStore = defineStore("main", {
       }
     }
   }
-  // persist: {
-  //   enabled: true,
-  //   strategies: [
-  //     {
-  //       storage: localStorage,
-  //       paths: ["encryptedPrivateKey"]
-  //     }
-  //   ]
-  // }
 })
 

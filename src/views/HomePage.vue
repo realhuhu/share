@@ -6,9 +6,9 @@
 
 
     <router-view v-slot="{ Component }">
-      <transition :name="page_animation || undefined" @after-enter="page_animation=undefined">
-        <component class="pt-12 md:pt-0" :is="Component"/>
-      </transition>
+      <keep-alive>
+        <component :is="Component"/>
+      </keep-alive>
     </router-view>
   </div>
 </template>
@@ -16,17 +16,19 @@
 
 <script lang="ts" setup>
 import {ref, watch, ComponentPublicInstance} from "vue"
+import {UseStore} from "@/store";
 
 interface VM extends ComponentPublicInstance {
   navbar_active: number
 }
 
+const store = UseStore()
 const navbar_active = ref<number>(0)
 const page_animation = ref<PageAnimation>()
 
 
 watch(navbar_active, (newValue, oldValue) => {
-  if (window.innerWidth >= 768) {
+  if (!store.is_mobile) {
     page_animation.value = undefined
     return
   }
