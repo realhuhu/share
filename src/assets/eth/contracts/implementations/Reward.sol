@@ -7,8 +7,8 @@ interface RewardInterface {
 
 }
 
-abstract contract RewardContact is BaseContact {
-    function RewardContact_init()
+abstract contract RewardContact is BaseContact, RewardInterface {
+    function RewardContract_init()
     external {
 
     }

@@ -26,7 +26,7 @@ type AllEvents = AdminTransferred;
 
 export interface ImplementationContactInstance
   extends Truffle.ContractInstance {
-  RewardContact_init: {
+  RewardContract_init: {
     (txDetails?: Truffle.TransactionDetails): Promise<
       Truffle.TransactionResponse<AllEvents>
     >;
@@ -320,7 +320,7 @@ export interface ImplementationContactInstance
   };
 
   methods: {
-    RewardContact_init: {
+    RewardContract_init: {
       (txDetails?: Truffle.TransactionDetails): Promise<
         Truffle.TransactionResponse<AllEvents>
       >;

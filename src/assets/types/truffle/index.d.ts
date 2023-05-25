@@ -9,6 +9,7 @@ import { FileContactContract } from "./FileContact";
 import { FileInterfaceContract } from "./FileInterface";
 import { ImplementationContactContract } from "./ImplementationContact";
 import { ImplementationInterfaceContract } from "./ImplementationInterface";
+import { MessageContactContract } from "./MessageContact";
 import { OurShareContract } from "./OurShare";
 import { RewardContactContract } from "./RewardContact";
 import { UserContractContract } from "./UserContract";
@@ -24,6 +25,7 @@ declare global {
       require(name: "FileInterface"): FileInterfaceContract;
       require(name: "ImplementationContact"): ImplementationContactContract;
       require(name: "ImplementationInterface"): ImplementationInterfaceContract;
+      require(name: "MessageContact"): MessageContactContract;
       require(name: "OurShare"): OurShareContract;
       require(name: "RewardContact"): RewardContactContract;
       require(name: "UserContract"): UserContractContract;
@@ -48,6 +50,10 @@ export {
   ImplementationInterfaceContract,
   ImplementationInterfaceInstance,
 } from "./ImplementationInterface";
+export {
+  MessageContactContract,
+  MessageContactInstance,
+} from "./MessageContact";
 export { OurShareContract, OurShareInstance } from "./OurShare";
 export { RewardContactContract, RewardContactInstance } from "./RewardContact";
 export { UserContractContract, UserContractInstance } from "./UserContract";

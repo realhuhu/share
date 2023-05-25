@@ -120,9 +120,6 @@ abstract contract StoreContact {
 
         mapping(address => bool) buyers;//已购买的用户
         mapping(address => uint) up_and_downs;//已点赞用户
-        mapping(address => Comment) comment_info;//评论信息
-
-        AddressLinkedList.T comment_index;//评论地址
     }
 
     struct FileBriefInfo {
@@ -216,41 +213,6 @@ abstract contract StoreContact {
         uint remuneration;//酬金
         uint update_timestamp;//更新时间
         uint create_timestamp;//上传时间
-
-        mapping(address => Comment) comment_info;//评论信息
-
-        AddressLinkedList.T comment_index;//评论地址
-        AddressOrderedMap.T _comments_by_up_num;//评论按点赞排序
-    }
-
-    //评论
-    struct Comment {
-        address author;//作者
-        address comment_address;
-
-        string content;//内容
-        string[3] images;//图片
-
-        uint up_num;//点赞次数
-        uint down_num;//点踩次数
-        uint comment_timestamp;//评论时间
-
-        mapping(address => SubComment) sub_comment_info;//子评论信息
-
-        AddressLinkedList.T sub_comment_index;//子评论
-    }
-
-    //子评论
-    struct SubComment {
-        address author;//作者
-        address target;//被回复的子评论
-        address sub_comment_address;
-
-        string content;//内容
-
-        uint up_num;//点赞次数
-        uint down_num;//点踩次数
-        uint comment_timestamp;//评论时间
     }
 
     //悬赏表

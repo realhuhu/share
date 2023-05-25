@@ -21,7 +21,7 @@ abstract contract FileContact is BaseContact, FileInterface {
     using AddressLinkedList for AddressLinkedList.T;
     using AddressOrderedMap for AddressOrderedMap.T;
 
-    function FileContact_init()
+    function FileContract_init()
     internal {
         categories.category_index.init();
         files.file_index.init();
@@ -85,8 +85,6 @@ abstract contract FileContact is BaseContact, FileInterface {
 
         file_info.buyers[msg.sender] = true;
 
-        file_info.comment_index.init();
-
         files.file_index.append(file_address);
         files._file_by_price.update(AddressOrderedMap.Item(file_address, price));
         files._file_by_buyer_num.update(AddressOrderedMap.Item(file_address, 0));
@@ -128,7 +126,7 @@ abstract contract FileContact is BaseContact, FileInterface {
         file_info.up_num = file.up_num;
         file_info.down_num = file.down_num;
         file_info.buyer_num = file.buyer_num;
-        file_info.comment_num = file.comment_index.length;
+        file_info.comment_num = reviews[file.file_address].comment_index.length;
         file_info.up_and_down = file.up_and_downs[msg.sender];
         file_info.upload_timestamp = file.upload_timestamp;
     }
@@ -210,7 +208,7 @@ abstract contract FileContact is BaseContact, FileInterface {
         detail_info.up_num = file.up_num;
         detail_info.down_num = file.down_num;
         detail_info.buyer_num = file.buyer_num;
-        detail_info.comment_num = file.comment_index.length;
+        detail_info.comment_num = reviews[file.file_address].comment_index.length;
         detail_info.up_and_down = file.up_and_downs[msg.sender];
         detail_info.upload_timestamp = file.upload_timestamp;
     }

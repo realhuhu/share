@@ -2,21 +2,24 @@
 pragma solidity ^0.8.17;
 
 import "./implementations/base/Base.sol";
+import "./implementations/User.sol";
 import "./implementations/File.sol";
 import "./implementations/Reward.sol";
-import "./implementations/User.sol";
+import "./implementations/Message.sol";
 
-interface ImplementationInterface is AdminInterface, UserInterface, FileInterface, RewardInterface {
+interface ImplementationInterface is AdminInterface, UserInterface, FileInterface, RewardInterface, MessageInterface {
     function init() external;
 }
 
-contract ImplementationContact is UserContract, FileContact, RewardContact {
+contract ImplementationContact is UserContract, FileContact, RewardContact, MessageContact {
     function init()
     public {
         require(admin != address(0), "initialized");
         admin = msg.sender;
         UserContract_init();
-        FileContact_init();
+        FileContract_init();
+//        RewardContract_init();
+        MessageContract_init();
     }
 }
 

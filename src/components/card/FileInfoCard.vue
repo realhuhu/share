@@ -13,7 +13,7 @@
       <div>{{ file_info.buyer_num }}购买</div>
     </div>
 
-    <div class="indent-8">
+    <div>
       {{ file_info.description }}
     </div>
 

@@ -2,7 +2,7 @@
   <div>
     <head-bar title="文件详情" back="/home/resource"/>
 
-    <div class="flex items-center justify-center md:pt-12 md:pt-0">
+    <div class="flex items-center justify-center md:pt-12">
       <div class="w-[960px] max-w-full md:mt-24 md:px-6 flex flex-col gap-3">
         <transition enter-active-class="animate__animated animate__fadeIn" appear>
           <file-info-card v-if="file_info" :file_info="file_info"/>

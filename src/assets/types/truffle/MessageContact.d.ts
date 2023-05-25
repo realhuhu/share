@@ -5,9 +5,9 @@
 import BN from "bn.js";
 import { EventData, PastEventOptions } from "web3-eth-contract";
 
-export interface RewardContactContract
-  extends Truffle.Contract<RewardContactInstance> {
-  "new"(meta?: Truffle.TransactionDetails): Promise<RewardContactInstance>;
+export interface MessageContactContract
+  extends Truffle.Contract<MessageContactInstance> {
+  "new"(meta?: Truffle.TransactionDetails): Promise<MessageContactInstance>;
 }
 
 export interface AdminTransferred {
@@ -22,7 +22,7 @@ export interface AdminTransferred {
 
 type AllEvents = AdminTransferred;
 
-export interface RewardContactInstance extends Truffle.ContractInstance {
+export interface MessageContactInstance extends Truffle.ContractInstance {
   admin(txDetails?: Truffle.TransactionDetails): Promise<string>;
 
   renounceAdmin: {
@@ -50,15 +50,6 @@ export interface RewardContactInstance extends Truffle.ContractInstance {
       new_admin: string,
       txDetails?: Truffle.TransactionDetails
     ): Promise<number>;
-  };
-
-  RewardContract_init: {
-    (txDetails?: Truffle.TransactionDetails): Promise<
-      Truffle.TransactionResponse<AllEvents>
-    >;
-    call(txDetails?: Truffle.TransactionDetails): Promise<void>;
-    sendTransaction(txDetails?: Truffle.TransactionDetails): Promise<string>;
-    estimateGas(txDetails?: Truffle.TransactionDetails): Promise<number>;
   };
 
   methods: {
@@ -89,15 +80,6 @@ export interface RewardContactInstance extends Truffle.ContractInstance {
         new_admin: string,
         txDetails?: Truffle.TransactionDetails
       ): Promise<number>;
-    };
-
-    RewardContract_init: {
-      (txDetails?: Truffle.TransactionDetails): Promise<
-        Truffle.TransactionResponse<AllEvents>
-      >;
-      call(txDetails?: Truffle.TransactionDetails): Promise<void>;
-      sendTransaction(txDetails?: Truffle.TransactionDetails): Promise<string>;
-      estimateGas(txDetails?: Truffle.TransactionDetails): Promise<number>;
     };
   };
 

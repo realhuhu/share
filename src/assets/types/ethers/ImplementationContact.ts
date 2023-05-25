@@ -228,7 +228,7 @@ export declare namespace StoreContact {
 
 export interface ImplementationContactInterface extends utils.Interface {
   functions: {
-    "RewardContact_init()": FunctionFragment;
+    "RewardContract_init()": FunctionFragment;
     "addCategory(string)": FunctionFragment;
     "admin()": FunctionFragment;
     "getCategorySlice(address)": FunctionFragment;
@@ -250,7 +250,7 @@ export interface ImplementationContactInterface extends utils.Interface {
 
   getFunction(
     nameOrSignatureOrTopic:
-      | "RewardContact_init"
+      | "RewardContract_init"
       | "addCategory"
       | "admin"
       | "getCategorySlice"
@@ -271,7 +271,7 @@ export interface ImplementationContactInterface extends utils.Interface {
   ): FunctionFragment;
 
   encodeFunctionData(
-    functionFragment: "RewardContact_init",
+    functionFragment: "RewardContract_init",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -351,7 +351,7 @@ export interface ImplementationContactInterface extends utils.Interface {
   encodeFunctionData(functionFragment: "init", values?: undefined): string;
 
   decodeFunctionResult(
-    functionFragment: "RewardContact_init",
+    functionFragment: "RewardContract_init",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -457,7 +457,7 @@ export interface ImplementationContact extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    RewardContact_init(
+    RewardContract_init(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -583,7 +583,7 @@ export interface ImplementationContact extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
-  RewardContact_init(
+  RewardContract_init(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -697,7 +697,7 @@ export interface ImplementationContact extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    RewardContact_init(overrides?: CallOverrides): Promise<void>;
+    RewardContract_init(overrides?: CallOverrides): Promise<void>;
 
     addCategory(
       name: PromiseOrValue<string>,
@@ -817,7 +817,7 @@ export interface ImplementationContact extends BaseContract {
   };
 
   estimateGas: {
-    RewardContact_init(
+    RewardContract_init(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -914,7 +914,7 @@ export interface ImplementationContact extends BaseContract {
   };
 
   populateTransaction: {
-    RewardContact_init(
+    RewardContract_init(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

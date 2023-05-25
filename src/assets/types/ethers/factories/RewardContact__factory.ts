@@ -61,7 +61,7 @@ const _abi = [
   },
   {
     inputs: [],
-    name: "RewardContact_init",
+    name: "RewardContract_init",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

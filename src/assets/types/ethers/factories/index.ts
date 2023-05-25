@@ -8,6 +8,7 @@ export { FileContact__factory } from "./FileContact__factory";
 export { FileInterface__factory } from "./FileInterface__factory";
 export { ImplementationContact__factory } from "./ImplementationContact__factory";
 export { ImplementationInterface__factory } from "./ImplementationInterface__factory";
+export { MessageContact__factory } from "./MessageContact__factory";
 export { OurShare__factory } from "./OurShare__factory";
 export { RewardContact__factory } from "./RewardContact__factory";
 export { UserContract__factory } from "./UserContract__factory";

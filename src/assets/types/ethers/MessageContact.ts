@@ -26,20 +26,15 @@ import type {
   PromiseOrValue,
 } from "./common";
 
-export interface RewardContactInterface extends utils.Interface {
+export interface MessageContactInterface extends utils.Interface {
   functions: {
     "admin()": FunctionFragment;
     "renounceAdmin()": FunctionFragment;
     "transferAdmin(address)": FunctionFragment;
-    "RewardContract_init()": FunctionFragment;
   };
 
   getFunction(
-    nameOrSignatureOrTopic:
-      | "admin"
-      | "renounceAdmin"
-      | "transferAdmin"
-      | "RewardContract_init"
+    nameOrSignatureOrTopic: "admin" | "renounceAdmin" | "transferAdmin"
   ): FunctionFragment;
 
   encodeFunctionData(functionFragment: "admin", values?: undefined): string;
@@ -51,10 +46,6 @@ export interface RewardContactInterface extends utils.Interface {
     functionFragment: "transferAdmin",
     values: [PromiseOrValue<string>]
   ): string;
-  encodeFunctionData(
-    functionFragment: "RewardContract_init",
-    values?: undefined
-  ): string;
 
   decodeFunctionResult(functionFragment: "admin", data: BytesLike): Result;
   decodeFunctionResult(
@@ -63,10 +54,6 @@ export interface RewardContactInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "transferAdmin",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "RewardContract_init",
     data: BytesLike
   ): Result;
 
@@ -89,12 +76,12 @@ export type AdminTransferredEvent = TypedEvent<
 export type AdminTransferredEventFilter =
   TypedEventFilter<AdminTransferredEvent>;
 
-export interface RewardContact extends BaseContract {
+export interface MessageContact extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: RewardContactInterface;
+  interface: MessageContactInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -126,10 +113,6 @@ export interface RewardContact extends BaseContract {
       new_admin: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
-
-    RewardContract_init(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
   };
 
   admin(overrides?: CallOverrides): Promise<string>;
@@ -143,10 +126,6 @@ export interface RewardContact extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  RewardContract_init(
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
   callStatic: {
     admin(overrides?: CallOverrides): Promise<string>;
 
@@ -156,8 +135,6 @@ export interface RewardContact extends BaseContract {
       new_admin: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    RewardContract_init(overrides?: CallOverrides): Promise<void>;
   };
 
   filters: {
@@ -182,10 +159,6 @@ export interface RewardContact extends BaseContract {
       new_admin: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
-
-    RewardContract_init(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -197,10 +170,6 @@ export interface RewardContact extends BaseContract {
 
     transferAdmin(
       new_admin: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    RewardContract_init(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
   };

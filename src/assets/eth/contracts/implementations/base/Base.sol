@@ -3,8 +3,9 @@ pragma solidity ^0.8.17;
 
 import "./Admin.sol";
 import "./Store.sol";
+import "./Review.sol";
 
-contract BaseContact is AdminContract, StoreContact {
+contract BaseContact is AdminContract, ReviewContact, StoreContact {
     using AddressLinkedList for AddressLinkedList.T;
     using AddressOrderedMap for AddressOrderedMap.T;
 
@@ -19,8 +20,8 @@ contract BaseContact is AdminContract, StoreContact {
     }
 
     function _validCategory_(address category_address)
-    internal view{
-        require(categories.category_index.isContain(category_address),"BaseContact>_validCategory_");
+    internal view {
+        require(categories.category_index.isContain(category_address), "BaseContact>_validCategory_");
     }
 
     function _uintRange_(uint data, uint min, uint max)
