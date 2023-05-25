@@ -258,6 +258,11 @@ const _abi = [
         name: "next",
         type: "address",
       },
+      {
+        internalType: "bool",
+        name: "finished",
+        type: "bool",
+      },
     ],
     stateMutability: "view",
     type: "function",
@@ -482,6 +487,57 @@ const _abi = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "file_address",
+        type: "address",
+      },
+      {
+        internalType: "string",
+        name: "content",
+        type: "string",
+      },
+      {
+        internalType: "string[3]",
+        name: "images",
+        type: "string[3]",
+      },
+    ],
+    name: "addComment",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "file_address",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "target_address",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "comment_address",
+        type: "address",
+      },
+      {
+        internalType: "string",
+        name: "content",
+        type: "string",
+      },
+    ],
+    name: "addSubComment",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
 ] as const;

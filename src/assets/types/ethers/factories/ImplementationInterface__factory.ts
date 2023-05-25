@@ -27,6 +27,29 @@ const _abi = [
     inputs: [
       {
         internalType: "address",
+        name: "file_address",
+        type: "address",
+      },
+      {
+        internalType: "string",
+        name: "content",
+        type: "string",
+      },
+      {
+        internalType: "string[3]",
+        name: "images",
+        type: "string[3]",
+      },
+    ],
+    name: "addComment",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
         name: "cursor",
         type: "address",
       },
@@ -325,6 +348,11 @@ const _abi = [
           },
           {
             internalType: "uint256",
+            name: "medal_num",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
             name: "experience",
             type: "uint256",
           },
@@ -448,6 +476,11 @@ const _abi = [
         internalType: "address",
         name: "next",
         type: "address",
+      },
+      {
+        internalType: "bool",
+        name: "finished",
+        type: "bool",
       },
     ],
     stateMutability: "view",

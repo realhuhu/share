@@ -10,16 +10,23 @@ interface FileInterface {
 
     function uploadFile(string memory ipfs_address, string memory name, string memory title, string memory description, address category, string[3] memory images, uint price) external;
 
-    function getSelfFileBriefInfos(address cursor, bool reverse) external view returns (StoreContact.FileBriefInfo[10] memory file_infos, address next);
+    function getSelfFileBriefInfos(address cursor, bool reverse) external view returns (StoreContact.FileBriefInfo[10] memory file_infos, address next, bool finished);
 
     function getFileBriefInfos(address cursor, address category, uint order, bool reverse) external view returns (StoreContact.FileBriefInfo[10] memory file_infos, address next, bool finished);
 
     function getFileDetailInfo(address file_address) external view returns (StoreContact.FileDetailInfo memory detail_info);
+
+    function addComment(address file_address, string memory content, string[3] memory images) external;
 }
+
+
 
 abstract contract FileContact is BaseContact, FileInterface {
     using AddressLinkedList for AddressLinkedList.T;
     using AddressOrderedMap for AddressOrderedMap.T;
+    using UintLib for uint;
+    using StringLib for string;
+    using Bytes32Lib for bytes32;
 
     function FileContract_init()
     internal {
@@ -29,10 +36,25 @@ abstract contract FileContact is BaseContact, FileInterface {
         files._file_by_buyer_num.init();
     }
 
+    function _validFile_(address file_address)
+    internal view {
+        require(files.file_index.isContain(file_address), "FileContact>_validFile_");
+    }
+
+    function _validFileComment_(File storage file, address comment_address)
+    internal view {
+        require(file.comment_index.isContain(comment_address), "FileContact>_validFileComment_");
+    }
+
+    function _validFileTargetComment_(FileComment storage comment, address target_address)
+    internal view {
+        require(target_address == address(0x0) || comment.sub_comment_index.isContain(target_address), "FileContact>_validFileTargetComment_");
+    }
+
     function addCategory(string memory name)
     _onlyAdmin_
     external {
-        address category_address = toAddress(keccak256(abi.encodePacked(name)));
+        address category_address = keccak256(abi.encodePacked(name)).toAddress();
         Category storage category_info = categories.category_info[category_address];
         category_info.category_address = category_address;
         category_info.name = name;
@@ -61,12 +83,13 @@ abstract contract FileContact is BaseContact, FileInterface {
     )
     external {
         _registered_(msg.sender);
-        _stringRange_(title, 1, 64);
-        _stringRange_(description, 1, 512);
-        _uintRange_(price, 1, 20);
         _validCategory_(category);
 
-        address file_address = toAddress(keccak256(abi.encodePacked(title)));
+        title._range_(1, 64);
+        description._range_(1, 512);
+        price._range_(1, 20);
+
+        address file_address = keccak256(abi.encodePacked(title)).toAddress();
         File storage file_info = files.file_info[file_address];
 
         file_info.owner = msg.sender;
@@ -91,7 +114,7 @@ abstract contract FileContact is BaseContact, FileInterface {
 
         categories.category_info[category].num++;
 
-        address message_address = toAddress(keccak256(abi.encodePacked(file_address)));
+        address message_address = keccak256(abi.encodePacked(file_address)).toAddress();
         FollowingUploadMessage storage message = messages.following_upload[message_address];
 
         message.user = msg.sender;
@@ -126,19 +149,22 @@ abstract contract FileContact is BaseContact, FileInterface {
         file_info.up_num = file.up_num;
         file_info.down_num = file.down_num;
         file_info.buyer_num = file.buyer_num;
-        file_info.comment_num = reviews[file.file_address].comment_index.length;
+        file_info.comment_num = file.comment_num;
         file_info.up_and_down = file.up_and_downs[msg.sender];
         file_info.upload_timestamp = file.upload_timestamp;
     }
 
     function getSelfFileBriefInfos(address cursor, bool reverse)
-    external view returns (FileBriefInfo[10] memory file_infos, address next){
+    external view returns (FileBriefInfo[10] memory file_infos, address next, bool finished){
         _registered_(msg.sender);
 
         address[10] memory file_index_slice = users.user_info[msg.sender].uploaded_files.slice(cursor, reverse);
         for (uint i = 0; i < 10; i++) {
             next = file_index_slice[i];
-            if (next == address(0x0)) break;
+            if (next == address(0x0)) {
+                finished = true;
+                break;
+            }
             file_infos[i] = _toFileBriefInfo(files.file_info[next]);
         }
     }
@@ -208,8 +234,70 @@ abstract contract FileContact is BaseContact, FileInterface {
         detail_info.up_num = file.up_num;
         detail_info.down_num = file.down_num;
         detail_info.buyer_num = file.buyer_num;
-        detail_info.comment_num = reviews[file.file_address].comment_index.length;
+        detail_info.comment_num = file.comment_num;
         detail_info.up_and_down = file.up_and_downs[msg.sender];
         detail_info.upload_timestamp = file.upload_timestamp;
+    }
+
+
+    function addComment(
+        address file_address,
+        string memory content,
+        string[3] memory images
+    ) external {
+        _validFile_(file_address);
+        content._range_(0, 128);
+
+        File storage file = files.file_info[file_address];
+
+        address comment_address = keccak256(abi.encodePacked(file_address, content, msg.sender, block.timestamp)).toAddress();
+
+        FileComment storage comment = file.comment_info[comment_address];
+
+        comment.author = msg.sender;
+        comment.comment_address = comment_address;
+
+        comment.content = content;
+        comment.images = images;
+
+        comment.comment_timestamp = block.timestamp;
+
+        comment.sub_comment_index.init();
+
+        file.comment_num++;
+        file.comment_index.append(comment_address);
+        file._comments_by_up_num.update(AddressOrderedMap.Item(comment_address, file.comment_num));
+    }
+
+    function addSubComment(
+        address file_address,
+        address target_address,
+        address comment_address,
+        string memory content
+    ) external {
+        content._range_(0, 128);
+
+        _validFile_(file_address);
+        File storage file = files.file_info[file_address];
+
+        _validFileComment_(file, comment_address);
+        FileComment storage comment = file.comment_info[comment_address];
+
+        _validFileTargetComment_(comment, target_address);
+
+        address sub_comment_address = keccak256(abi.encodePacked(file_address, comment_address, content, msg.sender, block.timestamp)).toAddress();
+
+        FileSubComment storage sub_comment = comment.sub_comment_info[sub_comment_address];
+
+        sub_comment.author = msg.sender;
+        sub_comment.target_address = target_address;
+        sub_comment.comment_address = comment_address;
+        sub_comment.sub_comment_address = sub_comment_address;
+
+        sub_comment.content = content;
+
+        sub_comment.comment_timestamp = block.timestamp;
+
+        comment.sub_comment_index.append(sub_comment_address);
     }
 }

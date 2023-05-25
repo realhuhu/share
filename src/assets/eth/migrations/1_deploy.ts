@@ -13,6 +13,13 @@ module.exports = async (
   const AddressLinkedList = artifacts.require("AddressLinkedList");
   // @ts-ignore
   const AddressOrderedMap = artifacts.require("AddressOrderedMap");
+  // @ts-ignore
+  const UintLib = artifacts.require("UintLib");
+  // @ts-ignore
+  const StringLib = artifacts.require("StringLib");
+  // @ts-ignore
+  const Bytes32Lib = artifacts.require("Bytes32Lib");
+
   const Implementation = artifacts.require("ImplementationContact");
   const OurShare = await artifacts.require("OurShare")
 
@@ -22,6 +29,15 @@ module.exports = async (
 
   await deployer.deploy(AddressOrderedMap);
   deployer.link(AddressOrderedMap, Implementation)
+
+  await deployer.deploy(UintLib);
+  deployer.link(UintLib, Implementation)
+
+  await deployer.deploy(StringLib);
+  deployer.link(StringLib, Implementation)
+
+  await deployer.deploy(Bytes32Lib);
+  deployer.link(Bytes32Lib, Implementation)
 
   await deployer.deploy(Implementation);
 

@@ -28,7 +28,6 @@
 import {UseStore} from "@/store";
 import {ref} from "vue";
 import {assertNotEmpty, DateParser} from "@/assets/lib/utils";
-import {safeBack} from "@/router";
 import {head_address, tail_address, zero_address} from "@/assets/lib/settings";
 import {StoreContact} from "@/assets/types/ethers/ImplementationContact";
 
@@ -41,16 +40,14 @@ const files = ref<StoreContact.FileBriefInfoStructOutput[]>([])
 const load = async () => {
   const contract = assertNotEmpty(store.contract, "合约未初始化")
   if (!cursor.value) cursor.value = reverse.value ? tail_address : head_address
-  const {file_infos, next} = await contract.getSelfFileBriefInfos(cursor.value, reverse.value)
-  for (const file_info of file_infos) {
-    if (file_info.file_address === zero_address) {
-      finished.value = true
-      break
-    }
+  const res = await contract.getSelfFileBriefInfos(cursor.value, reverse.value)
+  for (const file_info of res.file_infos) {
+    if (file_info.file_address === zero_address) break
     files.value.push(file_info)
-    cursor.value = next
+    cursor.value = res.next
   }
   loading.value = false
+  finished.value = res.finished
 }
 
 const date = (timestamp: number) => new DateParser(timestamp).all()

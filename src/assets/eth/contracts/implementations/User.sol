@@ -32,6 +32,9 @@ interface UserInterface {
 abstract contract UserContract is BaseContact, UserInterface {
     using AddressLinkedList for AddressLinkedList.T;
     using AddressOrderedMap for AddressOrderedMap.T;
+    using UintLib for uint;
+    using StringLib for string;
+    using Bytes32Lib for bytes32;
 
     function UserContract_init()
     internal {
@@ -45,7 +48,8 @@ abstract contract UserContract is BaseContact, UserInterface {
     function register(string memory nickname)
     external {
         _notRegistered_(msg.sender);
-        _stringRange_(nickname, 1, 10);
+        nickname._range_(1, 10);
+
         UserInfo storage user_info = users.user_info[msg.sender];
 
         user_info.pits = 2;
@@ -112,6 +116,7 @@ abstract contract UserContract is BaseContact, UserInterface {
         simple_info.nickname = user_info.nickname;
         simple_info.signature = user_info.signature;
         simple_info.heart = user_info.heart;
+        simple_info.heart = user_info.medals.length;
         simple_info.experience = user_info.experience;
         simple_info.follower_num = user_info.followers.length;
         simple_info.uploaded_file_num = user_info.uploaded_files.length;
@@ -121,7 +126,8 @@ abstract contract UserContract is BaseContact, UserInterface {
     function updateAvatar(string memory avatar)
     external {
         _registered_(msg.sender);
-        _stringRange_(avatar, 1, 10);
+        avatar._range_(1, 10);
+
         UserInfo storage user_info = users.user_info[msg.sender];
         user_info.avatar = avatar;
     }
@@ -130,7 +136,8 @@ abstract contract UserContract is BaseContact, UserInterface {
     function updateNickname(string memory nickname)
     external {
         _registered_(msg.sender);
-        _stringRange_(nickname, 1, 10);
+        nickname._range_(1, 10);
+
         UserInfo storage user_info = users.user_info[msg.sender];
         user_info.nickname = nickname;
     }
@@ -139,7 +146,7 @@ abstract contract UserContract is BaseContact, UserInterface {
     function updateSignature(string memory signature)
     external {
         _registered_(msg.sender);
-        _stringRange_(signature, 1, 32);
+        signature._range_(1, 32);
         UserInfo storage user_info = users.user_info[msg.sender];
         user_info.signature = signature;
     }

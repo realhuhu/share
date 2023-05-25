@@ -50,6 +50,64 @@ export interface ImplementationContactInstance
     ): Promise<number>;
   };
 
+  addComment: {
+    (
+      file_address: string,
+      content: string,
+      images: string[],
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<Truffle.TransactionResponse<AllEvents>>;
+    call(
+      file_address: string,
+      content: string,
+      images: string[],
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<void>;
+    sendTransaction(
+      file_address: string,
+      content: string,
+      images: string[],
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<string>;
+    estimateGas(
+      file_address: string,
+      content: string,
+      images: string[],
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<number>;
+  };
+
+  addSubComment: {
+    (
+      file_address: string,
+      target_address: string,
+      comment_address: string,
+      content: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<Truffle.TransactionResponse<AllEvents>>;
+    call(
+      file_address: string,
+      target_address: string,
+      comment_address: string,
+      content: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<void>;
+    sendTransaction(
+      file_address: string,
+      target_address: string,
+      comment_address: string,
+      content: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<string>;
+    estimateGas(
+      file_address: string,
+      target_address: string,
+      comment_address: string,
+      content: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<number>;
+  };
+
   admin(txDetails?: Truffle.TransactionDetails): Promise<string>;
 
   getCategorySlice(
@@ -119,6 +177,7 @@ export interface ImplementationContactInstance
     nickname: string;
     signature: string;
     heart: BN;
+    medal_num: BN;
     experience: BN;
     follower_num: BN;
     uploaded_file_num: BN;
@@ -147,6 +206,7 @@ export interface ImplementationContactInstance
       upload_timestamp: BN;
     }[];
     1: string;
+    2: boolean;
   }>;
 
   getSelfInfo(
@@ -344,6 +404,64 @@ export interface ImplementationContactInstance
       ): Promise<number>;
     };
 
+    addComment: {
+      (
+        file_address: string,
+        content: string,
+        images: string[],
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<Truffle.TransactionResponse<AllEvents>>;
+      call(
+        file_address: string,
+        content: string,
+        images: string[],
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<void>;
+      sendTransaction(
+        file_address: string,
+        content: string,
+        images: string[],
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<string>;
+      estimateGas(
+        file_address: string,
+        content: string,
+        images: string[],
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<number>;
+    };
+
+    addSubComment: {
+      (
+        file_address: string,
+        target_address: string,
+        comment_address: string,
+        content: string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<Truffle.TransactionResponse<AllEvents>>;
+      call(
+        file_address: string,
+        target_address: string,
+        comment_address: string,
+        content: string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<void>;
+      sendTransaction(
+        file_address: string,
+        target_address: string,
+        comment_address: string,
+        content: string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<string>;
+      estimateGas(
+        file_address: string,
+        target_address: string,
+        comment_address: string,
+        content: string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<number>;
+    };
+
     admin(txDetails?: Truffle.TransactionDetails): Promise<string>;
 
     getCategorySlice(
@@ -413,6 +531,7 @@ export interface ImplementationContactInstance
       nickname: string;
       signature: string;
       heart: BN;
+      medal_num: BN;
       experience: BN;
       follower_num: BN;
       uploaded_file_num: BN;
@@ -441,6 +560,7 @@ export interface ImplementationContactInstance
         upload_timestamp: BN;
       }[];
       1: string;
+      2: boolean;
     }>;
 
     getSelfInfo(

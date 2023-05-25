@@ -62,6 +62,7 @@ export interface UserInterfaceInstance extends Truffle.ContractInstance {
     nickname: string;
     signature: string;
     heart: BN;
+    medal_num: BN;
     experience: BN;
     follower_num: BN;
     uploaded_file_num: BN;
@@ -168,6 +169,7 @@ export interface UserInterfaceInstance extends Truffle.ContractInstance {
       nickname: string;
       signature: string;
       heart: BN;
+      medal_num: BN;
       experience: BN;
       follower_num: BN;
       uploaded_file_num: BN;

@@ -25,5 +25,8 @@ module.exports = {
     extend: {
       backgroundColor: ["active"],
     }
+  },
+  corePlugins: {
+    preflight: false,
   }
 }

@@ -153,6 +153,11 @@ const _abi = [
           },
           {
             internalType: "uint256",
+            name: "medal_num",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
             name: "experience",
             type: "uint256",
           },

@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.17;
 
-interface AdminInterface{
+interface AdminInterface {
     function renounceAdmin() external;
+
     function transferAdmin(address new_admin) external;
 }
 
@@ -25,7 +26,7 @@ abstract contract AdminContract {
         _transferAdmin(new_admin);
     }
 
-    function _transferAdmin(address new_admin) internal{
+    function _transferAdmin(address new_admin) internal {
         address old_admin = admin;
         admin = new_admin;
         emit AdminTransferred(old_admin, new_admin);

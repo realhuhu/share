@@ -153,6 +153,7 @@ export declare namespace StoreContact {
     nickname: PromiseOrValue<string>;
     signature: PromiseOrValue<string>;
     heart: PromiseOrValue<BigNumberish>;
+    medal_num: PromiseOrValue<BigNumberish>;
     experience: PromiseOrValue<BigNumberish>;
     follower_num: PromiseOrValue<BigNumberish>;
     uploaded_file_num: PromiseOrValue<BigNumberish>;
@@ -166,6 +167,7 @@ export declare namespace StoreContact {
     BigNumber,
     BigNumber,
     BigNumber,
+    BigNumber,
     BigNumber
   ] & {
     major: string;
@@ -173,6 +175,7 @@ export declare namespace StoreContact {
     nickname: string;
     signature: string;
     heart: BigNumber;
+    medal_num: BigNumber;
     experience: BigNumber;
     follower_num: BigNumber;
     uploaded_file_num: BigNumber;
@@ -225,6 +228,7 @@ export declare namespace StoreContact {
 export interface ImplementationInterfaceInterface extends utils.Interface {
   functions: {
     "addCategory(string)": FunctionFragment;
+    "addComment(address,string,string[3])": FunctionFragment;
     "getCategorySlice(address)": FunctionFragment;
     "getFileBriefInfos(address,address,uint256,bool)": FunctionFragment;
     "getFileDetailInfo(address)": FunctionFragment;
@@ -245,6 +249,7 @@ export interface ImplementationInterfaceInterface extends utils.Interface {
   getFunction(
     nameOrSignatureOrTopic:
       | "addCategory"
+      | "addComment"
       | "getCategorySlice"
       | "getFileBriefInfos"
       | "getFileDetailInfo"
@@ -265,6 +270,14 @@ export interface ImplementationInterfaceInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "addCategory",
     values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "addComment",
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      [PromiseOrValue<string>, PromiseOrValue<string>, PromiseOrValue<string>]
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "getCategorySlice",
@@ -341,6 +354,7 @@ export interface ImplementationInterfaceInterface extends utils.Interface {
     functionFragment: "addCategory",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "addComment", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getCategorySlice",
     data: BytesLike
@@ -428,6 +442,17 @@ export interface ImplementationInterface extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    addComment(
+      file_address: PromiseOrValue<string>,
+      content: PromiseOrValue<string>,
+      images: [
+        PromiseOrValue<string>,
+        PromiseOrValue<string>,
+        PromiseOrValue<string>
+      ],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     getCategorySlice(
       cursor: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -475,9 +500,10 @@ export interface ImplementationInterface extends BaseContract {
       reverse: PromiseOrValue<boolean>,
       overrides?: CallOverrides
     ): Promise<
-      [StoreContact.FileBriefInfoStructOutput[], string] & {
+      [StoreContact.FileBriefInfoStructOutput[], string, boolean] & {
         file_infos: StoreContact.FileBriefInfoStructOutput[];
         next: string;
+        finished: boolean;
       }
     >;
 
@@ -548,6 +574,17 @@ export interface ImplementationInterface extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  addComment(
+    file_address: PromiseOrValue<string>,
+    content: PromiseOrValue<string>,
+    images: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<string>
+    ],
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   getCategorySlice(
     cursor: PromiseOrValue<string>,
     overrides?: CallOverrides
@@ -587,9 +624,10 @@ export interface ImplementationInterface extends BaseContract {
     reverse: PromiseOrValue<boolean>,
     overrides?: CallOverrides
   ): Promise<
-    [StoreContact.FileBriefInfoStructOutput[], string] & {
+    [StoreContact.FileBriefInfoStructOutput[], string, boolean] & {
       file_infos: StoreContact.FileBriefInfoStructOutput[];
       next: string;
+      finished: boolean;
     }
   >;
 
@@ -656,6 +694,17 @@ export interface ImplementationInterface extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    addComment(
+      file_address: PromiseOrValue<string>,
+      content: PromiseOrValue<string>,
+      images: [
+        PromiseOrValue<string>,
+        PromiseOrValue<string>,
+        PromiseOrValue<string>
+      ],
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     getCategorySlice(
       cursor: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -695,9 +744,10 @@ export interface ImplementationInterface extends BaseContract {
       reverse: PromiseOrValue<boolean>,
       overrides?: CallOverrides
     ): Promise<
-      [StoreContact.FileBriefInfoStructOutput[], string] & {
+      [StoreContact.FileBriefInfoStructOutput[], string, boolean] & {
         file_infos: StoreContact.FileBriefInfoStructOutput[];
         next: string;
+        finished: boolean;
       }
     >;
 
@@ -760,6 +810,17 @@ export interface ImplementationInterface extends BaseContract {
   estimateGas: {
     addCategory(
       name: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    addComment(
+      file_address: PromiseOrValue<string>,
+      content: PromiseOrValue<string>,
+      images: [
+        PromiseOrValue<string>,
+        PromiseOrValue<string>,
+        PromiseOrValue<string>
+      ],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -851,6 +912,17 @@ export interface ImplementationInterface extends BaseContract {
   populateTransaction: {
     addCategory(
       name: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    addComment(
+      file_address: PromiseOrValue<string>,
+      content: PromiseOrValue<string>,
+      images: [
+        PromiseOrValue<string>,
+        PromiseOrValue<string>,
+        PromiseOrValue<string>
+      ],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

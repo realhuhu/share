@@ -77,6 +77,7 @@ export declare namespace StoreContact {
     nickname: PromiseOrValue<string>;
     signature: PromiseOrValue<string>;
     heart: PromiseOrValue<BigNumberish>;
+    medal_num: PromiseOrValue<BigNumberish>;
     experience: PromiseOrValue<BigNumberish>;
     follower_num: PromiseOrValue<BigNumberish>;
     uploaded_file_num: PromiseOrValue<BigNumberish>;
@@ -90,6 +91,7 @@ export declare namespace StoreContact {
     BigNumber,
     BigNumber,
     BigNumber,
+    BigNumber,
     BigNumber
   ] & {
     major: string;
@@ -97,6 +99,7 @@ export declare namespace StoreContact {
     nickname: string;
     signature: string;
     heart: BigNumber;
+    medal_num: BigNumber;
     experience: BigNumber;
     follower_num: BigNumber;
     uploaded_file_num: BigNumber;

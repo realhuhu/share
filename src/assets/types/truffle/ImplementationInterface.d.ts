@@ -31,6 +31,33 @@ export interface ImplementationInterfaceInstance
     ): Promise<number>;
   };
 
+  addComment: {
+    (
+      file_address: string,
+      content: string,
+      images: string[],
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<Truffle.TransactionResponse<AllEvents>>;
+    call(
+      file_address: string,
+      content: string,
+      images: string[],
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<void>;
+    sendTransaction(
+      file_address: string,
+      content: string,
+      images: string[],
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<string>;
+    estimateGas(
+      file_address: string,
+      content: string,
+      images: string[],
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<number>;
+  };
+
   getCategorySlice(
     cursor: string,
     txDetails?: Truffle.TransactionDetails
@@ -98,6 +125,7 @@ export interface ImplementationInterfaceInstance
     nickname: string;
     signature: string;
     heart: BN;
+    medal_num: BN;
     experience: BN;
     follower_num: BN;
     uploaded_file_num: BN;
@@ -126,6 +154,7 @@ export interface ImplementationInterfaceInstance
       upload_timestamp: BN;
     }[];
     1: string;
+    2: boolean;
   }>;
 
   getSelfInfo(
@@ -314,6 +343,33 @@ export interface ImplementationInterfaceInstance
       ): Promise<number>;
     };
 
+    addComment: {
+      (
+        file_address: string,
+        content: string,
+        images: string[],
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<Truffle.TransactionResponse<AllEvents>>;
+      call(
+        file_address: string,
+        content: string,
+        images: string[],
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<void>;
+      sendTransaction(
+        file_address: string,
+        content: string,
+        images: string[],
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<string>;
+      estimateGas(
+        file_address: string,
+        content: string,
+        images: string[],
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<number>;
+    };
+
     getCategorySlice(
       cursor: string,
       txDetails?: Truffle.TransactionDetails
@@ -381,6 +437,7 @@ export interface ImplementationInterfaceInstance
       nickname: string;
       signature: string;
       heart: BN;
+      medal_num: BN;
       experience: BN;
       follower_num: BN;
       uploaded_file_num: BN;
@@ -409,6 +466,7 @@ export interface ImplementationInterfaceInstance
         upload_timestamp: BN;
       }[];
       1: string;
+      2: boolean;
     }>;
 
     getSelfInfo(

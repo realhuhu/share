@@ -57,20 +57,6 @@ abstract contract StoreContact {
         uint uploaded_file_num;//我上传的文件数
     }
 
-    //其他用户信息
-    struct UserBriefInfo {
-        string major;//专业
-        string avatar;//头像
-        string nickname;//用户名
-        string signature;//简介
-
-        uint heart;//热心值
-        uint medal_num;//勋章数
-        uint experience;//经验值
-        uint follower_num;//粉丝数
-        uint login_timestamp;//登录时间
-        uint uploaded_file_num;//上传的文件数
-    }
 
     //卡片用户信息
     struct UserSimpleInfo {
@@ -80,10 +66,22 @@ abstract contract StoreContact {
         string signature;//简介
 
         uint heart;//热心值
+        uint medal_num;//勋章数
         uint experience;//经验值
         uint follower_num;//粉丝数
         uint uploaded_file_num;//上传的文件数
     }
+
+    //用户摘要信息
+    struct UserBriefInfo {
+        address user_address;
+
+        string avatar;//头像
+        string nickname;//用户名
+
+        uint experience;//经验值
+    }
+
 
     //用户表
     struct UserStore {
@@ -116,10 +114,15 @@ abstract contract StoreContact {
         uint up_num;//点赞数
         uint down_num;//点踩数
         uint buyer_num;//购买量
+        uint comment_num;//评论数
         uint upload_timestamp;//上传时间
 
         mapping(address => bool) buyers;//已购买的用户
         mapping(address => uint) up_and_downs;//已点赞用户
+        mapping(address => FileComment) comment_info;//评论信息
+
+        AddressLinkedList.T comment_index;//评论地址
+        AddressOrderedMap.T _comments_by_up_num;//评论按点赞排序
     }
 
     struct FileBriefInfo {
@@ -167,6 +170,41 @@ abstract contract StoreContact {
         uint upload_timestamp;//上传时间
     }
 
+    //评论
+    struct FileComment {
+        address author;//作者
+        address comment_address;
+
+        string content;//内容
+        string[3] images;//图片
+
+        uint up_num;//点赞次数
+        uint down_num;//点踩次数
+        uint comment_timestamp;//评论时间
+
+        mapping(address => uint) up_and_downs;//已点赞用户
+        mapping(address => FileSubComment) sub_comment_info;//子评论信息
+
+        AddressLinkedList.T sub_comment_index;//子评论
+    }
+
+    //子评论
+    struct FileSubComment {
+        address author;//作者
+        address target_address;//被回复的子评论地址
+        address comment_address;//根评论地址
+        address sub_comment_address;//子评论地址
+
+        string content;//内容
+
+        uint up_num;//点赞次数
+        uint down_num;//点踩次数
+        uint comment_timestamp;//评论时间
+
+        mapping(address => uint) up_and_downs;//已点赞用户
+    }
+
+
     //文件表
     struct FileStore {
         mapping(address => File) file_info;//文件信息
@@ -210,9 +248,12 @@ abstract contract StoreContact {
         uint up_num;//点赞次数
         uint view_num;//浏览次数
         uint down_num;//点踩次数
+        uint comment_num;//点踩次数
         uint remuneration;//酬金
         uint update_timestamp;//更新时间
         uint create_timestamp;//上传时间
+
+        mapping(address => uint) up_and_downs;//已点赞用户
     }
 
     //悬赏表
