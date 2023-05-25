@@ -1,5 +1,5 @@
 <template>
-  <div :class="color_list[level-1]" class="text-gray-50 font-bold px-1 rounded-md my-1 text-sm">Lv.{{ level }}</div>
+  <div :class="color_list[level-1]" class="text-gray-50 md:font-bold px-1 rounded-md my-1 text-sm">Lv.{{ level }}</div>
 </template>
 
 

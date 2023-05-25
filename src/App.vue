@@ -1,9 +1,11 @@
 <template>
   <router-view v-slot="{ Component }" class="md:pl-[64px]">
-    <transition :name="page_animation">
+    <suspense>
+      <!--    <transition :name="page_animation">-->
       <component v-if="show" :is="Component"/>
       <access-help v-else/>
-    </transition>
+      <!--    </transition>-->
+    </suspense>
   </router-view>
 
   <home-sidebar class="hidden md:flex"/>

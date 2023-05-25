@@ -1,13 +1,6 @@
 <template>
   <div>
-    <var-app-bar color="#f2f4f6" text-color="#666" elevation="0">
-      上传文件
-      <template #left>
-        <var-button round text color="transparent" text-color="#4ebaee" @click="safeBack('/home/resource')">
-          <var-icon name="chevron-left" :size="24"/>
-        </var-button>
-      </template>
-    </var-app-bar>
+    <head-bar title="上传文件" back="/home/resource"/>
 
     <div class=" flex items-center justify-center md:mt-16">
       <div class="w-screen md:w-[720px] flex flex-col gap-4 md:shadow-around md:p-12 p-5 rounded-3xl">

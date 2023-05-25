@@ -53,7 +53,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -78,15 +79,10 @@
           "type": "bool"
         }
       ],
-      "name": "getFileInfos",
+      "name": "getFileBriefInfos",
       "outputs": [
         {
           "components": [
-            {
-              "internalType": "address",
-              "name": "owner",
-              "type": "address"
-            },
             {
               "internalType": "address",
               "name": "category",
@@ -114,18 +110,18 @@
             },
             {
               "internalType": "string",
+              "name": "owner",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
               "name": "description",
               "type": "string"
             },
             {
               "internalType": "string",
-              "name": "ipfs_address",
+              "name": "cover",
               "type": "string"
-            },
-            {
-              "internalType": "string[3]",
-              "name": "images",
-              "type": "string[3]"
             },
             {
               "internalType": "uint256",
@@ -163,7 +159,7 @@
               "type": "uint256"
             }
           ],
-          "internalType": "struct StoreContact.FileInfo[10]",
+          "internalType": "struct StoreContact.FileBriefInfo[10]",
           "name": "file_infos",
           "type": "tuple[10]"
         },
@@ -179,22 +175,18 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
         {
           "internalType": "address",
-          "name": "cursor",
+          "name": "file_address",
           "type": "address"
-        },
-        {
-          "internalType": "bool",
-          "name": "reverse",
-          "type": "bool"
         }
       ],
-      "name": "getSelfFileInfos",
+      "name": "getFileDetailInfo",
       "outputs": [
         {
           "components": [
@@ -279,7 +271,171 @@
               "type": "uint256"
             }
           ],
-          "internalType": "struct StoreContact.FileInfo[10]",
+          "internalType": "struct StoreContact.FileDetailInfo",
+          "name": "detail_info",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "user_address",
+          "type": "address"
+        }
+      ],
+      "name": "getOtherSimpleInfo",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "major",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "avatar",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "nickname",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "signature",
+              "type": "string"
+            },
+            {
+              "internalType": "uint256",
+              "name": "heart",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "experience",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "follower_num",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "uploaded_file_num",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct StoreContact.UserSimpleInfo",
+          "name": "simple_info",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "cursor",
+          "type": "address"
+        },
+        {
+          "internalType": "bool",
+          "name": "reverse",
+          "type": "bool"
+        }
+      ],
+      "name": "getSelfFileBriefInfos",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "category",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "file_address",
+              "type": "address"
+            },
+            {
+              "internalType": "bool",
+              "name": "is_buy",
+              "type": "bool"
+            },
+            {
+              "internalType": "string",
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "title",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "owner",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "description",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "cover",
+              "type": "string"
+            },
+            {
+              "internalType": "uint256",
+              "name": "price",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "up_num",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "down_num",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "buyer_num",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "comment_num",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "up_and_down",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "upload_timestamp",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct StoreContact.FileBriefInfo[10]",
           "name": "file_infos",
           "type": "tuple[10]"
         },
@@ -290,7 +446,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -365,7 +522,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -384,7 +542,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -509,7 +668,7 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.17+commit.8df45f5f\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"}],\"name\":\"addCategory\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"cursor\",\"type\":\"address\"}],\"name\":\"getCategorySlice\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"category_address\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"num\",\"type\":\"uint256\"}],\"internalType\":\"struct StoreContact.Category[10]\",\"name\":\"category_slice\",\"type\":\"tuple[10]\"},{\"internalType\":\"address\",\"name\":\"next\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"cursor\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"category\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"order\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"reverse\",\"type\":\"bool\"}],\"name\":\"getFileInfos\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"category\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"file_address\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"is_buy\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"title\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"description\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"ipfs_address\",\"type\":\"string\"},{\"internalType\":\"string[3]\",\"name\":\"images\",\"type\":\"string[3]\"},{\"internalType\":\"uint256\",\"name\":\"price\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"up_num\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"down_num\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"buyer_num\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"comment_num\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"up_and_down\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"upload_timestamp\",\"type\":\"uint256\"}],\"internalType\":\"struct StoreContact.FileInfo[10]\",\"name\":\"file_infos\",\"type\":\"tuple[10]\"},{\"internalType\":\"address\",\"name\":\"next\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"finished\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"cursor\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"reverse\",\"type\":\"bool\"}],\"name\":\"getSelfFileInfos\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"category\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"file_address\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"is_buy\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"title\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"description\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"ipfs_address\",\"type\":\"string\"},{\"internalType\":\"string[3]\",\"name\":\"images\",\"type\":\"string[3]\"},{\"internalType\":\"uint256\",\"name\":\"price\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"up_num\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"down_num\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"buyer_num\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"comment_num\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"up_and_down\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"upload_timestamp\",\"type\":\"uint256\"}],\"internalType\":\"struct StoreContact.FileInfo[10]\",\"name\":\"file_infos\",\"type\":\"tuple[10]\"},{\"internalType\":\"address\",\"name\":\"next\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getSelfInfo\",\"outputs\":[{\"components\":[{\"internalType\":\"string\",\"name\":\"major\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"avatar\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"nickname\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"signature\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"ID\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"coins\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"heart\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"experience\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"follower_num\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"following_num\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"login_timestamp\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"uploaded_file_num\",\"type\":\"uint256\"}],\"internalType\":\"struct StoreContact.UserSelfInfo\",\"name\":\"self_info\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"init\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user_address\",\"type\":\"address\"}],\"name\":\"isRegistered\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"is_registered\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"nickname\",\"type\":\"string\"}],\"name\":\"register\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceAdmin\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"new_admin\",\"type\":\"address\"}],\"name\":\"transferAdmin\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"avatar\",\"type\":\"string\"}],\"name\":\"updateAvatar\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"nickname\",\"type\":\"string\"}],\"name\":\"updateNickname\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"signature\",\"type\":\"string\"}],\"name\":\"updateSignature\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"ipfs_address\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"title\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"description\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"category\",\"type\":\"address\"},{\"internalType\":\"string[3]\",\"name\":\"images\",\"type\":\"string[3]\"},{\"internalType\":\"uint256\",\"name\":\"price\",\"type\":\"uint256\"}],\"name\":\"uploadFile\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/src/assets/eth/contracts/OurShare.sol\":\"ImplementationInterface\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/src/assets/eth/contracts/OurShare.sol\":{\"keccak256\":\"0x77b02d0045429da29de7b987be780bbc7768fa9397bc19c67357fbf84e1f6071\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://8a5608555effc047f54aee639cff9fb7d630e62e932836411a6b30d50059fa5f\",\"dweb:/ipfs/QmP4cwh5uXWtMeaZH1vN9x6KY4bizqcxiQPtqwFfZwHrJE\"]},\"project:/src/assets/eth/contracts/implementations/File.sol\":{\"keccak256\":\"0x43f36a594edd3ee5113e47f7545abffd523e48064cac92f504f362d407821a2e\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://fb7ce10a55810bcaef845910f038427c1af7bb4f002de196210963eac57ab327\",\"dweb:/ipfs/QmP3WPH1H69dBeXThQjTJ442N2VpnrKzmR9nAoDuZ91hV7\"]},\"project:/src/assets/eth/contracts/implementations/Reward.sol\":{\"keccak256\":\"0x060d70af5a4b05fd36f2a09a3cd12ee79f2da3c982173a3f0420eb2613c50b82\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://8a81809a8c25ace6a61bd9a6686da0034b519e7ec844ec8fbdfa81cc8c57e3c3\",\"dweb:/ipfs/QmbLuejW2iXrmhmYKCT8XfPdmoUEReDs4LPYjbNwGnvipk\"]},\"project:/src/assets/eth/contracts/implementations/User.sol\":{\"keccak256\":\"0x487842ce34c3e17dcef0854f6e7c09139840ee627243e60673d319056668c060\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://3d41b529f90c5934b8215fafa2a863aaf553f75f2ca6284ef9f49430a6b82db1\",\"dweb:/ipfs/QmSC4kJtKQSdghTeJUsg7sCGrqeNGeecm6rAsDtN7PFr8g\"]},\"project:/src/assets/eth/contracts/implementations/base/Admin.sol\":{\"keccak256\":\"0x18b0bb276441a44343571f85e14ae623d91a093dc5093144292cdcfa536e147c\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://6d0ea147167292aba7ef5f239e1c169a82c16d20694496ee267177fc6166dce6\",\"dweb:/ipfs/QmZMVeaahCA4qFRN51hgGrtH6BU2JrXNN4Ew8JeM74StMv\"]},\"project:/src/assets/eth/contracts/implementations/base/Base.sol\":{\"keccak256\":\"0xe9481dba6a6b41bb5f73f25a5d1539bd0649f635fd87bfb8f17a1306741985b3\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://6c9e80e5f3e2c26b484119a6cdf26de4e508d9233619326cc88405f0050d6acd\",\"dweb:/ipfs/QmSokC7772Q5koEEnixBRiwBtQBHs9VwQPCfefmieiVL3V\"]},\"project:/src/assets/eth/contracts/implementations/base/Store.sol\":{\"keccak256\":\"0x583cc105fe78c27fd7caa0e7abfc5036dac1f4082324376e0dbee242b88595ce\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://bd04655f7685518f01b3dd07eec3c939529defb0c0c668bebd7a1daab687c5d3\",\"dweb:/ipfs/QmcGzTT5mrHPGAdNEHpyaDwFySBm3nbLm3QwRGeyfb28X8\"]},\"project:/src/assets/eth/contracts/utils/AddressLinkedList.sol\":{\"keccak256\":\"0xad95a257810b7cd38d1b307d747d10b3467bb5320bdcf7531910d994851c855d\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://0a42ef438d55fd39c3543d83319e87a4ef59188861dc91e2ec7d0769bbffbe32\",\"dweb:/ipfs/Qmc2UTFUxyU8RNcdfC4ny86NfXmzZfcDo48mrCnm3z7D3z\"]},\"project:/src/assets/eth/contracts/utils/AddressOrderedMap.sol\":{\"keccak256\":\"0xf1c220cfa7302e62110a2153b8df6998d189b5d35266a24f880f515e5cd1cfdd\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://5a1f32e50cfbad35996f57ca844b87b4977e793d1c09d65976d715ee94252274\",\"dweb:/ipfs/QmSB6qpusGbAGxrjzTCXrkdZam6UomAG12hfdQtL2mbEA4\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.17+commit.8df45f5f\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"}],\"name\":\"addCategory\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"cursor\",\"type\":\"address\"}],\"name\":\"getCategorySlice\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"category_address\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"num\",\"type\":\"uint256\"}],\"internalType\":\"struct StoreContact.Category[10]\",\"name\":\"category_slice\",\"type\":\"tuple[10]\"},{\"internalType\":\"address\",\"name\":\"next\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"cursor\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"category\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"order\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"reverse\",\"type\":\"bool\"}],\"name\":\"getFileBriefInfos\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"category\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"file_address\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"is_buy\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"title\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"owner\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"description\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"cover\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"price\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"up_num\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"down_num\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"buyer_num\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"comment_num\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"up_and_down\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"upload_timestamp\",\"type\":\"uint256\"}],\"internalType\":\"struct StoreContact.FileBriefInfo[10]\",\"name\":\"file_infos\",\"type\":\"tuple[10]\"},{\"internalType\":\"address\",\"name\":\"next\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"finished\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"file_address\",\"type\":\"address\"}],\"name\":\"getFileDetailInfo\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"category\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"file_address\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"is_buy\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"title\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"description\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"ipfs_address\",\"type\":\"string\"},{\"internalType\":\"string[3]\",\"name\":\"images\",\"type\":\"string[3]\"},{\"internalType\":\"uint256\",\"name\":\"price\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"up_num\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"down_num\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"buyer_num\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"comment_num\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"up_and_down\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"upload_timestamp\",\"type\":\"uint256\"}],\"internalType\":\"struct StoreContact.FileDetailInfo\",\"name\":\"detail_info\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user_address\",\"type\":\"address\"}],\"name\":\"getOtherSimpleInfo\",\"outputs\":[{\"components\":[{\"internalType\":\"string\",\"name\":\"major\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"avatar\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"nickname\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"signature\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"heart\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"experience\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"follower_num\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"uploaded_file_num\",\"type\":\"uint256\"}],\"internalType\":\"struct StoreContact.UserSimpleInfo\",\"name\":\"simple_info\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"cursor\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"reverse\",\"type\":\"bool\"}],\"name\":\"getSelfFileBriefInfos\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"category\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"file_address\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"is_buy\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"title\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"owner\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"description\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"cover\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"price\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"up_num\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"down_num\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"buyer_num\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"comment_num\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"up_and_down\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"upload_timestamp\",\"type\":\"uint256\"}],\"internalType\":\"struct StoreContact.FileBriefInfo[10]\",\"name\":\"file_infos\",\"type\":\"tuple[10]\"},{\"internalType\":\"address\",\"name\":\"next\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getSelfInfo\",\"outputs\":[{\"components\":[{\"internalType\":\"string\",\"name\":\"major\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"avatar\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"nickname\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"signature\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"ID\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"coins\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"heart\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"experience\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"follower_num\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"following_num\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"login_timestamp\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"uploaded_file_num\",\"type\":\"uint256\"}],\"internalType\":\"struct StoreContact.UserSelfInfo\",\"name\":\"self_info\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"init\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user_address\",\"type\":\"address\"}],\"name\":\"isRegistered\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"is_registered\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"nickname\",\"type\":\"string\"}],\"name\":\"register\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceAdmin\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"new_admin\",\"type\":\"address\"}],\"name\":\"transferAdmin\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"avatar\",\"type\":\"string\"}],\"name\":\"updateAvatar\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"nickname\",\"type\":\"string\"}],\"name\":\"updateNickname\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"signature\",\"type\":\"string\"}],\"name\":\"updateSignature\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"ipfs_address\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"title\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"description\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"category\",\"type\":\"address\"},{\"internalType\":\"string[3]\",\"name\":\"images\",\"type\":\"string[3]\"},{\"internalType\":\"uint256\",\"name\":\"price\",\"type\":\"uint256\"}],\"name\":\"uploadFile\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/src/assets/eth/contracts/OurShare.sol\":\"ImplementationInterface\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/src/assets/eth/contracts/OurShare.sol\":{\"keccak256\":\"0x77b02d0045429da29de7b987be780bbc7768fa9397bc19c67357fbf84e1f6071\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://8a5608555effc047f54aee639cff9fb7d630e62e932836411a6b30d50059fa5f\",\"dweb:/ipfs/QmP4cwh5uXWtMeaZH1vN9x6KY4bizqcxiQPtqwFfZwHrJE\"]},\"project:/src/assets/eth/contracts/implementations/File.sol\":{\"keccak256\":\"0x34abf5444563981782ed53d35bf032c79835942ef1484e4345f299ce1b57e55c\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://4a22486848ade4ecefe8bb4f965c1e713d0c9750c5bd63c63b2c6815abcaf2ea\",\"dweb:/ipfs/QmdSTPwdxsNr82zv7mHrbk2xagtZNNPexGUeqTRUn9Gd1k\"]},\"project:/src/assets/eth/contracts/implementations/Reward.sol\":{\"keccak256\":\"0x060d70af5a4b05fd36f2a09a3cd12ee79f2da3c982173a3f0420eb2613c50b82\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://8a81809a8c25ace6a61bd9a6686da0034b519e7ec844ec8fbdfa81cc8c57e3c3\",\"dweb:/ipfs/QmbLuejW2iXrmhmYKCT8XfPdmoUEReDs4LPYjbNwGnvipk\"]},\"project:/src/assets/eth/contracts/implementations/User.sol\":{\"keccak256\":\"0x5bd277b06b58d55764b21a21904536db960b8e8b8c833efe34a0d6b3f93ba16b\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://ac34f8dc3ed6e7ba31d24eaaa4808d83015dd624f4414ab00d99c0c997d53bde\",\"dweb:/ipfs/QmaYf7zvt82fvHPyQHJy3bN9ZdhP8gxf6ywHGZiSZN8gnE\"]},\"project:/src/assets/eth/contracts/implementations/base/Admin.sol\":{\"keccak256\":\"0x18b0bb276441a44343571f85e14ae623d91a093dc5093144292cdcfa536e147c\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://6d0ea147167292aba7ef5f239e1c169a82c16d20694496ee267177fc6166dce6\",\"dweb:/ipfs/QmZMVeaahCA4qFRN51hgGrtH6BU2JrXNN4Ew8JeM74StMv\"]},\"project:/src/assets/eth/contracts/implementations/base/Base.sol\":{\"keccak256\":\"0xe9481dba6a6b41bb5f73f25a5d1539bd0649f635fd87bfb8f17a1306741985b3\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://6c9e80e5f3e2c26b484119a6cdf26de4e508d9233619326cc88405f0050d6acd\",\"dweb:/ipfs/QmSokC7772Q5koEEnixBRiwBtQBHs9VwQPCfefmieiVL3V\"]},\"project:/src/assets/eth/contracts/implementations/base/Store.sol\":{\"keccak256\":\"0xe82b43666fdd5589557da85575b1b5e68d25f5a4ce772b9a3865940488479d94\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://01f33db4d69ca2d5dc6c8447801d6dd805517d7e4c377f2b4f16fc97f08bbd6f\",\"dweb:/ipfs/QmVqhZP1teqYyYveLHnjr9x8XHr55PZCYtuU4EM7roq9UK\"]},\"project:/src/assets/eth/contracts/utils/AddressLinkedList.sol\":{\"keccak256\":\"0xad95a257810b7cd38d1b307d747d10b3467bb5320bdcf7531910d994851c855d\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://0a42ef438d55fd39c3543d83319e87a4ef59188861dc91e2ec7d0769bbffbe32\",\"dweb:/ipfs/Qmc2UTFUxyU8RNcdfC4ny86NfXmzZfcDo48mrCnm3z7D3z\"]},\"project:/src/assets/eth/contracts/utils/AddressOrderedMap.sol\":{\"keccak256\":\"0xf1c220cfa7302e62110a2153b8df6998d189b5d35266a24f880f515e5cd1cfdd\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://5a1f32e50cfbad35996f57ca844b87b4977e793d1c09d65976d715ee94252274\",\"dweb:/ipfs/QmSB6qpusGbAGxrjzTCXrkdZam6UomAG12hfdQtL2mbEA4\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "immutableReferences": {},
@@ -523,25 +682,25 @@
     "absolutePath": "project:/src/assets/eth/contracts/OurShare.sol",
     "exportedSymbols": {
       "AddressLinkedList": [
-        3053
+        3308
       ],
       "AddressOrderedMap": [
-        3630
+        3885
       ],
       "AdminContract": [
-        1524
+        1744
       ],
       "AdminInterface": [
-        1449
+        1669
       ],
       "BaseContact": [
-        1685
+        1905
       ],
       "FileContact": [
-        999
+        1131
       ],
       "FileInterface": [
-        203
+        197
       ],
       "ImplementationContact": [
         49
@@ -553,19 +712,19 @@
         115
       ],
       "RewardContact": [
-        1010
+        1142
       ],
       "RewardInterface": [
-        1003
+        1135
       ],
       "StoreContact": [
-        2116
+        2371
       ],
       "UserContract": [
-        1438
+        1658
       ],
       "UserInterface": [
-        1047
+        1187
       ]
     },
     "id": 116,
@@ -590,7 +749,7 @@
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
         "scope": 116,
-        "sourceUnit": 1686,
+        "sourceUnit": 1906,
         "src": "65:41:0",
         "symbolAliases": [],
         "unitAlias": ""
@@ -602,7 +761,7 @@
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
         "scope": 116,
-        "sourceUnit": 1000,
+        "sourceUnit": 1132,
         "src": "108:36:0",
         "symbolAliases": [],
         "unitAlias": ""
@@ -614,7 +773,7 @@
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
         "scope": 116,
-        "sourceUnit": 1011,
+        "sourceUnit": 1143,
         "src": "146:38:0",
         "symbolAliases": [],
         "unitAlias": ""
@@ -626,7 +785,7 @@
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
         "scope": 116,
-        "sourceUnit": 1439,
+        "sourceUnit": 1659,
         "src": "186:36:0",
         "symbolAliases": [],
         "unitAlias": ""
@@ -642,7 +801,7 @@
                 "263:14:0"
               ],
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 1449,
+              "referencedDeclaration": 1669,
               "src": "263:14:0"
             },
             "id": 7,
@@ -657,7 +816,7 @@
                 "279:13:0"
               ],
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 1047,
+              "referencedDeclaration": 1187,
               "src": "279:13:0"
             },
             "id": 9,
@@ -672,7 +831,7 @@
                 "294:13:0"
               ],
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 203,
+              "referencedDeclaration": 197,
               "src": "294:13:0"
             },
             "id": 11,
@@ -687,7 +846,7 @@
                 "309:15:0"
               ],
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 1003,
+              "referencedDeclaration": 1135,
               "src": "309:15:0"
             },
             "id": 13,
@@ -702,10 +861,10 @@
         "id": 17,
         "linearizedBaseContracts": [
           17,
-          1003,
-          203,
-          1047,
-          1449
+          1135,
+          197,
+          1187,
+          1669
         ],
         "name": "ImplementationInterface",
         "nameLocation": "236:23:0",
@@ -754,7 +913,7 @@
                 "398:12:0"
               ],
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 1438,
+              "referencedDeclaration": 1658,
               "src": "398:12:0"
             },
             "id": 19,
@@ -769,7 +928,7 @@
                 "412:11:0"
               ],
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 999,
+              "referencedDeclaration": 1131,
               "src": "412:11:0"
             },
             "id": 21,
@@ -784,7 +943,7 @@
                 "425:13:0"
               ],
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 1010,
+              "referencedDeclaration": 1142,
               "src": "425:13:0"
             },
             "id": 23,
@@ -799,14 +958,14 @@
         "id": 49,
         "linearizedBaseContracts": [
           49,
-          1010,
-          999,
-          203,
-          1438,
-          1047,
-          1685,
-          2116,
-          1524
+          1142,
+          1131,
+          197,
+          1658,
+          1187,
+          1905,
+          2371,
+          1744
         ],
         "name": "ImplementationContact",
         "nameLocation": "373:21:0",
@@ -836,7 +995,7 @@
                           "name": "admin",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 1451,
+                          "referencedDeclaration": 1671,
                           "src": "493:5:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
@@ -986,7 +1145,7 @@
                       "name": "admin",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1451,
+                      "referencedDeclaration": 1671,
                       "src": "539:5:0",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -1041,7 +1200,7 @@
                       "name": "UserContract_init",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1091,
+                      "referencedDeclaration": 1231,
                       "src": "568:17:0",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$__$returns$__$",
@@ -1077,7 +1236,7 @@
                       "name": "FileContact_init",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 247,
+                      "referencedDeclaration": 241,
                       "src": "598:16:0",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$__$returns$__$",
@@ -1148,7 +1307,7 @@
                 "652:13:0"
               ],
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 1524,
+              "referencedDeclaration": 1744,
               "src": "652:13:0"
             },
             "id": 51,
@@ -1163,7 +1322,7 @@
         "id": 115,
         "linearizedBaseContracts": [
           115,
-          1524
+          1744
         ],
         "name": "OurShare",
         "nameLocation": "640:8:0",
@@ -1267,7 +1426,7 @@
                       "name": "admin",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1451,
+                      "referencedDeclaration": 1671,
                       "src": "778:5:0",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -1632,7 +1791,7 @@
                     "1091:11:0"
                   ],
                   "nodeType": "IdentifierPath",
-                  "referencedDeclaration": 1469,
+                  "referencedDeclaration": 1689,
                   "src": "1091:11:0"
                 },
                 "nodeType": "ModifierInvocation",
@@ -2248,7 +2407,8 @@
   },
   "networks": {},
   "schemaVersion": "3.4.13",
-  "updatedAt": "2023-05-21T08:45:04.731Z",
+  "updatedAt": "2023-05-25T02:32:13.200Z",
+  "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
     "methods": {},

@@ -169,15 +169,10 @@ const _abi = [
         type: "bool",
       },
     ],
-    name: "getSelfFileInfos",
+    name: "getSelfFileBriefInfos",
     outputs: [
       {
         components: [
-          {
-            internalType: "address",
-            name: "owner",
-            type: "address",
-          },
           {
             internalType: "address",
             name: "category",
@@ -205,18 +200,18 @@ const _abi = [
           },
           {
             internalType: "string",
+            name: "owner",
+            type: "string",
+          },
+          {
+            internalType: "string",
             name: "description",
             type: "string",
           },
           {
             internalType: "string",
-            name: "ipfs_address",
+            name: "cover",
             type: "string",
-          },
-          {
-            internalType: "string[3]",
-            name: "images",
-            type: "string[3]",
           },
           {
             internalType: "uint256",
@@ -254,7 +249,7 @@ const _abi = [
             type: "uint256",
           },
         ],
-        internalType: "struct StoreContact.FileInfo[10]",
+        internalType: "struct StoreContact.FileBriefInfo[10]",
         name: "file_infos",
         type: "tuple[10]",
       },
@@ -290,7 +285,113 @@ const _abi = [
         type: "bool",
       },
     ],
-    name: "getFileInfos",
+    name: "getFileBriefInfos",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "address",
+            name: "category",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "file_address",
+            type: "address",
+          },
+          {
+            internalType: "bool",
+            name: "is_buy",
+            type: "bool",
+          },
+          {
+            internalType: "string",
+            name: "name",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "title",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "owner",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "description",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "cover",
+            type: "string",
+          },
+          {
+            internalType: "uint256",
+            name: "price",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "up_num",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "down_num",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "buyer_num",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "comment_num",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "up_and_down",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "upload_timestamp",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct StoreContact.FileBriefInfo[10]",
+        name: "file_infos",
+        type: "tuple[10]",
+      },
+      {
+        internalType: "address",
+        name: "next",
+        type: "address",
+      },
+      {
+        internalType: "bool",
+        name: "finished",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "file_address",
+        type: "address",
+      },
+    ],
+    name: "getFileDetailInfo",
     outputs: [
       {
         components: [
@@ -375,19 +476,9 @@ const _abi = [
             type: "uint256",
           },
         ],
-        internalType: "struct StoreContact.FileInfo[10]",
-        name: "file_infos",
-        type: "tuple[10]",
-      },
-      {
-        internalType: "address",
-        name: "next",
-        type: "address",
-      },
-      {
-        internalType: "bool",
-        name: "finished",
-        type: "bool",
+        internalType: "struct StoreContact.FileDetailInfo",
+        name: "detail_info",
+        type: "tuple",
       },
     ],
     stateMutability: "view",

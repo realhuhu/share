@@ -1,20 +1,11 @@
 <template>
   <div>
-    <var-app-bar color="#f2f4f6" text-color="#666" elevation="0">
-      创建以太坊账号
-      <template #left>
-        <var-button round text color="transparent" text-color="#4ebaee" @click="safeBack('/home/profile')">
-          <var-icon name="chevron-left" :size="24"/>
-        </var-button>
-      </template>
+    <head-bar title="创建以太坊账号" back="/home/profile">
+      <var-button round text color="transparent">
+        <var-icon name="help-circle-outline" :size="24"/>
+      </var-button>
+    </head-bar>
 
-      <template #right>
-        <var-button round text color="transparent">
-          <var-icon name="help-circle-outline" :size="24"/>
-        </var-button>
-      </template>
-
-    </var-app-bar>
     <div class="md:flex md:justify-start md:items-center md:flex-col md:mt-6">
       <div class="md:w-[500px] md:border md:rounded-2xl md:shadow-around">
         <var-tabs color="transparent" class="border-b" v-model:active="active">

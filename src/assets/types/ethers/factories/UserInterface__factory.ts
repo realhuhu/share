@@ -117,6 +117,67 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "address",
+        name: "user_address",
+        type: "address",
+      },
+    ],
+    name: "getOtherSimpleInfo",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "string",
+            name: "major",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "avatar",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "nickname",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "signature",
+            type: "string",
+          },
+          {
+            internalType: "uint256",
+            name: "heart",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "experience",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "follower_num",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "uploaded_file_num",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct StoreContact.UserSimpleInfo",
+        name: "simple_info",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "string",
         name: "avatar",
         type: "string",

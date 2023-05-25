@@ -70,6 +70,37 @@ export declare namespace StoreContact {
     login_timestamp: BigNumber;
     uploaded_file_num: BigNumber;
   };
+
+  export type UserSimpleInfoStruct = {
+    major: PromiseOrValue<string>;
+    avatar: PromiseOrValue<string>;
+    nickname: PromiseOrValue<string>;
+    signature: PromiseOrValue<string>;
+    heart: PromiseOrValue<BigNumberish>;
+    experience: PromiseOrValue<BigNumberish>;
+    follower_num: PromiseOrValue<BigNumberish>;
+    uploaded_file_num: PromiseOrValue<BigNumberish>;
+  };
+
+  export type UserSimpleInfoStructOutput = [
+    string,
+    string,
+    string,
+    string,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber
+  ] & {
+    major: string;
+    avatar: string;
+    nickname: string;
+    signature: string;
+    heart: BigNumber;
+    experience: BigNumber;
+    follower_num: BigNumber;
+    uploaded_file_num: BigNumber;
+  };
 }
 
 export interface UserContractInterface extends utils.Interface {
@@ -80,6 +111,7 @@ export interface UserContractInterface extends utils.Interface {
     "register(string)": FunctionFragment;
     "isRegistered(address)": FunctionFragment;
     "getSelfInfo()": FunctionFragment;
+    "getOtherSimpleInfo(address)": FunctionFragment;
     "updateAvatar(string)": FunctionFragment;
     "updateNickname(string)": FunctionFragment;
     "updateSignature(string)": FunctionFragment;
@@ -93,6 +125,7 @@ export interface UserContractInterface extends utils.Interface {
       | "register"
       | "isRegistered"
       | "getSelfInfo"
+      | "getOtherSimpleInfo"
       | "updateAvatar"
       | "updateNickname"
       | "updateSignature"
@@ -118,6 +151,10 @@ export interface UserContractInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "getSelfInfo",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getOtherSimpleInfo",
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "updateAvatar",
@@ -148,6 +185,10 @@ export interface UserContractInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getSelfInfo",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getOtherSimpleInfo",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -238,6 +279,15 @@ export interface UserContract extends BaseContract {
       }
     >;
 
+    getOtherSimpleInfo(
+      user_address: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<
+      [StoreContact.UserSimpleInfoStructOutput] & {
+        simple_info: StoreContact.UserSimpleInfoStructOutput;
+      }
+    >;
+
     updateAvatar(
       avatar: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -279,6 +329,11 @@ export interface UserContract extends BaseContract {
     overrides?: CallOverrides
   ): Promise<StoreContact.UserSelfInfoStructOutput>;
 
+  getOtherSimpleInfo(
+    user_address: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<StoreContact.UserSimpleInfoStructOutput>;
+
   updateAvatar(
     avatar: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -317,6 +372,11 @@ export interface UserContract extends BaseContract {
     getSelfInfo(
       overrides?: CallOverrides
     ): Promise<StoreContact.UserSelfInfoStructOutput>;
+
+    getOtherSimpleInfo(
+      user_address: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<StoreContact.UserSimpleInfoStructOutput>;
 
     updateAvatar(
       avatar: PromiseOrValue<string>,
@@ -369,6 +429,11 @@ export interface UserContract extends BaseContract {
 
     getSelfInfo(overrides?: CallOverrides): Promise<BigNumber>;
 
+    getOtherSimpleInfo(
+      user_address: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     updateAvatar(
       avatar: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -408,6 +473,11 @@ export interface UserContract extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     getSelfInfo(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getOtherSimpleInfo(
+      user_address: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     updateAvatar(
       avatar: PromiseOrValue<string>,

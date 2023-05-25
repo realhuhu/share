@@ -92,6 +92,20 @@ export interface UserContractInstance extends Truffle.ContractInstance {
     uploaded_file_num: BN;
   }>;
 
+  getOtherSimpleInfo(
+    user_address: string,
+    txDetails?: Truffle.TransactionDetails
+  ): Promise<{
+    major: string;
+    avatar: string;
+    nickname: string;
+    signature: string;
+    heart: BN;
+    experience: BN;
+    follower_num: BN;
+    uploaded_file_num: BN;
+  }>;
+
   updateAvatar: {
     (avatar: string, txDetails?: Truffle.TransactionDetails): Promise<
       Truffle.TransactionResponse<AllEvents>
@@ -210,6 +224,20 @@ export interface UserContractInstance extends Truffle.ContractInstance {
       follower_num: BN;
       following_num: BN;
       login_timestamp: BN;
+      uploaded_file_num: BN;
+    }>;
+
+    getOtherSimpleInfo(
+      user_address: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<{
+      major: string;
+      avatar: string;
+      nickname: string;
+      signature: string;
+      heart: BN;
+      experience: BN;
+      follower_num: BN;
       uploaded_file_num: BN;
     }>;
 

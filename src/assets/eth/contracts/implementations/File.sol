@@ -10,9 +10,11 @@ interface FileInterface {
 
     function uploadFile(string memory ipfs_address, string memory name, string memory title, string memory description, address category, string[3] memory images, uint price) external;
 
-    function getSelfFileInfos(address cursor, bool reverse) external view returns (StoreContact.FileInfo[10] memory file_infos, address next);
+    function getSelfFileBriefInfos(address cursor, bool reverse) external view returns (StoreContact.FileBriefInfo[10] memory file_infos, address next);
 
-    function getFileInfos(address cursor, address category, uint order, bool reverse) external view returns (StoreContact.FileInfo[10] memory file_infos, address next, bool finished);
+    function getFileBriefInfos(address cursor, address category, uint order, bool reverse) external view returns (StoreContact.FileBriefInfo[10] memory file_infos, address next, bool finished);
+
+    function getFileDetailInfo(address file_address) external view returns (StoreContact.FileDetailInfo memory detail_info);
 }
 
 abstract contract FileContact is BaseContact, FileInterface {
@@ -108,9 +110,8 @@ abstract contract FileContact is BaseContact, FileInterface {
         self.uploaded_files.append(file_address);
     }
 
-    function _toFileInfo(File storage file)
-    internal view returns (FileInfo memory file_info){
-        file_info.owner = file.owner;
+    function _toFileBriefInfo(File storage file)
+    internal view returns (FileBriefInfo memory file_info){
         file_info.category = file.category;
         file_info.file_address = file.file_address;
 
@@ -118,10 +119,10 @@ abstract contract FileContact is BaseContact, FileInterface {
 
         file_info.name = file.name;
         file_info.title = file.title;
+        file_info.owner = users.user_info[file.owner].nickname;
         file_info.description = file.description;
-        file_info.ipfs_address = file.ipfs_address;
 
-        file_info.images = file.images;
+        file_info.cover = file.images[0];
 
         file_info.price = file.price;
         file_info.up_num = file.up_num;
@@ -132,21 +133,21 @@ abstract contract FileContact is BaseContact, FileInterface {
         file_info.upload_timestamp = file.upload_timestamp;
     }
 
-    function getSelfFileInfos(address cursor, bool reverse)
-    external view returns (FileInfo[10] memory file_infos, address next){
+    function getSelfFileBriefInfos(address cursor, bool reverse)
+    external view returns (FileBriefInfo[10] memory file_infos, address next){
         _registered_(msg.sender);
 
         address[10] memory file_index_slice = users.user_info[msg.sender].uploaded_files.slice(cursor, reverse);
         for (uint i = 0; i < 10; i++) {
             next = file_index_slice[i];
             if (next == address(0x0)) break;
-            file_infos[i] = _toFileInfo(files.file_info[next]);
+            file_infos[i] = _toFileBriefInfo(files.file_info[next]);
         }
     }
 
-    function getFileInfos(address cursor, address category, uint order, bool reverse)
-    external view returns (StoreContact.FileInfo[10] memory file_infos, address next, bool finished){
-        FileInfo memory file_info;
+    function getFileBriefInfos(address cursor, address category, uint order, bool reverse)
+    external view returns (FileBriefInfo[10] memory file_infos, address next, bool finished){
+        FileBriefInfo memory file_info;
         uint index = 0;
         while (index < 10) {
             if (reverse) {
@@ -177,7 +178,7 @@ abstract contract FileContact is BaseContact, FileInterface {
                 }
             }
 
-            file_info = _toFileInfo(files.file_info[cursor]);
+            file_info = _toFileBriefInfo(files.file_info[cursor]);
             if (file_info.category == category || category == address(0x0)) {
                 file_infos[index] = file_info;
                 index++;
@@ -185,5 +186,32 @@ abstract contract FileContact is BaseContact, FileInterface {
 
             next = cursor;
         }
+    }
+
+    function getFileDetailInfo(address file_address)
+    external view returns (FileDetailInfo memory detail_info){
+        File storage file = files.file_info[file_address];
+
+        detail_info.owner = file.owner;
+        detail_info.category = file.category;
+        detail_info.file_address = file.file_address;
+
+        detail_info.is_buy = file.buyers[msg.sender];
+
+        detail_info.name = file.name;
+        detail_info.title = file.title;
+        detail_info.description = file.description;
+
+        detail_info.images = file.images;
+
+        if (detail_info.is_buy) detail_info.ipfs_address = file.ipfs_address;
+
+        detail_info.price = file.price;
+        detail_info.up_num = file.up_num;
+        detail_info.down_num = file.down_num;
+        detail_info.buyer_num = file.buyer_num;
+        detail_info.comment_num = file.comment_index.length;
+        detail_info.up_and_down = file.up_and_downs[msg.sender];
+        detail_info.upload_timestamp = file.upload_timestamp;
     }
 }

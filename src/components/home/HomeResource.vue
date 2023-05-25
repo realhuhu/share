@@ -43,7 +43,7 @@
         <div class="flex items-start justify-start flex-wrap">
           <div v-for="(file_info,k) in files" :key="k" class="lg:w-[50%] w-full p-2">
             <transition enter-active-class="animate__animated animate__fadeIn" appear>
-              <file-card class="shadow-around" :file_info="file_info as StoreContact.FileInfoStructOutput"/>
+              <file-card class="shadow-around" :file_info="file_info as StoreContact.FileBriefInfoStructOutput"/>
             </transition>
           </div>
         </div>
@@ -96,7 +96,7 @@ const show_menu = ref(false)
 
 const cursor = ref<string>(head_address)
 
-const files = ref<StoreContact.FileInfoStructOutput[]>([])
+const files = ref<StoreContact.FileBriefInfoStructOutput[]>([])
 const loading = ref(false)
 const finished = ref(false)
 
@@ -109,7 +109,7 @@ const clear = () => {
 const load = async () => {
   const contract = assertNotEmpty(store.contract, "合约未初始化")
   const {type, reverse} = orders.value[current_order.value]
-  const res = await contract.getFileInfos(cursor.value, current_category.value, type, reverse)
+  const res = await contract.getFileBriefInfos(cursor.value, current_category.value, type, reverse)
   finished.value = res.finished
   cursor.value = res.next
   for (let file_info of res.file_infos) {

@@ -79,21 +79,20 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
     ): Promise<number>;
   };
 
-  getSelfFileInfos(
+  getSelfFileBriefInfos(
     cursor: string,
     reverse: boolean,
     txDetails?: Truffle.TransactionDetails
   ): Promise<{
     0: {
-      owner: string;
       category: string;
       file_address: string;
       is_buy: boolean;
       name: string;
       title: string;
+      owner: string;
       description: string;
-      ipfs_address: string;
-      images: string[];
+      cover: string;
       price: BN;
       up_num: BN;
       down_num: BN;
@@ -105,7 +104,7 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
     1: string;
   }>;
 
-  getFileInfos(
+  getFileBriefInfos(
     cursor: string,
     category: string,
     order: number | BN | string,
@@ -113,15 +112,14 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
     txDetails?: Truffle.TransactionDetails
   ): Promise<{
     0: {
-      owner: string;
       category: string;
       file_address: string;
       is_buy: boolean;
       name: string;
       title: string;
+      owner: string;
       description: string;
-      ipfs_address: string;
-      images: string[];
+      cover: string;
       price: BN;
       up_num: BN;
       down_num: BN;
@@ -132,6 +130,28 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
     }[];
     1: string;
     2: boolean;
+  }>;
+
+  getFileDetailInfo(
+    file_address: string,
+    txDetails?: Truffle.TransactionDetails
+  ): Promise<{
+    owner: string;
+    category: string;
+    file_address: string;
+    is_buy: boolean;
+    name: string;
+    title: string;
+    description: string;
+    ipfs_address: string;
+    images: string[];
+    price: BN;
+    up_num: BN;
+    down_num: BN;
+    buyer_num: BN;
+    comment_num: BN;
+    up_and_down: BN;
+    upload_timestamp: BN;
   }>;
 
   methods: {
@@ -201,21 +221,20 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
       ): Promise<number>;
     };
 
-    getSelfFileInfos(
+    getSelfFileBriefInfos(
       cursor: string,
       reverse: boolean,
       txDetails?: Truffle.TransactionDetails
     ): Promise<{
       0: {
-        owner: string;
         category: string;
         file_address: string;
         is_buy: boolean;
         name: string;
         title: string;
+        owner: string;
         description: string;
-        ipfs_address: string;
-        images: string[];
+        cover: string;
         price: BN;
         up_num: BN;
         down_num: BN;
@@ -227,7 +246,7 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
       1: string;
     }>;
 
-    getFileInfos(
+    getFileBriefInfos(
       cursor: string,
       category: string,
       order: number | BN | string,
@@ -235,15 +254,14 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
       txDetails?: Truffle.TransactionDetails
     ): Promise<{
       0: {
-        owner: string;
         category: string;
         file_address: string;
         is_buy: boolean;
         name: string;
         title: string;
+        owner: string;
         description: string;
-        ipfs_address: string;
-        images: string[];
+        cover: string;
         price: BN;
         up_num: BN;
         down_num: BN;
@@ -254,6 +272,28 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
       }[];
       1: string;
       2: boolean;
+    }>;
+
+    getFileDetailInfo(
+      file_address: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<{
+      owner: string;
+      category: string;
+      file_address: string;
+      is_buy: boolean;
+      name: string;
+      title: string;
+      description: string;
+      ipfs_address: string;
+      images: string[];
+      price: BN;
+      up_num: BN;
+      down_num: BN;
+      buyer_num: BN;
+      comment_num: BN;
+      up_and_down: BN;
+      upload_timestamp: BN;
     }>;
   };
 

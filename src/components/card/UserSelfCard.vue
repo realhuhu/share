@@ -43,12 +43,13 @@
   </div>
 
   <div v-if="user.is_registered">
-    <div class="px-8 pt-1 pb-3 text-gray-500 md:px-12 md:pt-3">{{ user.raw_data.signature }}</div>
+    <div class="px-8 pt-1 pb-3 text-gray-500 md:px-12 md:pt-3">{{ user.raw_data.signature||"还没有签名..." }}</div>
     <div class="hidden md:block px-12 py-6">
       <var-divider margin="0" dashed/>
     </div>
     <div class="flex justify-between items-center px-12 md:px-24 ">
-      <div class="flex flex-col justify-center items-center cursor-pointer p-2 hover:text-blue-500" @click="router.push('/self-upload')">
+      <div class="flex flex-col justify-center items-center cursor-pointer p-2 hover:text-blue-500"
+           @click="router.push('/self-upload')">
         <div>{{ user.raw_data.uploaded_file_num }}</div>
         <div class="text-sm text-gray-500">我的上传</div>
       </div>
@@ -81,15 +82,13 @@ const props = defineProps<{
   user: User
 }>()
 
-const avatar = computed(() => {
-  return props.user.is_registered ? props.user.avatar_b64 : "https://varlet.gitee.io/varlet-ui/cat.jpg"
-})
+const avatar = computed(() => props.user.is_registered ? props.user.avatar_b64 : "https://varlet.gitee.io/varlet-ui/cat.jpg")
 
 const store = UseStore()
 const router = useRouter()
 
 defineOptions({
-  name: "SelfCard"
+  name: "UserSelfCard.vue"
 })
 </script>
 

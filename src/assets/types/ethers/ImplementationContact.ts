@@ -40,7 +40,59 @@ export declare namespace StoreContact {
     num: BigNumber;
   };
 
-  export type FileInfoStruct = {
+  export type FileBriefInfoStruct = {
+    category: PromiseOrValue<string>;
+    file_address: PromiseOrValue<string>;
+    is_buy: PromiseOrValue<boolean>;
+    name: PromiseOrValue<string>;
+    title: PromiseOrValue<string>;
+    owner: PromiseOrValue<string>;
+    description: PromiseOrValue<string>;
+    cover: PromiseOrValue<string>;
+    price: PromiseOrValue<BigNumberish>;
+    up_num: PromiseOrValue<BigNumberish>;
+    down_num: PromiseOrValue<BigNumberish>;
+    buyer_num: PromiseOrValue<BigNumberish>;
+    comment_num: PromiseOrValue<BigNumberish>;
+    up_and_down: PromiseOrValue<BigNumberish>;
+    upload_timestamp: PromiseOrValue<BigNumberish>;
+  };
+
+  export type FileBriefInfoStructOutput = [
+    string,
+    string,
+    boolean,
+    string,
+    string,
+    string,
+    string,
+    string,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber
+  ] & {
+    category: string;
+    file_address: string;
+    is_buy: boolean;
+    name: string;
+    title: string;
+    owner: string;
+    description: string;
+    cover: string;
+    price: BigNumber;
+    up_num: BigNumber;
+    down_num: BigNumber;
+    buyer_num: BigNumber;
+    comment_num: BigNumber;
+    up_and_down: BigNumber;
+    upload_timestamp: BigNumber;
+  };
+
+  export type FileDetailInfoStruct = {
     owner: PromiseOrValue<string>;
     category: PromiseOrValue<string>;
     file_address: PromiseOrValue<string>;
@@ -63,7 +115,7 @@ export declare namespace StoreContact {
     upload_timestamp: PromiseOrValue<BigNumberish>;
   };
 
-  export type FileInfoStructOutput = [
+  export type FileDetailInfoStructOutput = [
     string,
     string,
     string,
@@ -97,6 +149,37 @@ export declare namespace StoreContact {
     comment_num: BigNumber;
     up_and_down: BigNumber;
     upload_timestamp: BigNumber;
+  };
+
+  export type UserSimpleInfoStruct = {
+    major: PromiseOrValue<string>;
+    avatar: PromiseOrValue<string>;
+    nickname: PromiseOrValue<string>;
+    signature: PromiseOrValue<string>;
+    heart: PromiseOrValue<BigNumberish>;
+    experience: PromiseOrValue<BigNumberish>;
+    follower_num: PromiseOrValue<BigNumberish>;
+    uploaded_file_num: PromiseOrValue<BigNumberish>;
+  };
+
+  export type UserSimpleInfoStructOutput = [
+    string,
+    string,
+    string,
+    string,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber
+  ] & {
+    major: string;
+    avatar: string;
+    nickname: string;
+    signature: string;
+    heart: BigNumber;
+    experience: BigNumber;
+    follower_num: BigNumber;
+    uploaded_file_num: BigNumber;
   };
 
   export type UserSelfInfoStruct = {
@@ -149,8 +232,10 @@ export interface ImplementationContactInterface extends utils.Interface {
     "addCategory(string)": FunctionFragment;
     "admin()": FunctionFragment;
     "getCategorySlice(address)": FunctionFragment;
-    "getFileInfos(address,address,uint256,bool)": FunctionFragment;
-    "getSelfFileInfos(address,bool)": FunctionFragment;
+    "getFileBriefInfos(address,address,uint256,bool)": FunctionFragment;
+    "getFileDetailInfo(address)": FunctionFragment;
+    "getOtherSimpleInfo(address)": FunctionFragment;
+    "getSelfFileBriefInfos(address,bool)": FunctionFragment;
     "getSelfInfo()": FunctionFragment;
     "isRegistered(address)": FunctionFragment;
     "register(string)": FunctionFragment;
@@ -169,8 +254,10 @@ export interface ImplementationContactInterface extends utils.Interface {
       | "addCategory"
       | "admin"
       | "getCategorySlice"
-      | "getFileInfos"
-      | "getSelfFileInfos"
+      | "getFileBriefInfos"
+      | "getFileDetailInfo"
+      | "getOtherSimpleInfo"
+      | "getSelfFileBriefInfos"
       | "getSelfInfo"
       | "isRegistered"
       | "register"
@@ -197,7 +284,7 @@ export interface ImplementationContactInterface extends utils.Interface {
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
-    functionFragment: "getFileInfos",
+    functionFragment: "getFileBriefInfos",
     values: [
       PromiseOrValue<string>,
       PromiseOrValue<string>,
@@ -206,7 +293,15 @@ export interface ImplementationContactInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: "getSelfFileInfos",
+    functionFragment: "getFileDetailInfo",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getOtherSimpleInfo",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getSelfFileBriefInfos",
     values: [PromiseOrValue<string>, PromiseOrValue<boolean>]
   ): string;
   encodeFunctionData(
@@ -269,11 +364,19 @@ export interface ImplementationContactInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getFileInfos",
+    functionFragment: "getFileBriefInfos",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getSelfFileInfos",
+    functionFragment: "getFileDetailInfo",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getOtherSimpleInfo",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getSelfFileBriefInfos",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -375,27 +478,45 @@ export interface ImplementationContact extends BaseContract {
       }
     >;
 
-    getFileInfos(
+    getFileBriefInfos(
       cursor: PromiseOrValue<string>,
       category: PromiseOrValue<string>,
       order: PromiseOrValue<BigNumberish>,
       reverse: PromiseOrValue<boolean>,
       overrides?: CallOverrides
     ): Promise<
-      [StoreContact.FileInfoStructOutput[], string, boolean] & {
-        file_infos: StoreContact.FileInfoStructOutput[];
+      [StoreContact.FileBriefInfoStructOutput[], string, boolean] & {
+        file_infos: StoreContact.FileBriefInfoStructOutput[];
         next: string;
         finished: boolean;
       }
     >;
 
-    getSelfFileInfos(
+    getFileDetailInfo(
+      file_address: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<
+      [StoreContact.FileDetailInfoStructOutput] & {
+        detail_info: StoreContact.FileDetailInfoStructOutput;
+      }
+    >;
+
+    getOtherSimpleInfo(
+      user_address: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<
+      [StoreContact.UserSimpleInfoStructOutput] & {
+        simple_info: StoreContact.UserSimpleInfoStructOutput;
+      }
+    >;
+
+    getSelfFileBriefInfos(
       cursor: PromiseOrValue<string>,
       reverse: PromiseOrValue<boolean>,
       overrides?: CallOverrides
     ): Promise<
-      [StoreContact.FileInfoStructOutput[], string] & {
-        file_infos: StoreContact.FileInfoStructOutput[];
+      [StoreContact.FileBriefInfoStructOutput[], string] & {
+        file_infos: StoreContact.FileBriefInfoStructOutput[];
         next: string;
       }
     >;
@@ -483,27 +604,37 @@ export interface ImplementationContact extends BaseContract {
     }
   >;
 
-  getFileInfos(
+  getFileBriefInfos(
     cursor: PromiseOrValue<string>,
     category: PromiseOrValue<string>,
     order: PromiseOrValue<BigNumberish>,
     reverse: PromiseOrValue<boolean>,
     overrides?: CallOverrides
   ): Promise<
-    [StoreContact.FileInfoStructOutput[], string, boolean] & {
-      file_infos: StoreContact.FileInfoStructOutput[];
+    [StoreContact.FileBriefInfoStructOutput[], string, boolean] & {
+      file_infos: StoreContact.FileBriefInfoStructOutput[];
       next: string;
       finished: boolean;
     }
   >;
 
-  getSelfFileInfos(
+  getFileDetailInfo(
+    file_address: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<StoreContact.FileDetailInfoStructOutput>;
+
+  getOtherSimpleInfo(
+    user_address: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<StoreContact.UserSimpleInfoStructOutput>;
+
+  getSelfFileBriefInfos(
     cursor: PromiseOrValue<string>,
     reverse: PromiseOrValue<boolean>,
     overrides?: CallOverrides
   ): Promise<
-    [StoreContact.FileInfoStructOutput[], string] & {
-      file_infos: StoreContact.FileInfoStructOutput[];
+    [StoreContact.FileBriefInfoStructOutput[], string] & {
+      file_infos: StoreContact.FileBriefInfoStructOutput[];
       next: string;
     }
   >;
@@ -585,27 +716,37 @@ export interface ImplementationContact extends BaseContract {
       }
     >;
 
-    getFileInfos(
+    getFileBriefInfos(
       cursor: PromiseOrValue<string>,
       category: PromiseOrValue<string>,
       order: PromiseOrValue<BigNumberish>,
       reverse: PromiseOrValue<boolean>,
       overrides?: CallOverrides
     ): Promise<
-      [StoreContact.FileInfoStructOutput[], string, boolean] & {
-        file_infos: StoreContact.FileInfoStructOutput[];
+      [StoreContact.FileBriefInfoStructOutput[], string, boolean] & {
+        file_infos: StoreContact.FileBriefInfoStructOutput[];
         next: string;
         finished: boolean;
       }
     >;
 
-    getSelfFileInfos(
+    getFileDetailInfo(
+      file_address: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<StoreContact.FileDetailInfoStructOutput>;
+
+    getOtherSimpleInfo(
+      user_address: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<StoreContact.UserSimpleInfoStructOutput>;
+
+    getSelfFileBriefInfos(
       cursor: PromiseOrValue<string>,
       reverse: PromiseOrValue<boolean>,
       overrides?: CallOverrides
     ): Promise<
-      [StoreContact.FileInfoStructOutput[], string] & {
-        file_infos: StoreContact.FileInfoStructOutput[];
+      [StoreContact.FileBriefInfoStructOutput[], string] & {
+        file_infos: StoreContact.FileBriefInfoStructOutput[];
         next: string;
       }
     >;
@@ -692,7 +833,7 @@ export interface ImplementationContact extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getFileInfos(
+    getFileBriefInfos(
       cursor: PromiseOrValue<string>,
       category: PromiseOrValue<string>,
       order: PromiseOrValue<BigNumberish>,
@@ -700,7 +841,17 @@ export interface ImplementationContact extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getSelfFileInfos(
+    getFileDetailInfo(
+      file_address: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getOtherSimpleInfo(
+      user_address: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getSelfFileBriefInfos(
       cursor: PromiseOrValue<string>,
       reverse: PromiseOrValue<boolean>,
       overrides?: CallOverrides
@@ -779,7 +930,7 @@ export interface ImplementationContact extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getFileInfos(
+    getFileBriefInfos(
       cursor: PromiseOrValue<string>,
       category: PromiseOrValue<string>,
       order: PromiseOrValue<BigNumberish>,
@@ -787,7 +938,17 @@ export interface ImplementationContact extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getSelfFileInfos(
+    getFileDetailInfo(
+      file_address: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getOtherSimpleInfo(
+      user_address: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getSelfFileBriefInfos(
       cursor: PromiseOrValue<string>,
       reverse: PromiseOrValue<boolean>,
       overrides?: CallOverrides

@@ -69,6 +69,7 @@ abstract contract StoreContact {
         uint experience;//经验值
         uint follower_num;//粉丝数
         uint login_timestamp;//登录时间
+        uint uploaded_file_num;//上传的文件数
     }
 
     //卡片用户信息
@@ -81,6 +82,7 @@ abstract contract StoreContact {
         uint heart;//热心值
         uint experience;//经验值
         uint follower_num;//粉丝数
+        uint uploaded_file_num;//上传的文件数
     }
 
     //用户表
@@ -123,8 +125,30 @@ abstract contract StoreContact {
         AddressLinkedList.T comment_index;//评论地址
     }
 
-    struct FileInfo {
-        address owner;//上传者
+    struct FileBriefInfo {
+        address category;//分类
+        address file_address;//地址
+
+        bool is_buy;//是否已购买
+
+        string name;//文件名
+        string title;//标题
+        string owner;//上传者用户名
+        string description;//描述
+
+        string cover;//图片
+
+        uint price;//价格
+        uint up_num;//点赞数
+        uint down_num;//点踩数
+        uint buyer_num;//购买量
+        uint comment_num;//评论数
+        uint up_and_down;//点赞点踩
+        uint upload_timestamp;//上传时间
+    }
+
+    struct FileDetailInfo {
+        address owner;//上传者地址
         address category;//分类
         address file_address;//地址
 

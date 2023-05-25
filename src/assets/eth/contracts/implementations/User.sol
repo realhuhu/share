@@ -10,6 +10,8 @@ interface UserInterface {
 
     function getSelfInfo() external view returns (StoreContact.UserSelfInfo memory self_info);
 
+    function getOtherSimpleInfo(address user_address) external view returns (StoreContact.UserSimpleInfo memory simple_info);
+
     function updateAvatar(string memory avatar) external;
 
     function updateNickname(string memory nickname) external;
@@ -97,6 +99,22 @@ abstract contract UserContract is BaseContact, UserInterface {
             nickname: user_info.nickname,
             signature: user_info.signature
         });
+    }
+
+    function getOtherSimpleInfo(address user_address)
+    external view returns (UserSimpleInfo memory simple_info){
+        _registered_(user_address);
+
+        UserInfo storage user_info = users.user_info[msg.sender];
+
+        simple_info.major = user_info.major;
+        simple_info.avatar = user_info.avatar;
+        simple_info.nickname = user_info.nickname;
+        simple_info.signature = user_info.signature;
+        simple_info.heart = user_info.heart;
+        simple_info.experience = user_info.experience;
+        simple_info.follower_num = user_info.followers.length;
+        simple_info.uploaded_file_num = user_info.uploaded_files.length;
     }
 
     //更新头像

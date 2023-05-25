@@ -1,13 +1,6 @@
 <template>
   <div>
-    <var-app-bar color="#f2f4f6" text-color="#666" elevation="0">
-      我上传的文件
-      <template #left>
-        <var-button round text color="transparent" text-color="#4ebaee" @click="safeBack('/home/resource')">
-          <var-icon name="chevron-left" :size="24"/>
-        </var-button>
-      </template>
-    </var-app-bar>
+    <head-bar title="我上传的文件" back="/home/resource"/>
 
     <div class=" flex flex-col items-center justify-center md:mt-16 gap-4 rounded-xl">
       <var-list
@@ -21,7 +14,7 @@
           <transition enter-active-class="animate__animated animate__fadeIn" appear>
             <div class="flex flex-col justify-center items-end">
               <div class="text-gray-500">{{ date(file_info.upload_timestamp.toNumber()) }}</div>
-              <file-card class="shadow-around" :file_info="file_info as StoreContact.FileInfoStructOutput"/>
+              <file-card class="shadow-around" :file_info="file_info as StoreContact.FileBriefInfoStructOutput"/>
             </div>
           </transition>
         </div>
@@ -44,11 +37,11 @@ const cursor = ref<string>()
 const reverse = ref(false)
 const loading = ref(false)
 const finished = ref(false)
-const files = ref<StoreContact.FileInfoStructOutput[]>([])
+const files = ref<StoreContact.FileBriefInfoStructOutput[]>([])
 const load = async () => {
   const contract = assertNotEmpty(store.contract, "合约未初始化")
   if (!cursor.value) cursor.value = reverse.value ? tail_address : head_address
-  const {file_infos, next} = await contract.getSelfFileInfos(cursor.value, reverse.value)
+  const {file_infos, next} = await contract.getSelfFileBriefInfos(cursor.value, reverse.value)
   for (const file_info of file_infos) {
     if (file_info.file_address === zero_address) {
       finished.value = true

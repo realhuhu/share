@@ -1,6 +1,8 @@
 import {Snackbar} from "@varlet/ui";
 import "@varlet/ui/es/snackbar/style/index"
 import {experience_list} from "@/assets/lib/settings";
+import Identicon from "identicon.js";
+import {ethers} from "ethers";
 
 export const TODO = (msg: string) => {
   Snackbar({
@@ -19,7 +21,7 @@ export const assertNotEmpty = <T>(data: T | null | undefined, message: string): 
   throw Error(message)
 }
 
-export const stripAddress = (address: Address): string => {
+export const stripAddress = (address: string): string => {
   return address.substr(0, 5) + "..." + address.substr(38);
 }
 
@@ -123,4 +125,8 @@ export const datetime = (value: number) => {
   if (nowDate.minutes() > valueDate.minutes()) return `${nowDate.minutes() - valueDate.minutes()}分钟前`
   if (nowDate.seconds() > valueDate.seconds()) return `${nowDate.seconds() - valueDate.seconds()}秒前`
   return "刚刚"
+}
+
+export const avatar = (str: string) => {
+  return "data:image/png;base64," + new Identicon(ethers.utils.hashMessage(str), {margin: 0.2}).toString()
 }

@@ -39,7 +39,7 @@ export interface ImplementationInterfaceInstance
     1: string;
   }>;
 
-  getFileInfos(
+  getFileBriefInfos(
     cursor: string,
     category: string,
     order: number | BN | string,
@@ -47,15 +47,14 @@ export interface ImplementationInterfaceInstance
     txDetails?: Truffle.TransactionDetails
   ): Promise<{
     0: {
-      owner: string;
       category: string;
       file_address: string;
       is_buy: boolean;
       name: string;
       title: string;
+      owner: string;
       description: string;
-      ipfs_address: string;
-      images: string[];
+      cover: string;
       price: BN;
       up_num: BN;
       down_num: BN;
@@ -68,21 +67,56 @@ export interface ImplementationInterfaceInstance
     2: boolean;
   }>;
 
-  getSelfFileInfos(
+  getFileDetailInfo(
+    file_address: string,
+    txDetails?: Truffle.TransactionDetails
+  ): Promise<{
+    owner: string;
+    category: string;
+    file_address: string;
+    is_buy: boolean;
+    name: string;
+    title: string;
+    description: string;
+    ipfs_address: string;
+    images: string[];
+    price: BN;
+    up_num: BN;
+    down_num: BN;
+    buyer_num: BN;
+    comment_num: BN;
+    up_and_down: BN;
+    upload_timestamp: BN;
+  }>;
+
+  getOtherSimpleInfo(
+    user_address: string,
+    txDetails?: Truffle.TransactionDetails
+  ): Promise<{
+    major: string;
+    avatar: string;
+    nickname: string;
+    signature: string;
+    heart: BN;
+    experience: BN;
+    follower_num: BN;
+    uploaded_file_num: BN;
+  }>;
+
+  getSelfFileBriefInfos(
     cursor: string,
     reverse: boolean,
     txDetails?: Truffle.TransactionDetails
   ): Promise<{
     0: {
-      owner: string;
       category: string;
       file_address: string;
       is_buy: boolean;
       name: string;
       title: string;
+      owner: string;
       description: string;
-      ipfs_address: string;
-      images: string[];
+      cover: string;
       price: BN;
       up_num: BN;
       down_num: BN;
@@ -288,7 +322,7 @@ export interface ImplementationInterfaceInstance
       1: string;
     }>;
 
-    getFileInfos(
+    getFileBriefInfos(
       cursor: string,
       category: string,
       order: number | BN | string,
@@ -296,15 +330,14 @@ export interface ImplementationInterfaceInstance
       txDetails?: Truffle.TransactionDetails
     ): Promise<{
       0: {
-        owner: string;
         category: string;
         file_address: string;
         is_buy: boolean;
         name: string;
         title: string;
+        owner: string;
         description: string;
-        ipfs_address: string;
-        images: string[];
+        cover: string;
         price: BN;
         up_num: BN;
         down_num: BN;
@@ -317,21 +350,56 @@ export interface ImplementationInterfaceInstance
       2: boolean;
     }>;
 
-    getSelfFileInfos(
+    getFileDetailInfo(
+      file_address: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<{
+      owner: string;
+      category: string;
+      file_address: string;
+      is_buy: boolean;
+      name: string;
+      title: string;
+      description: string;
+      ipfs_address: string;
+      images: string[];
+      price: BN;
+      up_num: BN;
+      down_num: BN;
+      buyer_num: BN;
+      comment_num: BN;
+      up_and_down: BN;
+      upload_timestamp: BN;
+    }>;
+
+    getOtherSimpleInfo(
+      user_address: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<{
+      major: string;
+      avatar: string;
+      nickname: string;
+      signature: string;
+      heart: BN;
+      experience: BN;
+      follower_num: BN;
+      uploaded_file_num: BN;
+    }>;
+
+    getSelfFileBriefInfos(
       cursor: string,
       reverse: boolean,
       txDetails?: Truffle.TransactionDetails
     ): Promise<{
       0: {
-        owner: string;
         category: string;
         file_address: string;
         is_buy: boolean;
         name: string;
         title: string;
+        owner: string;
         description: string;
-        ipfs_address: string;
-        images: string[];
+        cover: string;
         price: BN;
         up_num: BN;
         down_num: BN;

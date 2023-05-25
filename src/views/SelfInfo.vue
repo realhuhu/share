@@ -1,16 +1,7 @@
 <template>
   <div>
     <div class="fixed left-0 top-0 w-screen h-screen bg-gray-50 z-[-1]"></div>
-    <div>
-      <var-app-bar color="#f2f4f6" text-color="#666" elevation="0">
-        我的信息
-        <template #left>
-          <var-button round text color="transparent" text-color="#4ebaee" @click="safeBack('/home/profile')">
-            <var-icon name="chevron-left" :size="24"/>
-          </var-button>
-        </template>
-      </var-app-bar>
-    </div>
+    <head-bar title="我的信息" back="/home/profile"/>
 
     <div v-if="!(<User>store.user).is_registered" class="mt-12 text-center font-bold text-lg">
       请先

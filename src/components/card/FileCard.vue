@@ -1,7 +1,6 @@
 <template>
   <var-card
-    :subtitle="file_info.description"
-    :src="`${ipfs_url}ipfs/${file_info.images[0]||cover}`"
+    :src="`${ipfs_url}ipfs/${file_info.cover||cover}`"
     elevation="0"
     layout="row"
     ripple
@@ -9,19 +8,31 @@
     class="cursor-pointer hover:shadow-2xl duration-200"
   >
     <template #title>
-      <div class="flex justify-between items-center h-12 gap-1">
+      <div class="flex justify-between items-center mt-2 gap-1">
         <div class="flex justify-start items-center gap-1">
-          <var-chip size="small" color="#4ebaee" text-color="white" class="font-bold ml-3">{{ category }}</var-chip>
-          <div class="font-bold text-lg">{{ file_info.title }}</div>
+          <var-chip size="mini" color="#4ebaee" text-color="white" class="ml-3">{{ category }}</var-chip>
+          <div class="font-bold">{{ file_info.title }}</div>
         </div>
         <var-tooltip class="flex justify-end items-center text-blue-500 mr-2" :content="`价格：${file_info.price}`">
-          <div class="text-lg">{{ file_info.price }}</div>
+          <div>{{ file_info.price }}</div>
           <i-tabler-coin class="w-5 h-5"/>
         </var-tooltip>
       </div>
     </template>
+
+    <template #subtitle>
+      <div class="flex justify-start items-center ml-3 text-sm text-gray-500 gap-2">
+        <div>{{ file_info.owner }}</div>
+        <div>{{ time }}</div>
+      </div>
+    </template>
+
+    <template #description>
+      <div class="mx-3 mt-1 line2 text-sm">{{ file_info.description }}</div>
+    </template>
+
     <template #extra>
-      <div class="flex justify-end items-center gap-4">
+      <div class="flex justify-end items-center gap-4 text-sm">
         <div class="flex justify-center items-center gap-1  text-gray-500">
           <i-material-symbols-download/>
           {{ file_info.down_num }}
@@ -54,12 +65,15 @@ import {StoreContact} from "@/assets/types/ethers/ImplementationContact";
 import {cover, ipfs_url} from "@/assets/lib/settings";
 import {UseStore} from "@/store";
 import {computed} from "vue";
+import {useRouter} from "vue-router";
+import {datetime} from "@/assets/lib/utils";
 
 const props = withDefaults(defineProps<{
-  file_info: StoreContact.FileInfoStructOutput
+  file_info: StoreContact.FileBriefInfoStructOutput
 }>(), {})
 
 const store = UseStore()
+const router = useRouter()
 const category = computed(() => {
   if (store.categories) {
     for (const i of store.categories) {
@@ -68,15 +82,26 @@ const category = computed(() => {
   }
   return "未知分类"
 })
+
+const time = computed(() => datetime(props.file_info.upload_timestamp.toNumber()))
+
 const toDetail = () => {
-  console.log(1);
+  router.push(`/file-detail/${props.file_info.file_address}`)
 }
 
 defineOptions({
-  name: ""
+  name: "FileCard"
 })
 </script>
 
 
 <style lang="less" scoped>
+.line2 {
+  word-break: break-all;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2; /* 这里是超出几行省略 */
+  overflow: hidden;
+}
 </style>

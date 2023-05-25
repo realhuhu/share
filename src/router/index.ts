@@ -20,6 +20,7 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/components/home/HomeResource.vue"),
         meta: {
           depth: 0,
+          auth: true,
           navbar_active: 0
         }
       },
@@ -29,6 +30,7 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/components/home/HomeReward.vue"),
         meta: {
           depth: 0,
+          auth: true,
           navbar_active: 1
         }
       },
@@ -38,6 +40,7 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/components/home/HomeFavorite.vue"),
         meta: {
           depth: 0,
+          auth: true,
           navbar_active: 2
         }
       },
@@ -47,8 +50,8 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/components/home/HomeProfile.vue"),
         meta: {
           depth: 0,
-          navbar_active: 3,
-          auth: true
+          auth: true,
+          navbar_active: 3
         }
       }
     ]
@@ -93,6 +96,15 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import("@/views/SelfUpload.vue"),
     meta: {
       depth: 2,
+      auth: true
+    }
+  },
+  {
+    path: "/file-detail/:file_address",
+    name: "file-detail",
+    component: () => import("@/views/FileDetail.vue"),
+    meta: {
+      depth: 3,
       auth: true
     }
   }
