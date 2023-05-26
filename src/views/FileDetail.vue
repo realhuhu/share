@@ -24,13 +24,13 @@ import {useRoute} from "vue-router";
 import {UseStore} from "@/store";
 import {assertNotEmpty} from "@/assets/lib/utils";
 import {ref} from "vue";
-import {StoreContact} from "@/assets/types/ethers/ImplementationContact";
+import {Types} from "@/assets/types/ethers/ImplementationContact";
 import FileInfoCard from "@/components/card/FileInfoCard.vue";
 
 const route = useRoute()
 const store = UseStore()
-const file_info = ref<StoreContact.FileDetailInfoStructOutput>()
-const user_info = ref<StoreContact.UserSimpleInfoStructOutput>()
+const file_info = ref<Types.FileDetailInfoStructOutput>()
+const user_info = ref<Types.UserSimpleInfoStructOutput>()
 const contract = assertNotEmpty(store.contract, "合约未初始化")
 const file_address = typeof route.params.file_address === "string" ? route.params.file_address : route.params.file_address[0]
 

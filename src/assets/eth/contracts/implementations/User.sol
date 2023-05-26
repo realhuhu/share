@@ -8,9 +8,9 @@ interface UserInterface {
 
     function isRegistered(address user_address) external view returns (bool is_registered);
 
-    function getSelfInfo() external view returns (StoreContact.UserSelfInfo memory self_info);
+    function getSelfInfo() external view returns (Types.UserSelfInfo memory self_info);
 
-    function getOtherSimpleInfo(address user_address) external view returns (StoreContact.UserSimpleInfo memory simple_info);
+    function getOtherSimpleInfo(address user_address) external view returns (Types.UserSimpleInfo memory simple_info);
 
     function updateAvatar(string memory avatar) external;
 
@@ -30,125 +30,53 @@ interface UserInterface {
 }
 
 abstract contract UserContract is BaseContact, UserInterface {
-    using AddressLinkedList for AddressLinkedList.T;
-    using AddressOrderedMap for AddressOrderedMap.T;
-    using UintLib for uint;
-    using StringLib for string;
-    using Bytes32Lib for bytes32;
+    using UserLib for Types.UserStore;
 
     function UserContract_init()
     internal {
-        users.user_index.init();
-        users._user_by_heart.init();
-        users._user_by_follower_num.init();
-        users._user_by_medal_num.init();
+        users.init();
     }
 
     //注册账号
     function register(string memory nickname)
     external {
-        _notRegistered_(msg.sender);
-        nickname._range_(1, 10);
-
-        UserInfo storage user_info = users.user_info[msg.sender];
-
-        user_info.pits = 2;
-        user_info.login_timestamp = block.timestamp;
-        user_info.nickname = nickname;
-        user_info.user_address = msg.sender;
-
-        user_info.medals.init();
-        user_info.rewards.init();
-        user_info.comments.init();
-        user_info.followers.init();
-        user_info.followings.init();
-        user_info.up_messages.init();
-        user_info.marked_rewards.init();
-        user_info.uploaded_files.init();
-        user_info.reply_messages.init();
-        user_info.purchased_files.init();
-        user_info.following_upload_messages.init();
-        user_info.marked_reward_solved_messages.init();
-
-        users.user_index.append(msg.sender);
-        users._user_by_heart.update(AddressOrderedMap.Item(msg.sender, 0));
-        users._user_by_follower_num.update(AddressOrderedMap.Item(msg.sender, 0));
-        users._user_by_medal_num.update(AddressOrderedMap.Item(msg.sender, 0));
+        users.register(nickname);
     }
 
     //判断账号是否已注册
     function isRegistered(address user_address)
     external view returns (bool is_registered){
-        is_registered = users.user_info[user_address].login_timestamp != 0;
+        is_registered = users.isRegistered(user_address);
     }
 
 
     //获取个人信息
     function getSelfInfo()
-    external view returns (UserSelfInfo memory self_info){
-        UserInfo storage user_info = users.user_info[msg.sender];
-
-        self_info = UserSelfInfo({
-            ID: user_info.ID,
-            coins: user_info.coins,
-            heart: user_info.heart,
-            experience: user_info.experience,
-            follower_num: user_info.followers.length,
-            following_num: user_info.followings.length,
-            login_timestamp: user_info.login_timestamp,
-            uploaded_file_num: user_info.uploaded_files.length,
-
-            major: user_info.major,
-            avatar: user_info.avatar,
-            nickname: user_info.nickname,
-            signature: user_info.signature
-        });
+    external view returns (Types.UserSelfInfo memory self_info){
+        self_info = users.getSelfInfo();
     }
 
     function getOtherSimpleInfo(address user_address)
-    external view returns (UserSimpleInfo memory simple_info){
-        _registered_(user_address);
-
-        UserInfo storage user_info = users.user_info[msg.sender];
-
-        simple_info.major = user_info.major;
-        simple_info.avatar = user_info.avatar;
-        simple_info.nickname = user_info.nickname;
-        simple_info.signature = user_info.signature;
-        simple_info.heart = user_info.heart;
-        simple_info.heart = user_info.medals.length;
-        simple_info.experience = user_info.experience;
-        simple_info.follower_num = user_info.followers.length;
-        simple_info.uploaded_file_num = user_info.uploaded_files.length;
+    external view returns (Types.UserSimpleInfo memory simple_info){
+        simple_info = users.getOtherSimpleInfo(user_address);
     }
 
     //更新头像
     function updateAvatar(string memory avatar)
     external {
-        _registered_(msg.sender);
-        avatar._range_(1, 10);
-
-        UserInfo storage user_info = users.user_info[msg.sender];
-        user_info.avatar = avatar;
+        users.updateAvatar(avatar);
     }
 
     //更新姓名
     function updateNickname(string memory nickname)
     external {
-        _registered_(msg.sender);
-        nickname._range_(1, 10);
-
-        UserInfo storage user_info = users.user_info[msg.sender];
-        user_info.nickname = nickname;
+        users.updateNickname(nickname);
     }
 
     //更新签名
     function updateSignature(string memory signature)
     external {
-        _registered_(msg.sender);
-        signature._range_(1, 32);
-        UserInfo storage user_info = users.user_info[msg.sender];
-        user_info.signature = signature;
+        users.updateSignature(signature);
     }
 
     //    //获取其它用户的详细信息

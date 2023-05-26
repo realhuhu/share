@@ -48,7 +48,7 @@ const password = ref<string>()
 const encrypt_key = ref<string>()
 
 const save = () => {
-
+  console.log(1);
 }
 
 defineOptions({

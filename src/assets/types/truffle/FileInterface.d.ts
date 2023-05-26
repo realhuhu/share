@@ -34,6 +34,7 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
   ): Promise<{
     0: { category_address: string; name: string; num: BN }[];
     1: string;
+    2: boolean;
   }>;
 
   uploadFile: {
@@ -42,7 +43,7 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
       name: string,
       title: string,
       description: string,
-      category: string,
+      category_address: string,
       images: string[],
       price: number | BN | string,
       txDetails?: Truffle.TransactionDetails
@@ -52,7 +53,7 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
       name: string,
       title: string,
       description: string,
-      category: string,
+      category_address: string,
       images: string[],
       price: number | BN | string,
       txDetails?: Truffle.TransactionDetails
@@ -62,7 +63,7 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
       name: string,
       title: string,
       description: string,
-      category: string,
+      category_address: string,
       images: string[],
       price: number | BN | string,
       txDetails?: Truffle.TransactionDetails
@@ -72,7 +73,7 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
       name: string,
       title: string,
       description: string,
-      category: string,
+      category_address: string,
       images: string[],
       price: number | BN | string,
       txDetails?: Truffle.TransactionDetails
@@ -85,8 +86,8 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
     txDetails?: Truffle.TransactionDetails
   ): Promise<{
     0: {
-      category: string;
       file_address: string;
+      category_address: string;
       is_buy: boolean;
       name: string;
       title: string;
@@ -107,14 +108,14 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
 
   getFileBriefInfos(
     cursor: string,
-    category: string,
+    category_address: string,
     order: number | BN | string,
     reverse: boolean,
     txDetails?: Truffle.TransactionDetails
   ): Promise<{
     0: {
-      category: string;
       file_address: string;
+      category_address: string;
       is_buy: boolean;
       name: string;
       title: string;
@@ -138,8 +139,8 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
     txDetails?: Truffle.TransactionDetails
   ): Promise<{
     owner: string;
-    category: string;
     file_address: string;
+    category_address: string;
     is_buy: boolean;
     name: string;
     title: string;
@@ -154,33 +155,6 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
     up_and_down: BN;
     upload_timestamp: BN;
   }>;
-
-  addComment: {
-    (
-      file_address: string,
-      content: string,
-      images: string[],
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<Truffle.TransactionResponse<AllEvents>>;
-    call(
-      file_address: string,
-      content: string,
-      images: string[],
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<void>;
-    sendTransaction(
-      file_address: string,
-      content: string,
-      images: string[],
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<string>;
-    estimateGas(
-      file_address: string,
-      content: string,
-      images: string[],
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<number>;
-  };
 
   methods: {
     addCategory: {
@@ -204,6 +178,7 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
     ): Promise<{
       0: { category_address: string; name: string; num: BN }[];
       1: string;
+      2: boolean;
     }>;
 
     uploadFile: {
@@ -212,7 +187,7 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
         name: string,
         title: string,
         description: string,
-        category: string,
+        category_address: string,
         images: string[],
         price: number | BN | string,
         txDetails?: Truffle.TransactionDetails
@@ -222,7 +197,7 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
         name: string,
         title: string,
         description: string,
-        category: string,
+        category_address: string,
         images: string[],
         price: number | BN | string,
         txDetails?: Truffle.TransactionDetails
@@ -232,7 +207,7 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
         name: string,
         title: string,
         description: string,
-        category: string,
+        category_address: string,
         images: string[],
         price: number | BN | string,
         txDetails?: Truffle.TransactionDetails
@@ -242,7 +217,7 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
         name: string,
         title: string,
         description: string,
-        category: string,
+        category_address: string,
         images: string[],
         price: number | BN | string,
         txDetails?: Truffle.TransactionDetails
@@ -255,8 +230,8 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
       txDetails?: Truffle.TransactionDetails
     ): Promise<{
       0: {
-        category: string;
         file_address: string;
+        category_address: string;
         is_buy: boolean;
         name: string;
         title: string;
@@ -277,14 +252,14 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
 
     getFileBriefInfos(
       cursor: string,
-      category: string,
+      category_address: string,
       order: number | BN | string,
       reverse: boolean,
       txDetails?: Truffle.TransactionDetails
     ): Promise<{
       0: {
-        category: string;
         file_address: string;
+        category_address: string;
         is_buy: boolean;
         name: string;
         title: string;
@@ -308,8 +283,8 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
       txDetails?: Truffle.TransactionDetails
     ): Promise<{
       owner: string;
-      category: string;
       file_address: string;
+      category_address: string;
       is_buy: boolean;
       name: string;
       title: string;
@@ -324,33 +299,6 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
       up_and_down: BN;
       upload_timestamp: BN;
     }>;
-
-    addComment: {
-      (
-        file_address: string,
-        content: string,
-        images: string[],
-        txDetails?: Truffle.TransactionDetails
-      ): Promise<Truffle.TransactionResponse<AllEvents>>;
-      call(
-        file_address: string,
-        content: string,
-        images: string[],
-        txDetails?: Truffle.TransactionDetails
-      ): Promise<void>;
-      sendTransaction(
-        file_address: string,
-        content: string,
-        images: string[],
-        txDetails?: Truffle.TransactionDetails
-      ): Promise<string>;
-      estimateGas(
-        file_address: string,
-        content: string,
-        images: string[],
-        txDetails?: Truffle.TransactionDetails
-      ): Promise<number>;
-    };
   };
 
   getPastEvents(event: string): Promise<EventData[]>;

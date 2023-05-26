@@ -43,7 +43,7 @@
         <div class="flex items-start justify-start flex-wrap">
           <div v-for="(file_info,k) in files" :key="k" class="lg:w-[50%] w-full p-2">
             <transition enter-active-class="animate__animated animate__fadeIn" appear>
-              <file-card class="shadow-around" :file_info="file_info as StoreContact.FileBriefInfoStructOutput"/>
+              <file-card class="shadow-around" :file_info="file_info as Types.FileBriefInfoStructOutput"/>
             </transition>
           </div>
         </div>
@@ -59,7 +59,7 @@ import {UseStore} from "@/store";
 import {ref, watch} from "vue";
 import {head_address, tail_address, zero_address} from "@/assets/lib/settings";
 import {assertNotEmpty} from "@/assets/lib/utils";
-import {StoreContact} from "@/assets/types/ethers/ImplementationContact";
+import {Types} from "@/assets/types/ethers/ImplementationContact";
 
 
 const store = UseStore()
@@ -96,7 +96,7 @@ const show_menu = ref(false)
 
 const cursor = ref<string>(head_address)
 
-const files = ref<StoreContact.FileBriefInfoStructOutput[]>([])
+const files = ref<Types.FileBriefInfoStructOutput[]>([])
 const loading = ref(false)
 const finished = ref(false)
 

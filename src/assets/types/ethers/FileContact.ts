@@ -27,7 +27,7 @@ import type {
   PromiseOrValue,
 } from "./common";
 
-export declare namespace StoreContact {
+export declare namespace Types {
   export type CategoryStruct = {
     category_address: PromiseOrValue<string>;
     name: PromiseOrValue<string>;
@@ -41,8 +41,8 @@ export declare namespace StoreContact {
   };
 
   export type FileBriefInfoStruct = {
-    category: PromiseOrValue<string>;
     file_address: PromiseOrValue<string>;
+    category_address: PromiseOrValue<string>;
     is_buy: PromiseOrValue<boolean>;
     name: PromiseOrValue<string>;
     title: PromiseOrValue<string>;
@@ -75,8 +75,8 @@ export declare namespace StoreContact {
     BigNumber,
     BigNumber
   ] & {
-    category: string;
     file_address: string;
+    category_address: string;
     is_buy: boolean;
     name: string;
     title: string;
@@ -94,8 +94,8 @@ export declare namespace StoreContact {
 
   export type FileDetailInfoStruct = {
     owner: PromiseOrValue<string>;
-    category: PromiseOrValue<string>;
     file_address: PromiseOrValue<string>;
+    category_address: PromiseOrValue<string>;
     is_buy: PromiseOrValue<boolean>;
     name: PromiseOrValue<string>;
     title: PromiseOrValue<string>;
@@ -134,8 +134,8 @@ export declare namespace StoreContact {
     BigNumber
   ] & {
     owner: string;
-    category: string;
     file_address: string;
+    category_address: string;
     is_buy: boolean;
     name: string;
     title: string;
@@ -163,8 +163,6 @@ export interface FileContactInterface extends utils.Interface {
     "getSelfFileBriefInfos(address,bool)": FunctionFragment;
     "getFileBriefInfos(address,address,uint256,bool)": FunctionFragment;
     "getFileDetailInfo(address)": FunctionFragment;
-    "addComment(address,string,string[3])": FunctionFragment;
-    "addSubComment(address,address,address,string)": FunctionFragment;
   };
 
   getFunction(
@@ -178,8 +176,6 @@ export interface FileContactInterface extends utils.Interface {
       | "getSelfFileBriefInfos"
       | "getFileBriefInfos"
       | "getFileDetailInfo"
-      | "addComment"
-      | "addSubComment"
   ): FunctionFragment;
 
   encodeFunctionData(functionFragment: "admin", values?: undefined): string;
@@ -228,23 +224,6 @@ export interface FileContactInterface extends utils.Interface {
     functionFragment: "getFileDetailInfo",
     values: [PromiseOrValue<string>]
   ): string;
-  encodeFunctionData(
-    functionFragment: "addComment",
-    values: [
-      PromiseOrValue<string>,
-      PromiseOrValue<string>,
-      [PromiseOrValue<string>, PromiseOrValue<string>, PromiseOrValue<string>]
-    ]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "addSubComment",
-    values: [
-      PromiseOrValue<string>,
-      PromiseOrValue<string>,
-      PromiseOrValue<string>,
-      PromiseOrValue<string>
-    ]
-  ): string;
 
   decodeFunctionResult(functionFragment: "admin", data: BytesLike): Result;
   decodeFunctionResult(
@@ -274,11 +253,6 @@ export interface FileContactInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getFileDetailInfo",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "addComment", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "addSubComment",
     data: BytesLike
   ): Result;
 
@@ -348,9 +322,10 @@ export interface FileContact extends BaseContract {
       cursor: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<
-      [StoreContact.CategoryStructOutput[], string] & {
-        category_slice: StoreContact.CategoryStructOutput[];
+      [Types.CategoryStructOutput[], string, boolean] & {
+        category_slice: Types.CategoryStructOutput[];
         next: string;
+        finished: boolean;
       }
     >;
 
@@ -359,7 +334,7 @@ export interface FileContact extends BaseContract {
       name: PromiseOrValue<string>,
       title: PromiseOrValue<string>,
       description: PromiseOrValue<string>,
-      category: PromiseOrValue<string>,
+      category_address: PromiseOrValue<string>,
       images: [
         PromiseOrValue<string>,
         PromiseOrValue<string>,
@@ -374,8 +349,8 @@ export interface FileContact extends BaseContract {
       reverse: PromiseOrValue<boolean>,
       overrides?: CallOverrides
     ): Promise<
-      [StoreContact.FileBriefInfoStructOutput[], string, boolean] & {
-        file_infos: StoreContact.FileBriefInfoStructOutput[];
+      [Types.FileBriefInfoStructOutput[], string, boolean] & {
+        file_infos: Types.FileBriefInfoStructOutput[];
         next: string;
         finished: boolean;
       }
@@ -383,13 +358,13 @@ export interface FileContact extends BaseContract {
 
     getFileBriefInfos(
       cursor: PromiseOrValue<string>,
-      category: PromiseOrValue<string>,
+      category_address: PromiseOrValue<string>,
       order: PromiseOrValue<BigNumberish>,
       reverse: PromiseOrValue<boolean>,
       overrides?: CallOverrides
     ): Promise<
-      [StoreContact.FileBriefInfoStructOutput[], string, boolean] & {
-        file_infos: StoreContact.FileBriefInfoStructOutput[];
+      [Types.FileBriefInfoStructOutput[], string, boolean] & {
+        file_infos: Types.FileBriefInfoStructOutput[];
         next: string;
         finished: boolean;
       }
@@ -399,29 +374,10 @@ export interface FileContact extends BaseContract {
       file_address: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<
-      [StoreContact.FileDetailInfoStructOutput] & {
-        detail_info: StoreContact.FileDetailInfoStructOutput;
+      [Types.FileDetailInfoStructOutput] & {
+        detail_info: Types.FileDetailInfoStructOutput;
       }
     >;
-
-    addComment(
-      file_address: PromiseOrValue<string>,
-      content: PromiseOrValue<string>,
-      images: [
-        PromiseOrValue<string>,
-        PromiseOrValue<string>,
-        PromiseOrValue<string>
-      ],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    addSubComment(
-      file_address: PromiseOrValue<string>,
-      target_address: PromiseOrValue<string>,
-      comment_address: PromiseOrValue<string>,
-      content: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
   };
 
   admin(overrides?: CallOverrides): Promise<string>;
@@ -444,9 +400,10 @@ export interface FileContact extends BaseContract {
     cursor: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<
-    [StoreContact.CategoryStructOutput[], string] & {
-      category_slice: StoreContact.CategoryStructOutput[];
+    [Types.CategoryStructOutput[], string, boolean] & {
+      category_slice: Types.CategoryStructOutput[];
       next: string;
+      finished: boolean;
     }
   >;
 
@@ -455,7 +412,7 @@ export interface FileContact extends BaseContract {
     name: PromiseOrValue<string>,
     title: PromiseOrValue<string>,
     description: PromiseOrValue<string>,
-    category: PromiseOrValue<string>,
+    category_address: PromiseOrValue<string>,
     images: [
       PromiseOrValue<string>,
       PromiseOrValue<string>,
@@ -470,8 +427,8 @@ export interface FileContact extends BaseContract {
     reverse: PromiseOrValue<boolean>,
     overrides?: CallOverrides
   ): Promise<
-    [StoreContact.FileBriefInfoStructOutput[], string, boolean] & {
-      file_infos: StoreContact.FileBriefInfoStructOutput[];
+    [Types.FileBriefInfoStructOutput[], string, boolean] & {
+      file_infos: Types.FileBriefInfoStructOutput[];
       next: string;
       finished: boolean;
     }
@@ -479,13 +436,13 @@ export interface FileContact extends BaseContract {
 
   getFileBriefInfos(
     cursor: PromiseOrValue<string>,
-    category: PromiseOrValue<string>,
+    category_address: PromiseOrValue<string>,
     order: PromiseOrValue<BigNumberish>,
     reverse: PromiseOrValue<boolean>,
     overrides?: CallOverrides
   ): Promise<
-    [StoreContact.FileBriefInfoStructOutput[], string, boolean] & {
-      file_infos: StoreContact.FileBriefInfoStructOutput[];
+    [Types.FileBriefInfoStructOutput[], string, boolean] & {
+      file_infos: Types.FileBriefInfoStructOutput[];
       next: string;
       finished: boolean;
     }
@@ -494,26 +451,7 @@ export interface FileContact extends BaseContract {
   getFileDetailInfo(
     file_address: PromiseOrValue<string>,
     overrides?: CallOverrides
-  ): Promise<StoreContact.FileDetailInfoStructOutput>;
-
-  addComment(
-    file_address: PromiseOrValue<string>,
-    content: PromiseOrValue<string>,
-    images: [
-      PromiseOrValue<string>,
-      PromiseOrValue<string>,
-      PromiseOrValue<string>
-    ],
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  addSubComment(
-    file_address: PromiseOrValue<string>,
-    target_address: PromiseOrValue<string>,
-    comment_address: PromiseOrValue<string>,
-    content: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
+  ): Promise<Types.FileDetailInfoStructOutput>;
 
   callStatic: {
     admin(overrides?: CallOverrides): Promise<string>;
@@ -534,9 +472,10 @@ export interface FileContact extends BaseContract {
       cursor: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<
-      [StoreContact.CategoryStructOutput[], string] & {
-        category_slice: StoreContact.CategoryStructOutput[];
+      [Types.CategoryStructOutput[], string, boolean] & {
+        category_slice: Types.CategoryStructOutput[];
         next: string;
+        finished: boolean;
       }
     >;
 
@@ -545,7 +484,7 @@ export interface FileContact extends BaseContract {
       name: PromiseOrValue<string>,
       title: PromiseOrValue<string>,
       description: PromiseOrValue<string>,
-      category: PromiseOrValue<string>,
+      category_address: PromiseOrValue<string>,
       images: [
         PromiseOrValue<string>,
         PromiseOrValue<string>,
@@ -560,8 +499,8 @@ export interface FileContact extends BaseContract {
       reverse: PromiseOrValue<boolean>,
       overrides?: CallOverrides
     ): Promise<
-      [StoreContact.FileBriefInfoStructOutput[], string, boolean] & {
-        file_infos: StoreContact.FileBriefInfoStructOutput[];
+      [Types.FileBriefInfoStructOutput[], string, boolean] & {
+        file_infos: Types.FileBriefInfoStructOutput[];
         next: string;
         finished: boolean;
       }
@@ -569,13 +508,13 @@ export interface FileContact extends BaseContract {
 
     getFileBriefInfos(
       cursor: PromiseOrValue<string>,
-      category: PromiseOrValue<string>,
+      category_address: PromiseOrValue<string>,
       order: PromiseOrValue<BigNumberish>,
       reverse: PromiseOrValue<boolean>,
       overrides?: CallOverrides
     ): Promise<
-      [StoreContact.FileBriefInfoStructOutput[], string, boolean] & {
-        file_infos: StoreContact.FileBriefInfoStructOutput[];
+      [Types.FileBriefInfoStructOutput[], string, boolean] & {
+        file_infos: Types.FileBriefInfoStructOutput[];
         next: string;
         finished: boolean;
       }
@@ -584,26 +523,7 @@ export interface FileContact extends BaseContract {
     getFileDetailInfo(
       file_address: PromiseOrValue<string>,
       overrides?: CallOverrides
-    ): Promise<StoreContact.FileDetailInfoStructOutput>;
-
-    addComment(
-      file_address: PromiseOrValue<string>,
-      content: PromiseOrValue<string>,
-      images: [
-        PromiseOrValue<string>,
-        PromiseOrValue<string>,
-        PromiseOrValue<string>
-      ],
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    addSubComment(
-      file_address: PromiseOrValue<string>,
-      target_address: PromiseOrValue<string>,
-      comment_address: PromiseOrValue<string>,
-      content: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<Types.FileDetailInfoStructOutput>;
   };
 
   filters: {
@@ -644,7 +564,7 @@ export interface FileContact extends BaseContract {
       name: PromiseOrValue<string>,
       title: PromiseOrValue<string>,
       description: PromiseOrValue<string>,
-      category: PromiseOrValue<string>,
+      category_address: PromiseOrValue<string>,
       images: [
         PromiseOrValue<string>,
         PromiseOrValue<string>,
@@ -662,7 +582,7 @@ export interface FileContact extends BaseContract {
 
     getFileBriefInfos(
       cursor: PromiseOrValue<string>,
-      category: PromiseOrValue<string>,
+      category_address: PromiseOrValue<string>,
       order: PromiseOrValue<BigNumberish>,
       reverse: PromiseOrValue<boolean>,
       overrides?: CallOverrides
@@ -671,25 +591,6 @@ export interface FileContact extends BaseContract {
     getFileDetailInfo(
       file_address: PromiseOrValue<string>,
       overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    addComment(
-      file_address: PromiseOrValue<string>,
-      content: PromiseOrValue<string>,
-      images: [
-        PromiseOrValue<string>,
-        PromiseOrValue<string>,
-        PromiseOrValue<string>
-      ],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    addSubComment(
-      file_address: PromiseOrValue<string>,
-      target_address: PromiseOrValue<string>,
-      comment_address: PromiseOrValue<string>,
-      content: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
   };
 
@@ -720,7 +621,7 @@ export interface FileContact extends BaseContract {
       name: PromiseOrValue<string>,
       title: PromiseOrValue<string>,
       description: PromiseOrValue<string>,
-      category: PromiseOrValue<string>,
+      category_address: PromiseOrValue<string>,
       images: [
         PromiseOrValue<string>,
         PromiseOrValue<string>,
@@ -738,7 +639,7 @@ export interface FileContact extends BaseContract {
 
     getFileBriefInfos(
       cursor: PromiseOrValue<string>,
-      category: PromiseOrValue<string>,
+      category_address: PromiseOrValue<string>,
       order: PromiseOrValue<BigNumberish>,
       reverse: PromiseOrValue<boolean>,
       overrides?: CallOverrides
@@ -747,25 +648,6 @@ export interface FileContact extends BaseContract {
     getFileDetailInfo(
       file_address: PromiseOrValue<string>,
       overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    addComment(
-      file_address: PromiseOrValue<string>,
-      content: PromiseOrValue<string>,
-      images: [
-        PromiseOrValue<string>,
-        PromiseOrValue<string>,
-        PromiseOrValue<string>
-      ],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    addSubComment(
-      file_address: PromiseOrValue<string>,
-      target_address: PromiseOrValue<string>,
-      comment_address: PromiseOrValue<string>,
-      content: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
   };
 }

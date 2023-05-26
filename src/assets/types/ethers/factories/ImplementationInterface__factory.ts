@@ -27,29 +27,6 @@ const _abi = [
     inputs: [
       {
         internalType: "address",
-        name: "file_address",
-        type: "address",
-      },
-      {
-        internalType: "string",
-        name: "content",
-        type: "string",
-      },
-      {
-        internalType: "string[3]",
-        name: "images",
-        type: "string[3]",
-      },
-    ],
-    name: "addComment",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
         name: "cursor",
         type: "address",
       },
@@ -74,7 +51,7 @@ const _abi = [
             type: "uint256",
           },
         ],
-        internalType: "struct StoreContact.Category[10]",
+        internalType: "struct Types.Category[10]",
         name: "category_slice",
         type: "tuple[10]",
       },
@@ -82,6 +59,11 @@ const _abi = [
         internalType: "address",
         name: "next",
         type: "address",
+      },
+      {
+        internalType: "bool",
+        name: "finished",
+        type: "bool",
       },
     ],
     stateMutability: "view",
@@ -96,7 +78,7 @@ const _abi = [
       },
       {
         internalType: "address",
-        name: "category",
+        name: "category_address",
         type: "address",
       },
       {
@@ -116,12 +98,12 @@ const _abi = [
         components: [
           {
             internalType: "address",
-            name: "category",
+            name: "file_address",
             type: "address",
           },
           {
             internalType: "address",
-            name: "file_address",
+            name: "category_address",
             type: "address",
           },
           {
@@ -190,7 +172,7 @@ const _abi = [
             type: "uint256",
           },
         ],
-        internalType: "struct StoreContact.FileBriefInfo[10]",
+        internalType: "struct Types.FileBriefInfo[10]",
         name: "file_infos",
         type: "tuple[10]",
       },
@@ -227,12 +209,12 @@ const _abi = [
           },
           {
             internalType: "address",
-            name: "category",
+            name: "file_address",
             type: "address",
           },
           {
             internalType: "address",
-            name: "file_address",
+            name: "category_address",
             type: "address",
           },
           {
@@ -301,7 +283,7 @@ const _abi = [
             type: "uint256",
           },
         ],
-        internalType: "struct StoreContact.FileDetailInfo",
+        internalType: "struct Types.FileDetailInfo",
         name: "detail_info",
         type: "tuple",
       },
@@ -367,7 +349,7 @@ const _abi = [
             type: "uint256",
           },
         ],
-        internalType: "struct StoreContact.UserSimpleInfo",
+        internalType: "struct Types.UserSimpleInfo",
         name: "simple_info",
         type: "tuple",
       },
@@ -394,12 +376,12 @@ const _abi = [
         components: [
           {
             internalType: "address",
-            name: "category",
+            name: "file_address",
             type: "address",
           },
           {
             internalType: "address",
-            name: "file_address",
+            name: "category_address",
             type: "address",
           },
           {
@@ -468,7 +450,7 @@ const _abi = [
             type: "uint256",
           },
         ],
-        internalType: "struct StoreContact.FileBriefInfo[10]",
+        internalType: "struct Types.FileBriefInfo[10]",
         name: "file_infos",
         type: "tuple[10]",
       },
@@ -553,7 +535,7 @@ const _abi = [
             type: "uint256",
           },
         ],
-        internalType: "struct StoreContact.UserSelfInfo",
+        internalType: "struct Types.UserSelfInfo",
         name: "self_info",
         type: "tuple",
       },
@@ -676,7 +658,7 @@ const _abi = [
       },
       {
         internalType: "address",
-        name: "category",
+        name: "category_address",
         type: "address",
       },
       {

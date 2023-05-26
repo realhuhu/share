@@ -27,11 +27,11 @@
 
 
 <script lang="ts" setup>
-import {StoreContact} from "@/assets/types/ethers/ImplementationContact";
+import {Types} from "@/assets/types/ethers/ImplementationContact";
 import {avatar, calcLevel} from "@/assets/lib/utils";
 
-const props = withDefaults(defineProps<{
-  user_info: StoreContact.UserSimpleInfoStructOutput
+withDefaults(defineProps<{
+  user_info: Types.UserSimpleInfoStructOutput
 }>(), {})
 
 

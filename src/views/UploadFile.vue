@@ -43,7 +43,6 @@
 
 <script lang="ts" setup>
 import {ref} from "vue";
-import {safeBack} from "@/router";
 import {UseStore} from "@/store";
 import {assertNotEmpty} from "@/assets/lib/utils";
 import ImageUploader from "@/components/uploader/ImageUploader.vue";

@@ -23,7 +23,7 @@ import type {
   PromiseOrValue,
 } from "./common";
 
-export declare namespace StoreContact {
+export declare namespace Types {
   export type UserSelfInfoStruct = {
     major: PromiseOrValue<string>;
     avatar: PromiseOrValue<string>;
@@ -222,8 +222,8 @@ export interface UserInterface extends BaseContract {
     getSelfInfo(
       overrides?: CallOverrides
     ): Promise<
-      [StoreContact.UserSelfInfoStructOutput] & {
-        self_info: StoreContact.UserSelfInfoStructOutput;
+      [Types.UserSelfInfoStructOutput] & {
+        self_info: Types.UserSelfInfoStructOutput;
       }
     >;
 
@@ -231,8 +231,8 @@ export interface UserInterface extends BaseContract {
       user_address: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<
-      [StoreContact.UserSimpleInfoStructOutput] & {
-        simple_info: StoreContact.UserSimpleInfoStructOutput;
+      [Types.UserSimpleInfoStructOutput] & {
+        simple_info: Types.UserSimpleInfoStructOutput;
       }
     >;
 
@@ -264,12 +264,12 @@ export interface UserInterface extends BaseContract {
 
   getSelfInfo(
     overrides?: CallOverrides
-  ): Promise<StoreContact.UserSelfInfoStructOutput>;
+  ): Promise<Types.UserSelfInfoStructOutput>;
 
   getOtherSimpleInfo(
     user_address: PromiseOrValue<string>,
     overrides?: CallOverrides
-  ): Promise<StoreContact.UserSimpleInfoStructOutput>;
+  ): Promise<Types.UserSimpleInfoStructOutput>;
 
   updateAvatar(
     avatar: PromiseOrValue<string>,
@@ -299,12 +299,12 @@ export interface UserInterface extends BaseContract {
 
     getSelfInfo(
       overrides?: CallOverrides
-    ): Promise<StoreContact.UserSelfInfoStructOutput>;
+    ): Promise<Types.UserSelfInfoStructOutput>;
 
     getOtherSimpleInfo(
       user_address: PromiseOrValue<string>,
       overrides?: CallOverrides
-    ): Promise<StoreContact.UserSimpleInfoStructOutput>;
+    ): Promise<Types.UserSimpleInfoStructOutput>;
 
     updateAvatar(
       avatar: PromiseOrValue<string>,

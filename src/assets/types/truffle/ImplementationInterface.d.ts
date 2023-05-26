@@ -31,51 +31,25 @@ export interface ImplementationInterfaceInstance
     ): Promise<number>;
   };
 
-  addComment: {
-    (
-      file_address: string,
-      content: string,
-      images: string[],
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<Truffle.TransactionResponse<AllEvents>>;
-    call(
-      file_address: string,
-      content: string,
-      images: string[],
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<void>;
-    sendTransaction(
-      file_address: string,
-      content: string,
-      images: string[],
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<string>;
-    estimateGas(
-      file_address: string,
-      content: string,
-      images: string[],
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<number>;
-  };
-
   getCategorySlice(
     cursor: string,
     txDetails?: Truffle.TransactionDetails
   ): Promise<{
     0: { category_address: string; name: string; num: BN }[];
     1: string;
+    2: boolean;
   }>;
 
   getFileBriefInfos(
     cursor: string,
-    category: string,
+    category_address: string,
     order: number | BN | string,
     reverse: boolean,
     txDetails?: Truffle.TransactionDetails
   ): Promise<{
     0: {
-      category: string;
       file_address: string;
+      category_address: string;
       is_buy: boolean;
       name: string;
       title: string;
@@ -99,8 +73,8 @@ export interface ImplementationInterfaceInstance
     txDetails?: Truffle.TransactionDetails
   ): Promise<{
     owner: string;
-    category: string;
     file_address: string;
+    category_address: string;
     is_buy: boolean;
     name: string;
     title: string;
@@ -137,8 +111,8 @@ export interface ImplementationInterfaceInstance
     txDetails?: Truffle.TransactionDetails
   ): Promise<{
     0: {
-      category: string;
       file_address: string;
+      category_address: string;
       is_buy: boolean;
       name: string;
       title: string;
@@ -281,7 +255,7 @@ export interface ImplementationInterfaceInstance
       name: string,
       title: string,
       description: string,
-      category: string,
+      category_address: string,
       images: string[],
       price: number | BN | string,
       txDetails?: Truffle.TransactionDetails
@@ -291,7 +265,7 @@ export interface ImplementationInterfaceInstance
       name: string,
       title: string,
       description: string,
-      category: string,
+      category_address: string,
       images: string[],
       price: number | BN | string,
       txDetails?: Truffle.TransactionDetails
@@ -301,7 +275,7 @@ export interface ImplementationInterfaceInstance
       name: string,
       title: string,
       description: string,
-      category: string,
+      category_address: string,
       images: string[],
       price: number | BN | string,
       txDetails?: Truffle.TransactionDetails
@@ -311,7 +285,7 @@ export interface ImplementationInterfaceInstance
       name: string,
       title: string,
       description: string,
-      category: string,
+      category_address: string,
       images: string[],
       price: number | BN | string,
       txDetails?: Truffle.TransactionDetails
@@ -343,51 +317,25 @@ export interface ImplementationInterfaceInstance
       ): Promise<number>;
     };
 
-    addComment: {
-      (
-        file_address: string,
-        content: string,
-        images: string[],
-        txDetails?: Truffle.TransactionDetails
-      ): Promise<Truffle.TransactionResponse<AllEvents>>;
-      call(
-        file_address: string,
-        content: string,
-        images: string[],
-        txDetails?: Truffle.TransactionDetails
-      ): Promise<void>;
-      sendTransaction(
-        file_address: string,
-        content: string,
-        images: string[],
-        txDetails?: Truffle.TransactionDetails
-      ): Promise<string>;
-      estimateGas(
-        file_address: string,
-        content: string,
-        images: string[],
-        txDetails?: Truffle.TransactionDetails
-      ): Promise<number>;
-    };
-
     getCategorySlice(
       cursor: string,
       txDetails?: Truffle.TransactionDetails
     ): Promise<{
       0: { category_address: string; name: string; num: BN }[];
       1: string;
+      2: boolean;
     }>;
 
     getFileBriefInfos(
       cursor: string,
-      category: string,
+      category_address: string,
       order: number | BN | string,
       reverse: boolean,
       txDetails?: Truffle.TransactionDetails
     ): Promise<{
       0: {
-        category: string;
         file_address: string;
+        category_address: string;
         is_buy: boolean;
         name: string;
         title: string;
@@ -411,8 +359,8 @@ export interface ImplementationInterfaceInstance
       txDetails?: Truffle.TransactionDetails
     ): Promise<{
       owner: string;
-      category: string;
       file_address: string;
+      category_address: string;
       is_buy: boolean;
       name: string;
       title: string;
@@ -449,8 +397,8 @@ export interface ImplementationInterfaceInstance
       txDetails?: Truffle.TransactionDetails
     ): Promise<{
       0: {
-        category: string;
         file_address: string;
+        category_address: string;
         is_buy: boolean;
         name: string;
         title: string;
@@ -596,7 +544,7 @@ export interface ImplementationInterfaceInstance
         name: string,
         title: string,
         description: string,
-        category: string,
+        category_address: string,
         images: string[],
         price: number | BN | string,
         txDetails?: Truffle.TransactionDetails
@@ -606,7 +554,7 @@ export interface ImplementationInterfaceInstance
         name: string,
         title: string,
         description: string,
-        category: string,
+        category_address: string,
         images: string[],
         price: number | BN | string,
         txDetails?: Truffle.TransactionDetails
@@ -616,7 +564,7 @@ export interface ImplementationInterfaceInstance
         name: string,
         title: string,
         description: string,
-        category: string,
+        category_address: string,
         images: string[],
         price: number | BN | string,
         txDetails?: Truffle.TransactionDetails
@@ -626,7 +574,7 @@ export interface ImplementationInterfaceInstance
         name: string,
         title: string,
         description: string,
-        category: string,
+        category_address: string,
         images: string[],
         price: number | BN | string,
         txDetails?: Truffle.TransactionDetails

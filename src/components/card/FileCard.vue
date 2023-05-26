@@ -61,7 +61,7 @@
 
 
 <script lang="ts" setup>
-import {StoreContact} from "@/assets/types/ethers/ImplementationContact";
+import {Types} from "@/assets/types/ethers/ImplementationContact";
 import {cover, ipfs_url} from "@/assets/lib/settings";
 import {UseStore} from "@/store";
 import {computed} from "vue";
@@ -69,7 +69,7 @@ import {useRouter} from "vue-router";
 import {datetime} from "@/assets/lib/utils";
 
 const props = withDefaults(defineProps<{
-  file_info: StoreContact.FileBriefInfoStructOutput
+  file_info: Types.FileBriefInfoStructOutput
 }>(), {})
 
 const store = UseStore()
@@ -77,7 +77,7 @@ const router = useRouter()
 const category = computed(() => {
   if (store.categories) {
     for (const i of store.categories) {
-      if (i.category_address === props.file_info.category) return i.name
+      if (i.category_address === props.file_info.category_address) return i.name
     }
   }
   return "未知分类"

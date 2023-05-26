@@ -38,14 +38,14 @@
 
 
 <script lang="ts" setup>
-import {StoreContact} from "@/assets/types/ethers/ImplementationContact";
+import {Types} from "@/assets/types/ethers/ImplementationContact";
 import {datetime, stripAddress} from "@/assets/lib/utils";
 import {UseStore} from "@/store";
 import {computed} from "vue";
 import {ipfs_url} from "@/assets/lib/settings";
 
 const props = withDefaults(defineProps<{
-  file_info: StoreContact.FileDetailInfoStructOutput
+  file_info: Types.FileDetailInfoStructOutput
 }>(), {})
 
 const store = UseStore()
@@ -53,7 +53,7 @@ const store = UseStore()
 const category = computed(() => {
   if (store.categories) {
     for (const i of store.categories) {
-      if (i.category_address === props.file_info.category) return i.name
+      if (i.category_address === props.file_info.category_address) return i.name
     }
   }
   return "未知分类"

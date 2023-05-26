@@ -61,7 +61,7 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.17+commit.8df45f5f\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"old_admin\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"new_admin\",\"type\":\"address\"}],\"name\":\"AdminTransferred\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"RewardContract_init\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"admin\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceAdmin\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"new_admin\",\"type\":\"address\"}],\"name\":\"transferAdmin\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/src/assets/eth/contracts/implementations/Reward.sol\":\"RewardContact\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/src/assets/eth/contracts/implementations/Reward.sol\":{\"keccak256\":\"0xb3c39fd45d5b2fdc2f1e641b152f14e92883f890c2b4c652e28bb6f073ab4b2e\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://c872ef5ffdc5bdf13e0d82d0bca72b78fca6438d2078d0caca5c8cbc0f626389\",\"dweb:/ipfs/QmNxbPXnrMMmbu1aUp2jXnpkaXct9mfgDiVFbgZx1AgqcT\"]},\"project:/src/assets/eth/contracts/implementations/base/Admin.sol\":{\"keccak256\":\"0x9ffa9e5eec6500258e9c78f68d0611cd8e517810c9d2510e480276af75d01f67\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://b4e47ecdb27127d15ed8879842e61b16f712541d11701af4ef22f7781eb99664\",\"dweb:/ipfs/QmPGP9e3LFunoRjJB7VCxjX1BrDqm5xQnUugdEExezNo6U\"]},\"project:/src/assets/eth/contracts/implementations/base/Base.sol\":{\"keccak256\":\"0x7aa723ebf6e7d784d9476cdab5a73f9ecffaf9c662161c9c6385aa1ea8d6b2ce\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://258d6a8a5f0872964ca3e1ed27fb1ea2d3800113107430060b06eb724b1b6f12\",\"dweb:/ipfs/QmUufDqh2FwkBBA6ej561moqZc6FDx9soZZPxEv5FS24gL\"]},\"project:/src/assets/eth/contracts/implementations/base/Store.sol\":{\"keccak256\":\"0x5b85a07faac24bf24e8a3b41c8ee17247752708a375a1db0d6f3c6dc03d97ad5\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://de3774db18535395c21dcfc4536d88476302dc9c033e8978cfedb833423e7272\",\"dweb:/ipfs/QmX5XXHdf7u4fwVXEoYa29Cm1U7bVjL6zoDHxm7emSjcyS\"]},\"project:/src/assets/eth/contracts/utils/AddressLinkedList.sol\":{\"keccak256\":\"0xad95a257810b7cd38d1b307d747d10b3467bb5320bdcf7531910d994851c855d\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://0a42ef438d55fd39c3543d83319e87a4ef59188861dc91e2ec7d0769bbffbe32\",\"dweb:/ipfs/Qmc2UTFUxyU8RNcdfC4ny86NfXmzZfcDo48mrCnm3z7D3z\"]},\"project:/src/assets/eth/contracts/utils/AddressOrderedMap.sol\":{\"keccak256\":\"0xf1c220cfa7302e62110a2153b8df6998d189b5d35266a24f880f515e5cd1cfdd\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://5a1f32e50cfbad35996f57ca844b87b4977e793d1c09d65976d715ee94252274\",\"dweb:/ipfs/QmSB6qpusGbAGxrjzTCXrkdZam6UomAG12hfdQtL2mbEA4\"]},\"project:/src/assets/eth/contracts/utils/Bytes32.sol\":{\"keccak256\":\"0x216ade25cc3a82798aee1a794b971582189bf63f7be423d2d2d8ad90c7833324\",\"license\":\"UNLICENSED\",\"urls\":[\"bzz-raw://b1a695d5ae680add5beaa9b3c36e55d2e11d9ef18599b72ef294e4981299f3f9\",\"dweb:/ipfs/QmdCit4qim4zNBaVXiW4L3r2ASkc4sGpTDYTUi5tMNfHM4\"]},\"project:/src/assets/eth/contracts/utils/String.sol\":{\"keccak256\":\"0xe6333bd8f02c73b16a06ad3c155ab97303149a8c3fdacbc3529767c38ba0c61f\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://50e40c3f65f717611b1c2e52fe7a9c8076737864a6ed12f6805fdad9f2c8ce05\",\"dweb:/ipfs/QmYfsMYdtTwR43BxfcMceNnxZp6cqgBhGWQFSwCp5wKXD1\"]},\"project:/src/assets/eth/contracts/utils/Uint.sol\":{\"keccak256\":\"0xe4697b758483901e737637e345af4ae592985ffabdc4b714154b4e857760e616\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://31db6fde8fd4cdc35f59a0852c7cd3f3da9c8bd845be5fef9a3fa8e8df0677bc\",\"dweb:/ipfs/QmcYyiLyTL51XsSG2uEuS7GPCeodYq7mnD2raAiVBHDHHK\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.17+commit.8df45f5f\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"old_admin\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"new_admin\",\"type\":\"address\"}],\"name\":\"AdminTransferred\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"RewardContract_init\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"admin\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceAdmin\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"new_admin\",\"type\":\"address\"}],\"name\":\"transferAdmin\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/src/assets/eth/contracts/implementations/Reward.sol\":\"RewardContact\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/src/assets/eth/contracts/implementations/Reward.sol\":{\"keccak256\":\"0xb3c39fd45d5b2fdc2f1e641b152f14e92883f890c2b4c652e28bb6f073ab4b2e\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://c872ef5ffdc5bdf13e0d82d0bca72b78fca6438d2078d0caca5c8cbc0f626389\",\"dweb:/ipfs/QmNxbPXnrMMmbu1aUp2jXnpkaXct9mfgDiVFbgZx1AgqcT\"]},\"project:/src/assets/eth/contracts/implementations/base/Admin.sol\":{\"keccak256\":\"0x9ffa9e5eec6500258e9c78f68d0611cd8e517810c9d2510e480276af75d01f67\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://b4e47ecdb27127d15ed8879842e61b16f712541d11701af4ef22f7781eb99664\",\"dweb:/ipfs/QmPGP9e3LFunoRjJB7VCxjX1BrDqm5xQnUugdEExezNo6U\"]},\"project:/src/assets/eth/contracts/implementations/base/Base.sol\":{\"keccak256\":\"0x03c9d2b764e4ea8450d8c3ac77a25dab2704821ce47ed5c28d6b35ded50f5a62\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://5180d1f3ca660d4048ea17a39b0a2af20c09e85826efbe74e118702ed3cc6e00\",\"dweb:/ipfs/QmWHeFBU4pJcvLhkDgm4MGSbwW77j7CCybN8XXzaUiG8yN\"]},\"project:/src/assets/eth/contracts/implementations/base/Store.sol\":{\"keccak256\":\"0x830d2ecd632a6277c364d9c431126c94e2936f7827b4957fae158e4d1e76c490\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://6552c1c9301a58db46626e8db03369a2b8d3d349d980775907692e1e37b1bd0b\",\"dweb:/ipfs/QmXtHA9hJCJGw92rLkCjh7EZTVku8h3ordzgogAU7k3cjH\"]},\"project:/src/assets/eth/contracts/utils/AddressLinkedList.sol\":{\"keccak256\":\"0xad95a257810b7cd38d1b307d747d10b3467bb5320bdcf7531910d994851c855d\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://0a42ef438d55fd39c3543d83319e87a4ef59188861dc91e2ec7d0769bbffbe32\",\"dweb:/ipfs/Qmc2UTFUxyU8RNcdfC4ny86NfXmzZfcDo48mrCnm3z7D3z\"]},\"project:/src/assets/eth/contracts/utils/AddressOrderedMap.sol\":{\"keccak256\":\"0xf1c220cfa7302e62110a2153b8df6998d189b5d35266a24f880f515e5cd1cfdd\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://5a1f32e50cfbad35996f57ca844b87b4977e793d1c09d65976d715ee94252274\",\"dweb:/ipfs/QmSB6qpusGbAGxrjzTCXrkdZam6UomAG12hfdQtL2mbEA4\"]},\"project:/src/assets/eth/contracts/utils/Bytes32.sol\":{\"keccak256\":\"0x216ade25cc3a82798aee1a794b971582189bf63f7be423d2d2d8ad90c7833324\",\"license\":\"UNLICENSED\",\"urls\":[\"bzz-raw://b1a695d5ae680add5beaa9b3c36e55d2e11d9ef18599b72ef294e4981299f3f9\",\"dweb:/ipfs/QmdCit4qim4zNBaVXiW4L3r2ASkc4sGpTDYTUi5tMNfHM4\"]},\"project:/src/assets/eth/contracts/utils/String.sol\":{\"keccak256\":\"0xe6333bd8f02c73b16a06ad3c155ab97303149a8c3fdacbc3529767c38ba0c61f\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://50e40c3f65f717611b1c2e52fe7a9c8076737864a6ed12f6805fdad9f2c8ce05\",\"dweb:/ipfs/QmYfsMYdtTwR43BxfcMceNnxZp6cqgBhGWQFSwCp5wKXD1\"]},\"project:/src/assets/eth/contracts/utils/Uint.sol\":{\"keccak256\":\"0xe4697b758483901e737637e345af4ae592985ffabdc4b714154b4e857760e616\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://31db6fde8fd4cdc35f59a0852c7cd3f3da9c8bd845be5fef9a3fa8e8df0677bc\",\"dweb:/ipfs/QmcYyiLyTL51XsSG2uEuS7GPCeodYq7mnD2raAiVBHDHHK\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "immutableReferences": {},
@@ -75,45 +75,57 @@
     "absolutePath": "project:/src/assets/eth/contracts/implementations/Reward.sol",
     "exportedSymbols": {
       "AddressLinkedList": [
-        3581
+        3462
       ],
       "AddressOrderedMap": [
-        4158
+        4039
       ],
       "AdminContract": [
-        2109
+        819
       ],
       "AdminInterface": [
-        2034
+        744
       ],
       "BaseContact": [
-        2178
+        879
       ],
       "Bytes32Lib": [
-        4182
+        4063
+      ],
+      "CategoryLib": [
+        2515
+      ],
+      "FileLib": [
+        2332
       ],
       "RewardContact": [
-        1486
+        578
       ],
       "RewardInterface": [
-        1477
+        569
       ],
       "StoreContact": [
-        2644
+        2525
       ],
       "StringLib": [
-        4227
+        4108
+      ],
+      "Types": [
+        1214
       ],
       "UintLib": [
-        4262
+        4143
+      ],
+      "UserLib": [
+        1704
       ]
     },
-    "id": 1487,
+    "id": 579,
     "license": "GPL-3.0",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1475,
+        "id": 567,
         "literals": [
           "solidity",
           "^",
@@ -126,11 +138,11 @@
       {
         "absolutePath": "project:/src/assets/eth/contracts/implementations/base/Base.sol",
         "file": "./base/Base.sol",
-        "id": 1476,
+        "id": 568,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 1487,
-        "sourceUnit": 2179,
+        "scope": 579,
+        "sourceUnit": 880,
         "src": "64:25:3",
         "symbolAliases": [],
         "unitAlias": ""
@@ -142,15 +154,15 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "fullyImplemented": true,
-        "id": 1477,
+        "id": 569,
         "linearizedBaseContracts": [
-          1477
+          569
         ],
         "name": "RewardInterface",
         "nameLocation": "103:15:3",
         "nodeType": "ContractDefinition",
         "nodes": [],
-        "scope": 1487,
+        "scope": 579,
         "src": "93:32:3",
         "usedErrors": []
       },
@@ -159,31 +171,31 @@
         "baseContracts": [
           {
             "baseName": {
-              "id": 1478,
+              "id": 570,
               "name": "BaseContact",
               "nameLocations": [
                 "164:11:3"
               ],
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 2178,
+              "referencedDeclaration": 879,
               "src": "164:11:3"
             },
-            "id": 1479,
+            "id": 571,
             "nodeType": "InheritanceSpecifier",
             "src": "164:11:3"
           },
           {
             "baseName": {
-              "id": 1480,
+              "id": 572,
               "name": "RewardInterface",
               "nameLocations": [
                 "177:15:3"
               ],
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 1477,
+              "referencedDeclaration": 569,
               "src": "177:15:3"
             },
-            "id": 1481,
+            "id": 573,
             "nodeType": "InheritanceSpecifier",
             "src": "177:15:3"
           }
@@ -192,13 +204,13 @@
         "contractDependencies": [],
         "contractKind": "contract",
         "fullyImplemented": true,
-        "id": 1486,
+        "id": 578,
         "linearizedBaseContracts": [
-          1486,
-          1477,
-          2178,
-          2644,
-          2109
+          578,
+          569,
+          879,
+          2525,
+          819
         ],
         "name": "RewardContact",
         "nameLocation": "147:13:3",
@@ -206,13 +218,13 @@
         "nodes": [
           {
             "body": {
-              "id": 1484,
+              "id": 576,
               "nodeType": "Block",
               "src": "245:10:3",
               "statements": []
             },
             "functionSelector": "db12e041",
-            "id": 1485,
+            "id": 577,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -220,25 +232,25 @@
             "nameLocation": "209:19:3",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1482,
+              "id": 574,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "228:2:3"
             },
             "returnParameters": {
-              "id": 1483,
+              "id": 575,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "245:0:3"
             },
-            "scope": 1486,
+            "scope": 578,
             "src": "200:55:3",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 1487,
+        "scope": 579,
         "src": "129:129:3",
         "usedErrors": []
       }
@@ -251,7 +263,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.13",
-  "updatedAt": "2023-05-25T12:30:05.246Z",
+  "updatedAt": "2023-05-26T05:05:43.312Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

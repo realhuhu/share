@@ -82,7 +82,6 @@ import {ref, watch} from "vue";
 import {ethers} from "ethers";
 import TextClipboard from "@/components/utils/TextClipboard.vue";
 import {Snackbar} from "@varlet/ui";
-import {safeBack} from "@/router";
 
 const active = ref<0 | 1 | 2>(0)
 

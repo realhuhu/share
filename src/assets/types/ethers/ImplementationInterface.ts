@@ -23,7 +23,7 @@ import type {
   PromiseOrValue,
 } from "./common";
 
-export declare namespace StoreContact {
+export declare namespace Types {
   export type CategoryStruct = {
     category_address: PromiseOrValue<string>;
     name: PromiseOrValue<string>;
@@ -37,8 +37,8 @@ export declare namespace StoreContact {
   };
 
   export type FileBriefInfoStruct = {
-    category: PromiseOrValue<string>;
     file_address: PromiseOrValue<string>;
+    category_address: PromiseOrValue<string>;
     is_buy: PromiseOrValue<boolean>;
     name: PromiseOrValue<string>;
     title: PromiseOrValue<string>;
@@ -71,8 +71,8 @@ export declare namespace StoreContact {
     BigNumber,
     BigNumber
   ] & {
-    category: string;
     file_address: string;
+    category_address: string;
     is_buy: boolean;
     name: string;
     title: string;
@@ -90,8 +90,8 @@ export declare namespace StoreContact {
 
   export type FileDetailInfoStruct = {
     owner: PromiseOrValue<string>;
-    category: PromiseOrValue<string>;
     file_address: PromiseOrValue<string>;
+    category_address: PromiseOrValue<string>;
     is_buy: PromiseOrValue<boolean>;
     name: PromiseOrValue<string>;
     title: PromiseOrValue<string>;
@@ -130,8 +130,8 @@ export declare namespace StoreContact {
     BigNumber
   ] & {
     owner: string;
-    category: string;
     file_address: string;
+    category_address: string;
     is_buy: boolean;
     name: string;
     title: string;
@@ -228,7 +228,6 @@ export declare namespace StoreContact {
 export interface ImplementationInterfaceInterface extends utils.Interface {
   functions: {
     "addCategory(string)": FunctionFragment;
-    "addComment(address,string,string[3])": FunctionFragment;
     "getCategorySlice(address)": FunctionFragment;
     "getFileBriefInfos(address,address,uint256,bool)": FunctionFragment;
     "getFileDetailInfo(address)": FunctionFragment;
@@ -249,7 +248,6 @@ export interface ImplementationInterfaceInterface extends utils.Interface {
   getFunction(
     nameOrSignatureOrTopic:
       | "addCategory"
-      | "addComment"
       | "getCategorySlice"
       | "getFileBriefInfos"
       | "getFileDetailInfo"
@@ -270,14 +268,6 @@ export interface ImplementationInterfaceInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "addCategory",
     values: [PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "addComment",
-    values: [
-      PromiseOrValue<string>,
-      PromiseOrValue<string>,
-      [PromiseOrValue<string>, PromiseOrValue<string>, PromiseOrValue<string>]
-    ]
   ): string;
   encodeFunctionData(
     functionFragment: "getCategorySlice",
@@ -354,7 +344,6 @@ export interface ImplementationInterfaceInterface extends utils.Interface {
     functionFragment: "addCategory",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "addComment", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getCategorySlice",
     data: BytesLike
@@ -442,36 +431,26 @@ export interface ImplementationInterface extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    addComment(
-      file_address: PromiseOrValue<string>,
-      content: PromiseOrValue<string>,
-      images: [
-        PromiseOrValue<string>,
-        PromiseOrValue<string>,
-        PromiseOrValue<string>
-      ],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
     getCategorySlice(
       cursor: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<
-      [StoreContact.CategoryStructOutput[], string] & {
-        category_slice: StoreContact.CategoryStructOutput[];
+      [Types.CategoryStructOutput[], string, boolean] & {
+        category_slice: Types.CategoryStructOutput[];
         next: string;
+        finished: boolean;
       }
     >;
 
     getFileBriefInfos(
       cursor: PromiseOrValue<string>,
-      category: PromiseOrValue<string>,
+      category_address: PromiseOrValue<string>,
       order: PromiseOrValue<BigNumberish>,
       reverse: PromiseOrValue<boolean>,
       overrides?: CallOverrides
     ): Promise<
-      [StoreContact.FileBriefInfoStructOutput[], string, boolean] & {
-        file_infos: StoreContact.FileBriefInfoStructOutput[];
+      [Types.FileBriefInfoStructOutput[], string, boolean] & {
+        file_infos: Types.FileBriefInfoStructOutput[];
         next: string;
         finished: boolean;
       }
@@ -481,8 +460,8 @@ export interface ImplementationInterface extends BaseContract {
       file_address: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<
-      [StoreContact.FileDetailInfoStructOutput] & {
-        detail_info: StoreContact.FileDetailInfoStructOutput;
+      [Types.FileDetailInfoStructOutput] & {
+        detail_info: Types.FileDetailInfoStructOutput;
       }
     >;
 
@@ -490,8 +469,8 @@ export interface ImplementationInterface extends BaseContract {
       user_address: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<
-      [StoreContact.UserSimpleInfoStructOutput] & {
-        simple_info: StoreContact.UserSimpleInfoStructOutput;
+      [Types.UserSimpleInfoStructOutput] & {
+        simple_info: Types.UserSimpleInfoStructOutput;
       }
     >;
 
@@ -500,8 +479,8 @@ export interface ImplementationInterface extends BaseContract {
       reverse: PromiseOrValue<boolean>,
       overrides?: CallOverrides
     ): Promise<
-      [StoreContact.FileBriefInfoStructOutput[], string, boolean] & {
-        file_infos: StoreContact.FileBriefInfoStructOutput[];
+      [Types.FileBriefInfoStructOutput[], string, boolean] & {
+        file_infos: Types.FileBriefInfoStructOutput[];
         next: string;
         finished: boolean;
       }
@@ -510,8 +489,8 @@ export interface ImplementationInterface extends BaseContract {
     getSelfInfo(
       overrides?: CallOverrides
     ): Promise<
-      [StoreContact.UserSelfInfoStructOutput] & {
-        self_info: StoreContact.UserSelfInfoStructOutput;
+      [Types.UserSelfInfoStructOutput] & {
+        self_info: Types.UserSelfInfoStructOutput;
       }
     >;
 
@@ -554,7 +533,7 @@ export interface ImplementationInterface extends BaseContract {
       name: PromiseOrValue<string>,
       title: PromiseOrValue<string>,
       description: PromiseOrValue<string>,
-      category: PromiseOrValue<string>,
+      category_address: PromiseOrValue<string>,
       images: [
         PromiseOrValue<string>,
         PromiseOrValue<string>,
@@ -574,36 +553,26 @@ export interface ImplementationInterface extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  addComment(
-    file_address: PromiseOrValue<string>,
-    content: PromiseOrValue<string>,
-    images: [
-      PromiseOrValue<string>,
-      PromiseOrValue<string>,
-      PromiseOrValue<string>
-    ],
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
   getCategorySlice(
     cursor: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<
-    [StoreContact.CategoryStructOutput[], string] & {
-      category_slice: StoreContact.CategoryStructOutput[];
+    [Types.CategoryStructOutput[], string, boolean] & {
+      category_slice: Types.CategoryStructOutput[];
       next: string;
+      finished: boolean;
     }
   >;
 
   getFileBriefInfos(
     cursor: PromiseOrValue<string>,
-    category: PromiseOrValue<string>,
+    category_address: PromiseOrValue<string>,
     order: PromiseOrValue<BigNumberish>,
     reverse: PromiseOrValue<boolean>,
     overrides?: CallOverrides
   ): Promise<
-    [StoreContact.FileBriefInfoStructOutput[], string, boolean] & {
-      file_infos: StoreContact.FileBriefInfoStructOutput[];
+    [Types.FileBriefInfoStructOutput[], string, boolean] & {
+      file_infos: Types.FileBriefInfoStructOutput[];
       next: string;
       finished: boolean;
     }
@@ -612,20 +581,20 @@ export interface ImplementationInterface extends BaseContract {
   getFileDetailInfo(
     file_address: PromiseOrValue<string>,
     overrides?: CallOverrides
-  ): Promise<StoreContact.FileDetailInfoStructOutput>;
+  ): Promise<Types.FileDetailInfoStructOutput>;
 
   getOtherSimpleInfo(
     user_address: PromiseOrValue<string>,
     overrides?: CallOverrides
-  ): Promise<StoreContact.UserSimpleInfoStructOutput>;
+  ): Promise<Types.UserSimpleInfoStructOutput>;
 
   getSelfFileBriefInfos(
     cursor: PromiseOrValue<string>,
     reverse: PromiseOrValue<boolean>,
     overrides?: CallOverrides
   ): Promise<
-    [StoreContact.FileBriefInfoStructOutput[], string, boolean] & {
-      file_infos: StoreContact.FileBriefInfoStructOutput[];
+    [Types.FileBriefInfoStructOutput[], string, boolean] & {
+      file_infos: Types.FileBriefInfoStructOutput[];
       next: string;
       finished: boolean;
     }
@@ -633,7 +602,7 @@ export interface ImplementationInterface extends BaseContract {
 
   getSelfInfo(
     overrides?: CallOverrides
-  ): Promise<StoreContact.UserSelfInfoStructOutput>;
+  ): Promise<Types.UserSelfInfoStructOutput>;
 
   isRegistered(
     user_address: PromiseOrValue<string>,
@@ -674,7 +643,7 @@ export interface ImplementationInterface extends BaseContract {
     name: PromiseOrValue<string>,
     title: PromiseOrValue<string>,
     description: PromiseOrValue<string>,
-    category: PromiseOrValue<string>,
+    category_address: PromiseOrValue<string>,
     images: [
       PromiseOrValue<string>,
       PromiseOrValue<string>,
@@ -694,36 +663,26 @@ export interface ImplementationInterface extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    addComment(
-      file_address: PromiseOrValue<string>,
-      content: PromiseOrValue<string>,
-      images: [
-        PromiseOrValue<string>,
-        PromiseOrValue<string>,
-        PromiseOrValue<string>
-      ],
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     getCategorySlice(
       cursor: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<
-      [StoreContact.CategoryStructOutput[], string] & {
-        category_slice: StoreContact.CategoryStructOutput[];
+      [Types.CategoryStructOutput[], string, boolean] & {
+        category_slice: Types.CategoryStructOutput[];
         next: string;
+        finished: boolean;
       }
     >;
 
     getFileBriefInfos(
       cursor: PromiseOrValue<string>,
-      category: PromiseOrValue<string>,
+      category_address: PromiseOrValue<string>,
       order: PromiseOrValue<BigNumberish>,
       reverse: PromiseOrValue<boolean>,
       overrides?: CallOverrides
     ): Promise<
-      [StoreContact.FileBriefInfoStructOutput[], string, boolean] & {
-        file_infos: StoreContact.FileBriefInfoStructOutput[];
+      [Types.FileBriefInfoStructOutput[], string, boolean] & {
+        file_infos: Types.FileBriefInfoStructOutput[];
         next: string;
         finished: boolean;
       }
@@ -732,20 +691,20 @@ export interface ImplementationInterface extends BaseContract {
     getFileDetailInfo(
       file_address: PromiseOrValue<string>,
       overrides?: CallOverrides
-    ): Promise<StoreContact.FileDetailInfoStructOutput>;
+    ): Promise<Types.FileDetailInfoStructOutput>;
 
     getOtherSimpleInfo(
       user_address: PromiseOrValue<string>,
       overrides?: CallOverrides
-    ): Promise<StoreContact.UserSimpleInfoStructOutput>;
+    ): Promise<Types.UserSimpleInfoStructOutput>;
 
     getSelfFileBriefInfos(
       cursor: PromiseOrValue<string>,
       reverse: PromiseOrValue<boolean>,
       overrides?: CallOverrides
     ): Promise<
-      [StoreContact.FileBriefInfoStructOutput[], string, boolean] & {
-        file_infos: StoreContact.FileBriefInfoStructOutput[];
+      [Types.FileBriefInfoStructOutput[], string, boolean] & {
+        file_infos: Types.FileBriefInfoStructOutput[];
         next: string;
         finished: boolean;
       }
@@ -753,7 +712,7 @@ export interface ImplementationInterface extends BaseContract {
 
     getSelfInfo(
       overrides?: CallOverrides
-    ): Promise<StoreContact.UserSelfInfoStructOutput>;
+    ): Promise<Types.UserSelfInfoStructOutput>;
 
     isRegistered(
       user_address: PromiseOrValue<string>,
@@ -792,7 +751,7 @@ export interface ImplementationInterface extends BaseContract {
       name: PromiseOrValue<string>,
       title: PromiseOrValue<string>,
       description: PromiseOrValue<string>,
-      category: PromiseOrValue<string>,
+      category_address: PromiseOrValue<string>,
       images: [
         PromiseOrValue<string>,
         PromiseOrValue<string>,
@@ -813,17 +772,6 @@ export interface ImplementationInterface extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    addComment(
-      file_address: PromiseOrValue<string>,
-      content: PromiseOrValue<string>,
-      images: [
-        PromiseOrValue<string>,
-        PromiseOrValue<string>,
-        PromiseOrValue<string>
-      ],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
     getCategorySlice(
       cursor: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -831,7 +779,7 @@ export interface ImplementationInterface extends BaseContract {
 
     getFileBriefInfos(
       cursor: PromiseOrValue<string>,
-      category: PromiseOrValue<string>,
+      category_address: PromiseOrValue<string>,
       order: PromiseOrValue<BigNumberish>,
       reverse: PromiseOrValue<boolean>,
       overrides?: CallOverrides
@@ -894,7 +842,7 @@ export interface ImplementationInterface extends BaseContract {
       name: PromiseOrValue<string>,
       title: PromiseOrValue<string>,
       description: PromiseOrValue<string>,
-      category: PromiseOrValue<string>,
+      category_address: PromiseOrValue<string>,
       images: [
         PromiseOrValue<string>,
         PromiseOrValue<string>,
@@ -915,17 +863,6 @@ export interface ImplementationInterface extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    addComment(
-      file_address: PromiseOrValue<string>,
-      content: PromiseOrValue<string>,
-      images: [
-        PromiseOrValue<string>,
-        PromiseOrValue<string>,
-        PromiseOrValue<string>
-      ],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
     getCategorySlice(
       cursor: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -933,7 +870,7 @@ export interface ImplementationInterface extends BaseContract {
 
     getFileBriefInfos(
       cursor: PromiseOrValue<string>,
-      category: PromiseOrValue<string>,
+      category_address: PromiseOrValue<string>,
       order: PromiseOrValue<BigNumberish>,
       reverse: PromiseOrValue<boolean>,
       overrides?: CallOverrides
@@ -996,7 +933,7 @@ export interface ImplementationInterface extends BaseContract {
       name: PromiseOrValue<string>,
       title: PromiseOrValue<string>,
       description: PromiseOrValue<string>,
-      category: PromiseOrValue<string>,
+      category_address: PromiseOrValue<string>,
       images: [
         PromiseOrValue<string>,
         PromiseOrValue<string>,

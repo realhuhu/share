@@ -14,7 +14,7 @@
           <transition enter-active-class="animate__animated animate__fadeIn" appear>
             <div class="flex flex-col justify-center items-end">
               <div class="text-gray-500">{{ date(file_info.upload_timestamp.toNumber()) }}</div>
-              <file-card class="shadow-around" :file_info="file_info as StoreContact.FileBriefInfoStructOutput"/>
+              <file-card class="shadow-around" :file_info="file_info as Types.FileBriefInfoStructOutput"/>
             </div>
           </transition>
         </div>
@@ -29,14 +29,14 @@ import {UseStore} from "@/store";
 import {ref} from "vue";
 import {assertNotEmpty, DateParser} from "@/assets/lib/utils";
 import {head_address, tail_address, zero_address} from "@/assets/lib/settings";
-import {StoreContact} from "@/assets/types/ethers/ImplementationContact";
+import {Types} from "@/assets/types/ethers/ImplementationContact";
 
 const store = UseStore()
 const cursor = ref<string>()
 const reverse = ref(false)
 const loading = ref(false)
 const finished = ref(false)
-const files = ref<StoreContact.FileBriefInfoStructOutput[]>([])
+const files = ref<Types.FileBriefInfoStructOutput[]>([])
 const load = async () => {
   const contract = assertNotEmpty(store.contract, "合约未初始化")
   if (!cursor.value) cursor.value = reverse.value ? tail_address : head_address

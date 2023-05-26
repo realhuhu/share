@@ -58,7 +58,7 @@
 
         <div class="bg-white my-2 px-2 py-0.5">
           <var-divider margin="0"/>
-          <div class="p-2 h-10 flex items-center justify-between gap-2" v-ripple @click="TODO('敬请期待')">
+          <div class="p-2 h-10 flex items-center justify-between gap-2" ripple @click="TODO('敬请期待')">
             <div>东南大学学生身份认证</div>
             <var-icon name="chevron-right"/>
           </div>

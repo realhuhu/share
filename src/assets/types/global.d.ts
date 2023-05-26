@@ -1,6 +1,6 @@
 export {}
 import {ExternalProvider} from "ethers"
-import {StoreContact} from "@/assets/types/ethers/ImplementationContact";
+import {Types} from "@/assets/types/ethers/ImplementationContact";
 
 
 declare global {
@@ -19,7 +19,7 @@ declare global {
 
   type User = ({
     is_registered: true
-    raw_data: StoreContact.UserSelfInfoStructOutput
+    raw_data: Types.UserSelfInfoStructOutput
     avatar_b64: string
   } | {
     is_registered: false
