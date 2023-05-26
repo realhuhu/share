@@ -52,6 +52,11 @@ export interface UserContractInstance extends Truffle.ContractInstance {
     ): Promise<number>;
   };
 
+  isRegistered(
+    user_address: string,
+    txDetails?: Truffle.TransactionDetails
+  ): Promise<boolean>;
+
   register: {
     (nickname: string, txDetails?: Truffle.TransactionDetails): Promise<
       Truffle.TransactionResponse<AllEvents>
@@ -69,11 +74,6 @@ export interface UserContractInstance extends Truffle.ContractInstance {
       txDetails?: Truffle.TransactionDetails
     ): Promise<number>;
   };
-
-  isRegistered(
-    user_address: string,
-    txDetails?: Truffle.TransactionDetails
-  ): Promise<boolean>;
 
   getSelfInfo(
     txDetails?: Truffle.TransactionDetails
@@ -188,6 +188,11 @@ export interface UserContractInstance extends Truffle.ContractInstance {
       ): Promise<number>;
     };
 
+    isRegistered(
+      user_address: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<boolean>;
+
     register: {
       (nickname: string, txDetails?: Truffle.TransactionDetails): Promise<
         Truffle.TransactionResponse<AllEvents>
@@ -205,11 +210,6 @@ export interface UserContractInstance extends Truffle.ContractInstance {
         txDetails?: Truffle.TransactionDetails
       ): Promise<number>;
     };
-
-    isRegistered(
-      user_address: string,
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<boolean>;
 
     getSelfInfo(
       txDetails?: Truffle.TransactionDetails

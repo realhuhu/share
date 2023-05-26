@@ -17,6 +17,9 @@
       {{ file_info.description }}
     </div>
 
+    <var-image v-for="(image,k) in file_info.images.filter(x=>x.length)" :key="k" :src="`${ipfs_url}ipfs/${image}`"/>
+
+
     <div v-if="file_info.is_buy" class="self-center">
       <var-button text outline type="primary" @click="download">
         <i-material-symbols-download/>
@@ -31,8 +34,6 @@
     <div>
       <var-chip size="small">{{ category }}</var-chip>
     </div>
-
-
   </div>
 </template>
 
@@ -42,7 +43,7 @@ import {Types} from "@/assets/types/ethers/ImplementationContact";
 import {datetime, stripAddress} from "@/assets/lib/utils";
 import {UseStore} from "@/store";
 import {computed} from "vue";
-import {ipfs_url} from "@/assets/lib/settings";
+import {cover, ipfs_url} from "@/assets/lib/settings";
 
 const props = withDefaults(defineProps<{
   file_info: Types.FileDetailInfoStructOutput

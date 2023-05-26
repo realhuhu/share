@@ -16,7 +16,13 @@ interface FileInterface {
 
     function getFileDetailInfo(address file_address) external view returns (Types.FileDetailInfo memory detail_info);
 
-    //    function addComment(address file_address, string memory content, string[3] memory images) external;
+    function upAndDown(address file_address, bool is_up) external;
+
+    function addComment(address file_address, string memory content, string[3] memory images) external;
+
+    function addSubComment(address file_address, address target_address, address comment_address, string memory content) external;
+
+    function getRootComments(address file_address, address cursor, uint order, bool reverse) external view returns (Types.FileRootComment[10] memory root_comments, address next, bool finished);
 }
 
 
@@ -37,9 +43,7 @@ abstract contract FileContact is BaseContact, FileInterface {
 
     function _getFileBriefInfo(address file_address)
     internal view returns (Types.FileBriefInfo memory file_info){
-        address owner_;
-        (file_info, owner_) = files.getFileBriefInfo(file_address);
-        file_info.owner = users.user_info[owner_].nickname;
+        file_info = files.getFileBriefInfo(file_address, users);
     }
 
     function addCategory(string memory name)
@@ -54,22 +58,13 @@ abstract contract FileContact is BaseContact, FileInterface {
     }
 
 
-    function uploadFile(
-        string memory ipfs_address,
-        string memory name,
-        string memory title,
-        string memory description,
-        address category_address,
-        string[3] memory images,
-        uint price
-    )
+    function uploadFile(string memory ipfs_address, string memory name, string memory title, string memory description, address category_address, string[3] memory images, uint price)
     external {
-        _registered_(msg.sender);
-        _validCategory_(category_address);
+        require(categories.isContain(category_address), "FileContact>uploadFile");
 
         title._range_(1, 64);
-        description._range_(1, 512);
         price._range_(1, 20);
+        description._range_(1, 512);
 
         address file_address = files.uploadFile(ipfs_address, name, title, description, category_address, images, price);
 
@@ -94,27 +89,12 @@ abstract contract FileContact is BaseContact, FileInterface {
 
     function getSelfFileBriefInfos(address cursor, bool reverse)
     external view returns (Types.FileBriefInfo[10] memory file_infos, address next, bool finished){
-        address[10] memory file_index_slice = users.getSelfFileAddressSlice(cursor, reverse);
-        for (uint i = 0; i < 10; i++) {
-            next = file_index_slice[i];
-            if (next == address(0x0)) {
-                finished = true;
-                break;
-            }
-            file_infos[i] = _getFileBriefInfo(next);
-        }
+        (file_infos, next, finished) = files.getSelfFileBriefInfos(cursor, reverse, users);
     }
 
     function getFileBriefInfos(address cursor, address category_address, uint order, bool reverse)
     external view returns (Types.FileBriefInfo[10] memory file_infos, address next, bool finished){
-        address[10] memory file_slice;
-        (file_slice, next, finished) = files.getFileSlice(cursor, category_address, order, reverse);
-        for (uint i = 0; i < 10; i++) {
-            if (file_slice[i] == address(0x0)) {
-                break;
-            }
-            file_infos[i] = _getFileBriefInfo(file_slice[i]);
-        }
+        (file_infos, next, finished) = files.getFileBriefInfos(cursor, category_address, order, reverse, users);
     }
 
     function getFileDetailInfo(address file_address)
@@ -122,65 +102,23 @@ abstract contract FileContact is BaseContact, FileInterface {
         detail_info = files.getFileDetailInfo(file_address);
     }
 
+    function upAndDown(address file_address, bool is_up)
+    external {
+        files.upAndDown(file_address, is_up);
+    }
 
-    //    function addComment(
-    //        address file_address,
-    //        string memory content,
-    //        string[3] memory images
-    //    ) external {
-    //        _validFile_(file_address);
-    //        content._range_(0, 128);
-    //
-    //        File storage file = files.file_info[file_address];
-    //
-    //        address comment_address = keccak256(abi.encodePacked(file_address, content, msg.sender, block.timestamp)).toAddress();
-    //
-    //        FileComment storage comment = file.comment_info[comment_address];
-    //
-    //        comment.author = msg.sender;
-    //        comment.comment_address = comment_address;
-    //
-    //        comment.content = content;
-    //        comment.images = images;
-    //
-    //        comment.comment_timestamp = block.timestamp;
-    //
-    //        comment.sub_comment_index.init();
-    //
-    //        file.comment_num++;
-    //        file.comment_index.append(comment_address);
-    //        file._comments_by_up_num.update(AddressOrderedMap.Item(comment_address, file.comment_num));
-    //    }
-    //
-    //    function addSubComment(
-    //        address file_address,
-    //        address target_address,
-    //        address comment_address,
-    //        string memory content
-    //    ) external {
-    //        content._range_(0, 128);
-    //
-    //        _validFile_(file_address);
-    //        File storage file = files.file_info[file_address];
-    //
-    //        _validFileComment_(file, comment_address);
-    //        FileComment storage comment = file.comment_info[comment_address];
-    //
-    //        _validFileTargetComment_(comment, target_address);
-    //
-    //        address sub_comment_address = keccak256(abi.encodePacked(file_address, comment_address, content, msg.sender, block.timestamp)).toAddress();
-    //
-    //        FileSubComment storage sub_comment = comment.sub_comment_info[sub_comment_address];
-    //
-    //        sub_comment.author = msg.sender;
-    //        sub_comment.target_address = target_address;
-    //        sub_comment.comment_address = comment_address;
-    //        sub_comment.sub_comment_address = sub_comment_address;
-    //
-    //        sub_comment.content = content;
-    //
-    //        sub_comment.comment_timestamp = block.timestamp;
-    //
-    //        comment.sub_comment_index.append(sub_comment_address);
-    //    }
+    function addComment(address file_address, string memory content, string[3] memory images)
+    external {
+        files.addComment(file_address, content, images);
+    }
+
+    function addSubComment(address file_address, address target_address, address comment_address, string memory content)
+    external {
+        files.addSubComment(file_address, target_address, comment_address, content);
+    }
+
+    function getRootComments(address file_address, address cursor, uint order, bool reverse)
+    external view returns (Types.FileRootComment[10] memory root_comments, address next, bool finished){
+        (root_comments, next, finished) = files.getRootComments(file_address, cursor, order, reverse, users);
+    }
 }

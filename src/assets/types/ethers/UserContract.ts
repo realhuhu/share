@@ -111,8 +111,8 @@ export interface UserContractInterface extends utils.Interface {
     "admin()": FunctionFragment;
     "renounceAdmin()": FunctionFragment;
     "transferAdmin(address)": FunctionFragment;
-    "register(string)": FunctionFragment;
     "isRegistered(address)": FunctionFragment;
+    "register(string)": FunctionFragment;
     "getSelfInfo()": FunctionFragment;
     "getOtherSimpleInfo(address)": FunctionFragment;
     "updateAvatar(string)": FunctionFragment;
@@ -125,8 +125,8 @@ export interface UserContractInterface extends utils.Interface {
       | "admin"
       | "renounceAdmin"
       | "transferAdmin"
-      | "register"
       | "isRegistered"
+      | "register"
       | "getSelfInfo"
       | "getOtherSimpleInfo"
       | "updateAvatar"
@@ -144,11 +144,11 @@ export interface UserContractInterface extends utils.Interface {
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
-    functionFragment: "register",
+    functionFragment: "isRegistered",
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
-    functionFragment: "isRegistered",
+    functionFragment: "register",
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
@@ -181,11 +181,11 @@ export interface UserContractInterface extends utils.Interface {
     functionFragment: "transferAdmin",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "register", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "isRegistered",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "register", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getSelfInfo",
     data: BytesLike
@@ -264,15 +264,15 @@ export interface UserContract extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    register(
-      nickname: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
     isRegistered(
       user_address: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[boolean] & { is_registered: boolean }>;
+
+    register(
+      nickname: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     getSelfInfo(
       overrides?: CallOverrides
@@ -318,15 +318,15 @@ export interface UserContract extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  register(
-    nickname: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
   isRegistered(
     user_address: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<boolean>;
+
+  register(
+    nickname: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   getSelfInfo(
     overrides?: CallOverrides
@@ -362,15 +362,15 @@ export interface UserContract extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    register(
-      nickname: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     isRegistered(
       user_address: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    register(
+      nickname: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     getSelfInfo(
       overrides?: CallOverrides
@@ -420,14 +420,14 @@ export interface UserContract extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    register(
-      nickname: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
     isRegistered(
       user_address: PromiseOrValue<string>,
       overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    register(
+      nickname: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     getSelfInfo(overrides?: CallOverrides): Promise<BigNumber>;
@@ -465,14 +465,14 @@ export interface UserContract extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    register(
-      nickname: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
     isRegistered(
       user_address: PromiseOrValue<string>,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    register(
+      nickname: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     getSelfInfo(overrides?: CallOverrides): Promise<PopulatedTransaction>;

@@ -8,11 +8,9 @@
     class="cursor-pointer hover:shadow-2xl duration-200"
   >
     <template #title>
-      <div class="flex justify-between items-center mt-2 gap-1">
-        <div class="flex justify-start items-center gap-1">
-          <var-chip size="mini" color="#4ebaee" text-color="white" class="ml-3">{{ category }}</var-chip>
-          <div class="font-bold">{{ file_info.title }}</div>
-        </div>
+      <div class="flex justify-between items-center mt-2 ml-2 gap-1">
+        <div class="font-bold line1">{{ file_info.title }}</div>
+
         <var-tooltip class="flex justify-end items-center text-blue-500 mr-2" :content="`价格：${file_info.price}`">
           <div>{{ file_info.price }}</div>
           <i-tabler-coin class="w-5 h-5"/>
@@ -21,9 +19,13 @@
     </template>
 
     <template #subtitle>
-      <div class="flex justify-start items-center ml-3 text-sm text-gray-500 gap-2">
-        <div>{{ file_info.owner }}</div>
-        <div>{{ time }}</div>
+      <div class="flex justify-between items-center">
+        <div class="flex justify-start items-center ml-3 text-sm text-gray-500 gap-2">
+          <div>{{ file_info.owner }}</div>
+          <div>{{ time }}</div>
+        </div>
+
+        <var-chip size="mini" color="#4ebaee" text-color="white" class="ml-3">{{ category }}</var-chip>
       </div>
     </template>
 
@@ -96,6 +98,15 @@ defineOptions({
 
 
 <style lang="less" scoped>
+.line1 {
+  word-break: break-all;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1; /* 这里是超出几行省略 */
+  overflow: hidden;
+}
+
 .line2 {
   word-break: break-all;
   text-overflow: ellipsis;

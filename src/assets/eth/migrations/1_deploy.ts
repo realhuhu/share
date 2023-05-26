@@ -45,6 +45,7 @@ module.exports = async (
   deployer.link(AddressLinkedList, FileLib)
   deployer.link(AddressOrderedMap, FileLib)
   deployer.link(Bytes32Lib, FileLib)
+  deployer.link(UserLib, FileLib)
   await deployer.deploy(FileLib);
 
   deployer.link(AddressLinkedList, CategoryLib)

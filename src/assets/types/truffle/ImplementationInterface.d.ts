@@ -31,6 +31,64 @@ export interface ImplementationInterfaceInstance
     ): Promise<number>;
   };
 
+  addComment: {
+    (
+      file_address: string,
+      content: string,
+      images: string[],
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<Truffle.TransactionResponse<AllEvents>>;
+    call(
+      file_address: string,
+      content: string,
+      images: string[],
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<void>;
+    sendTransaction(
+      file_address: string,
+      content: string,
+      images: string[],
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<string>;
+    estimateGas(
+      file_address: string,
+      content: string,
+      images: string[],
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<number>;
+  };
+
+  addSubComment: {
+    (
+      file_address: string,
+      target_address: string,
+      comment_address: string,
+      content: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<Truffle.TransactionResponse<AllEvents>>;
+    call(
+      file_address: string,
+      target_address: string,
+      comment_address: string,
+      content: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<void>;
+    sendTransaction(
+      file_address: string,
+      target_address: string,
+      comment_address: string,
+      content: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<string>;
+    estimateGas(
+      file_address: string,
+      target_address: string,
+      comment_address: string,
+      content: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<number>;
+  };
+
   getCategorySlice(
     cursor: string,
     txDetails?: Truffle.TransactionDetails
@@ -103,6 +161,49 @@ export interface ImplementationInterfaceInstance
     experience: BN;
     follower_num: BN;
     uploaded_file_num: BN;
+  }>;
+
+  getRootComments(
+    file_address: string,
+    cursor: string,
+    order: number | BN | string,
+    reverse: boolean,
+    txDetails?: Truffle.TransactionDetails
+  ): Promise<{
+    0: {
+      comment_address: string;
+      children_comments: {
+        target_address: string;
+        comment_address: string;
+        sub_comment_address: string;
+        content: string;
+        author: {
+          user_address: string;
+          avatar: string;
+          nickname: string;
+          experience: BN;
+        };
+        up_num: BN;
+        down_num: BN;
+        up_and_down: BN;
+        comment_timestamp: BN;
+      }[];
+      content: string;
+      images: string[];
+      author: {
+        user_address: string;
+        avatar: string;
+        nickname: string;
+        experience: BN;
+      };
+      up_num: BN;
+      down_num: BN;
+      up_and_down: BN;
+      comment_num: BN;
+      comment_timestamp: BN;
+    }[];
+    1: string;
+    2: boolean;
   }>;
 
   getSelfFileBriefInfos(
@@ -194,6 +295,29 @@ export interface ImplementationInterfaceInstance
     ): Promise<string>;
     estimateGas(
       new_admin: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<number>;
+  };
+
+  upAndDown: {
+    (
+      file_address: string,
+      is_up: boolean,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<Truffle.TransactionResponse<AllEvents>>;
+    call(
+      file_address: string,
+      is_up: boolean,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<void>;
+    sendTransaction(
+      file_address: string,
+      is_up: boolean,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<string>;
+    estimateGas(
+      file_address: string,
+      is_up: boolean,
       txDetails?: Truffle.TransactionDetails
     ): Promise<number>;
   };
@@ -317,6 +441,64 @@ export interface ImplementationInterfaceInstance
       ): Promise<number>;
     };
 
+    addComment: {
+      (
+        file_address: string,
+        content: string,
+        images: string[],
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<Truffle.TransactionResponse<AllEvents>>;
+      call(
+        file_address: string,
+        content: string,
+        images: string[],
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<void>;
+      sendTransaction(
+        file_address: string,
+        content: string,
+        images: string[],
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<string>;
+      estimateGas(
+        file_address: string,
+        content: string,
+        images: string[],
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<number>;
+    };
+
+    addSubComment: {
+      (
+        file_address: string,
+        target_address: string,
+        comment_address: string,
+        content: string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<Truffle.TransactionResponse<AllEvents>>;
+      call(
+        file_address: string,
+        target_address: string,
+        comment_address: string,
+        content: string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<void>;
+      sendTransaction(
+        file_address: string,
+        target_address: string,
+        comment_address: string,
+        content: string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<string>;
+      estimateGas(
+        file_address: string,
+        target_address: string,
+        comment_address: string,
+        content: string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<number>;
+    };
+
     getCategorySlice(
       cursor: string,
       txDetails?: Truffle.TransactionDetails
@@ -389,6 +571,49 @@ export interface ImplementationInterfaceInstance
       experience: BN;
       follower_num: BN;
       uploaded_file_num: BN;
+    }>;
+
+    getRootComments(
+      file_address: string,
+      cursor: string,
+      order: number | BN | string,
+      reverse: boolean,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<{
+      0: {
+        comment_address: string;
+        children_comments: {
+          target_address: string;
+          comment_address: string;
+          sub_comment_address: string;
+          content: string;
+          author: {
+            user_address: string;
+            avatar: string;
+            nickname: string;
+            experience: BN;
+          };
+          up_num: BN;
+          down_num: BN;
+          up_and_down: BN;
+          comment_timestamp: BN;
+        }[];
+        content: string;
+        images: string[];
+        author: {
+          user_address: string;
+          avatar: string;
+          nickname: string;
+          experience: BN;
+        };
+        up_num: BN;
+        down_num: BN;
+        up_and_down: BN;
+        comment_num: BN;
+        comment_timestamp: BN;
+      }[];
+      1: string;
+      2: boolean;
     }>;
 
     getSelfFileBriefInfos(
@@ -480,6 +705,29 @@ export interface ImplementationInterfaceInstance
       ): Promise<string>;
       estimateGas(
         new_admin: string,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<number>;
+    };
+
+    upAndDown: {
+      (
+        file_address: string,
+        is_up: boolean,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<Truffle.TransactionResponse<AllEvents>>;
+      call(
+        file_address: string,
+        is_up: boolean,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<void>;
+      sendTransaction(
+        file_address: string,
+        is_up: boolean,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<string>;
+      estimateGas(
+        file_address: string,
+        is_up: boolean,
         txDetails?: Truffle.TransactionDetails
       ): Promise<number>;
     };

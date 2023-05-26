@@ -2,8 +2,8 @@
   <div>
     <head-bar title="文件详情" back="/home/resource"/>
 
-    <div class="flex items-center justify-center md:pt-12">
-      <div class="w-[960px] max-w-full md:mt-24 md:px-6 flex flex-col gap-3">
+    <div class="flex flex-col items-center justify-center">
+      <div class="w-[960px] max-w-full md:mt-24 md:px-6 flex flex-col md:gap-3">
         <transition enter-active-class="animate__animated animate__fadeIn" appear>
           <file-info-card v-if="file_info" :file_info="file_info"/>
         </transition>
@@ -12,7 +12,11 @@
           <user-simple-card v-if="user_info" :user_info="user_info"/>
         </transition>
 
-        <var-divider class="md:hidden" margin="0"/>
+        <var-divider class="md:hidden w-full" margin="0"/>
+
+        <transition enter-active-class="animate__animated animate__fadeIn" appear>
+          <review-card v-if="file_info" :file_info="file_info"/>
+        </transition>
       </div>
     </div>
   </div>
@@ -26,6 +30,7 @@ import {assertNotEmpty} from "@/assets/lib/utils";
 import {ref} from "vue";
 import {Types} from "@/assets/types/ethers/ImplementationContact";
 import FileInfoCard from "@/components/card/FileInfoCard.vue";
+import FileReviewCard from "@/components/card/FileReviewCard.vue";
 
 const route = useRoute()
 const store = UseStore()

@@ -157,6 +157,37 @@ abstract contract Types {
         mapping(address => uint) up_and_downs;//已点赞用户
     }
 
+    struct FileRootComment {
+        address comment_address;
+
+        FileChildrenComment[2] children_comments;
+
+        string content;//内容
+        string[3] images;//图片
+
+        UserBriefInfo author;
+
+        uint up_num;//点赞次数
+        uint down_num;//点踩次数
+        uint up_and_down;
+        uint comment_num;//评论数
+        uint comment_timestamp;//评论时间
+    }
+
+    struct FileChildrenComment {
+        address target_address;//被回复的子评论地址
+        address comment_address;//根评论地址
+        address sub_comment_address;//子评论地址
+
+        string content;//内容
+
+        UserBriefInfo author;
+
+        uint up_num;//点赞次数
+        uint down_num;//点踩次数
+        uint up_and_down;
+        uint comment_timestamp;//评论时间
+    }
 
     //文件表
     struct FileStore {
@@ -230,7 +261,6 @@ abstract contract Types {
     }
 
 }
-
 
 library UserLib {
     using AddressLinkedList for AddressLinkedList.T;
@@ -320,9 +350,16 @@ library UserLib {
         simple_info.uploaded_file_num = user_info.uploaded_files.length;
     }
 
-    function getSelfFileAddressSlice(Types.UserStore storage self, address cursor, bool reverse)
-    public view returns (address[10] memory file_index_slice){
-        file_index_slice = self.user_info[msg.sender].uploaded_files.slice(cursor, reverse);
+    function getOtherBriefInfo(Types.UserStore storage self, address user_address)
+    public view returns (Types.UserBriefInfo memory brief_info){
+        Types.UserInfo storage user_info = self.user_info[user_address];
+
+        brief_info.user_address = user_info.user_address;
+
+        brief_info.avatar = user_info.avatar;
+        brief_info.nickname = user_info.nickname;
+
+        brief_info.experience = user_info.experience;
     }
 
     //更新头像
@@ -355,6 +392,12 @@ library FileLib {
     using AddressOrderedMap for AddressOrderedMap.T;
     using Bytes32Lib for bytes32;
 
+    using UserLib for Types.UserStore;
+
+    function isContain(Types.FileStore storage self, address file_address)
+    public view returns (bool is_contain) {
+        is_contain = self.file_index.isContain(file_address);
+    }
 
     function init(Types.FileStore storage self)
     public {
@@ -376,6 +419,8 @@ library FileLib {
     public returns (address file_address){
         file_address = keccak256(abi.encodePacked(title)).toAddress();
 
+        require(!isContain(self, file_address), "FileLib>uploadFile");
+
         Types.File storage file_info = self.file_info[file_address];
 
         file_info.owner = msg.sender;
@@ -394,13 +439,16 @@ library FileLib {
 
         file_info.buyers[msg.sender] = true;
 
+        file_info.comment_index.init();
+        file_info._comments_by_up_num.init();
+
         self.file_index.append(file_address);
         self._file_by_price.update(AddressOrderedMap.Item(file_address, price));
         self._file_by_buyer_num.update(AddressOrderedMap.Item(file_address, 0));
     }
 
-    function getFileBriefInfo(Types.FileStore storage self, address file_address)
-    public view returns (Types.FileBriefInfo memory file_info, address owner_){
+    function getFileBriefInfo(Types.FileStore storage self, address file_address, Types.UserStore storage users)
+    public view returns (Types.FileBriefInfo memory file_info){
         Types.File storage file = self.file_info[file_address];
 
         file_info.file_address = file.file_address;
@@ -410,6 +458,7 @@ library FileLib {
 
         file_info.name = file.name;
         file_info.title = file.title;
+        file_info.owner = users.user_info[file.owner].nickname;
         file_info.description = file.description;
 
         file_info.cover = file.images[0];
@@ -421,20 +470,37 @@ library FileLib {
         file_info.comment_num = file.comment_num;
         file_info.up_and_down = file.up_and_downs[msg.sender];
         file_info.upload_timestamp = file.upload_timestamp;
-
-        owner_ = file.owner;
     }
 
-    function getFileSlice(Types.FileStore storage self, address cursor, address category_address, uint order, bool reverse)
-    public view returns (address[10] memory file_slice, address next, bool finished){
+    function getSelfFileBriefInfos(
+        Types.FileStore storage self,
+        address cursor,
+        bool reverse,
+        Types.UserStore storage users
+    ) public view returns (Types.FileBriefInfo[10] memory file_infos, address next, bool finished) {
+        address[10] memory file_index_slice = users.user_info[msg.sender].uploaded_files.slice(cursor, reverse);
+        for (uint i = 0; i < 10; i++) {
+            next = file_index_slice[i];
+            if (next == address(0x0)) {
+                finished = true;
+                break;
+            }
+            file_infos[i] = getFileBriefInfo(self, next, users);
+        }
+
+    }
+
+    function getFileBriefInfos(
+        Types.FileStore storage self,
+        address cursor,
+        address category_address,
+        uint order,
+        bool reverse,
+        Types.UserStore storage users
+    ) public view returns (Types.FileBriefInfo[10] memory file_infos, address next, bool finished){
         uint index = 0;
         while (index < 10) {
             if (reverse) {
-                if (cursor == address(0x1)) {
-                    finished = true;
-                    break;
-                }
-
                 if (order == 1) {
                     cursor = self._file_by_price.getPrev(cursor);
                 } else if (order == 2) {
@@ -442,12 +508,12 @@ library FileLib {
                 } else {
                     cursor = self.file_index.getPrev(cursor);
                 }
-            } else {
-                if (cursor == address(0x2)) {
+
+                if (cursor == address(0x1)) {
                     finished = true;
                     break;
                 }
-
+            } else {
                 if (order == 1) {
                     cursor = self._file_by_price.getNext(cursor);
                 } else if (order == 2) {
@@ -455,11 +521,16 @@ library FileLib {
                 } else {
                     cursor = self.file_index.getNext(cursor);
                 }
+
+                if (cursor == address(0x2)) {
+                    finished = true;
+                    break;
+                }
             }
 
 
             if (self.file_info[cursor].category_address == category_address || category_address == address(0x0)) {
-                file_slice[index] = cursor;
+                file_infos[index] = getFileBriefInfo(self, cursor, users);
                 index++;
             }
 
@@ -471,29 +542,191 @@ library FileLib {
     public view returns (Types.FileDetailInfo memory detail_info){
         Types.File storage file = self.file_info[file_address];
 
-        detail_info.owner = file.owner;
-        detail_info.file_address = file.file_address;
-        detail_info.category_address = file.category_address;
-
-        detail_info.is_buy = file.buyers[msg.sender];
-
-        detail_info.name = file.name;
-        detail_info.title = file.title;
-        detail_info.description = file.description;
-
-        detail_info.images = file.images;
-
-        if (detail_info.is_buy) detail_info.ipfs_address = file.ipfs_address;
-
-        detail_info.price = file.price;
-        detail_info.up_num = file.up_num;
-        detail_info.down_num = file.down_num;
-        detail_info.buyer_num = file.buyer_num;
-        detail_info.comment_num = file.comment_num;
-        detail_info.up_and_down = file.up_and_downs[msg.sender];
-        detail_info.upload_timestamp = file.upload_timestamp;
+        detail_info = Types.FileDetailInfo({
+            owner: file.owner,
+            file_address: file.file_address,
+            category_address: file.category_address,
+            is_buy: file.buyers[msg.sender],
+            name: file.name,
+            title: file.title,
+            description: file.description,
+            ipfs_address: file.buyers[msg.sender] ? file.ipfs_address : "",
+            images: file.images,
+            price: file.price,
+            up_num: file.up_num,
+            down_num: file.down_num,
+            buyer_num: file.buyer_num,
+            comment_num: file.comment_num,
+            up_and_down: file.up_and_downs[msg.sender],
+            upload_timestamp: file.upload_timestamp
+        });
     }
 
+    function upAndDown(Types.FileStore storage self, address file_address, bool is_up)
+    public {
+        Types.File storage file = self.file_info[file_address];
+        uint up_and_down = file.up_and_downs[msg.sender];
+        if (up_and_down == 0) {//未操作
+            if (is_up) {
+                file.up_and_downs[msg.sender] = 1;
+                file.up_num++;
+            } else {
+                file.up_and_downs[msg.sender] = 2;
+                file.down_num++;
+            }
+        } else if (up_and_down == 1) {//已点赞
+            if (is_up) {
+                file.up_and_downs[msg.sender] = 0;
+                file.up_num--;
+            } else {
+                file.up_and_downs[msg.sender] = 2;
+                file.up_num--;
+                file.down_num++;
+            }
+        } else if (up_and_down == 2) {//已点踩
+            if (is_up) {
+                file.up_and_downs[msg.sender] = 1;
+                file.up_num++;
+                file.down_num--;
+            } else {
+                file.up_and_downs[msg.sender] = 0;
+                file.down_num--;
+            }
+        }
+    }
+
+    function addComment(
+        Types.FileStore storage self,
+        address file_address,
+        string memory content,
+        string[3] memory images
+    ) public {
+        Types.File storage file = self.file_info[file_address];
+
+        address comment_address = keccak256(abi.encodePacked(file_address, content, msg.sender, block.timestamp)).toAddress();
+
+        Types.FileComment storage comment = file.comment_info[comment_address];
+
+        comment.author = msg.sender;
+        comment.comment_address = comment_address;
+
+        comment.content = content;
+        comment.images = images;
+
+        comment.comment_timestamp = block.timestamp;
+
+        comment.sub_comment_index.init();
+
+        file.comment_num++;
+        file.comment_index.append(comment_address);
+        file._comments_by_up_num.update(AddressOrderedMap.Item(comment_address, file.comment_num));
+    }
+
+    function addSubComment(
+        Types.FileStore storage self,
+        address file_address,
+        address target_address,
+        address comment_address,
+        string memory content
+    ) public {
+        Types.File storage file = self.file_info[file_address];
+        Types.FileComment storage comment = file.comment_info[comment_address];
+
+        address sub_comment_address = keccak256(abi.encodePacked(file_address, comment_address, content, msg.sender, block.timestamp)).toAddress();
+
+        Types.FileSubComment storage sub_comment = comment.sub_comment_info[sub_comment_address];
+
+        sub_comment.author = msg.sender;
+        sub_comment.target_address = target_address;
+        sub_comment.comment_address = comment_address;
+        sub_comment.sub_comment_address = sub_comment_address;
+
+        sub_comment.content = content;
+
+        sub_comment.comment_timestamp = block.timestamp;
+
+        comment.sub_comment_index.append(sub_comment_address);
+
+        file.comment_num++;
+    }
+
+    function getRootComments(
+        Types.FileStore storage self,
+        address file_address,
+        address cursor,
+        uint order,
+        bool reverse,
+        Types.UserStore storage users
+    ) public view returns (Types.FileRootComment[10] memory root_comments, address next, bool finished){
+        Types.File storage file = self.file_info[file_address];
+
+        uint index = 0;
+        while (index < 10) {
+            if (reverse) {
+                if (order == 1) {
+                    cursor = file._comments_by_up_num.getPrev(cursor);
+                } else {
+                    cursor = file.comment_index.getPrev(cursor);
+                }
+
+                if (cursor == address(0x1)) {
+                    finished = true;
+                    break;
+                }
+            } else {
+                if (order == 1) {
+                    cursor = file._comments_by_up_num.getNext(cursor);
+                } else {
+                    cursor = file.comment_index.getNext(cursor);
+                }
+
+                if (cursor == address(0x2)) {
+                    finished = true;
+                    break;
+                }
+            }
+
+            Types.FileComment storage file_comment = file.comment_info[cursor];
+            Types.FileChildrenComment[2] memory children_comments;
+
+            address current = address(0x1);
+            Types.FileSubComment storage sub_comment;
+
+            for (uint i = 0; i < 2; i++) {
+                current = file_comment.sub_comment_index.getNext(current);
+                if (current == address(0x2)) break;
+                sub_comment = file_comment.sub_comment_info[current];
+                children_comments[i] = Types.FileChildrenComment({
+                    target_address: sub_comment.target_address,
+                    comment_address: sub_comment.comment_address,
+                    sub_comment_address: sub_comment.sub_comment_address,
+                    content: sub_comment.content,
+                    author: users.getOtherBriefInfo(sub_comment.author),
+                    up_num: sub_comment.up_num,
+                    down_num: sub_comment.down_num,
+                    up_and_down: sub_comment.up_and_downs[msg.sender],
+                    comment_timestamp: sub_comment.comment_timestamp
+                });
+            }
+
+
+            root_comments[index] = Types.FileRootComment({
+                comment_address: file_comment.comment_address,
+                children_comments: children_comments,
+                content: file_comment.content,
+                images: file_comment.images,
+                author: users.getOtherBriefInfo(file_comment.author),
+                up_num: file_comment.up_num,
+                down_num: file_comment.down_num,
+                up_and_down: file_comment.up_and_downs[msg.sender],
+                comment_num: file_comment.sub_comment_index.length,
+                comment_timestamp: file_comment.comment_timestamp
+            });
+
+            index++;
+            next = cursor;
+        }
+    }
 
 }
 
@@ -515,6 +748,7 @@ library CategoryLib {
     function addCategory(Types.CategoryStore storage self, string memory name)
     public {
         address category_address = keccak256(abi.encodePacked(name)).toAddress();
+        require(!isContain(self, category_address), "CategoryLib>addCategory");
 
         Types.Category storage category_info = self.category_info[category_address];
 

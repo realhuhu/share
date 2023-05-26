@@ -62,19 +62,6 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "string",
-        name: "nickname",
-        type: "string",
-      },
-    ],
-    name: "register",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
         internalType: "address",
         name: "user_address",
         type: "address",
@@ -89,6 +76,19 @@ const _abi = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "nickname",
+        type: "string",
+      },
+    ],
+    name: "register",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {

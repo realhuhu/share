@@ -67,12 +67,12 @@ const orders = ref([
   {
     text: "最近上传",
     type: 0,
-    reverse: false
+    reverse: true
   },
   {
     text: "最早上传",
     type: 0,
-    reverse: true
+    reverse: false
   },
   {
     text: "价格降序",
@@ -94,7 +94,7 @@ const current_category = ref(zero_address)
 const current_order = ref(0)
 const show_menu = ref(false)
 
-const cursor = ref<string>(head_address)
+const cursor = ref<string>(tail_address)
 
 const files = ref<Types.FileBriefInfoStructOutput[]>([])
 const loading = ref(false)
