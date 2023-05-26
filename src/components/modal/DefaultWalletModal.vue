@@ -38,7 +38,7 @@
 
 <script lang="ts" setup>
 import {UseStore} from "@/store";
-import {ref, watch} from "vue";
+import {ref} from "vue";
 
 const store = UseStore()
 

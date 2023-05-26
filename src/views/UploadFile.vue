@@ -9,7 +9,7 @@
         <file-uploader ref="file_uploader" v-model:file="ipfs_address" v-model:name="name"/>
         <var-input variant="outlined" placeholder="标题" :maxlength="64" v-model="title"/>
         <var-input variant="outlined" placeholder="文件描述..." :maxlength="512" resize textarea v-model="description"/>
-        <category-select-bar v-model="category"/>
+        <category-select-bar v-model="category_address"/>
 
         <div class="flex justify-center items-center gap-6 pr-6 pt-4">
           <div class="w-16 font-bold md:text-lg text-gray-500">图片:</div>
@@ -52,17 +52,17 @@ const ipfs_address = ref<string>()
 const name = ref<string>()
 const title = ref<string>()
 const description = ref<string>()
-const category = ref<Address>()
+const category_address = ref<Address>()
 const images = ref<Images>(["", "", ""])
 const price = ref<number>(2)
 const uploading = ref(false)
 const file_uploader = ref()
 const image_uploader = ref()
 
-const valid = () => Boolean(title.value && description.value && price.value && category.value && ipfs_address.value && name.value)
+const valid = () => Boolean(title.value && description.value && price.value && category_address.value && ipfs_address.value && name.value)
 
 const upload = async () => {
-  if (!(title.value && description.value && price.value && category.value && ipfs_address.value && name.value)) {
+  if (!(title.value && description.value && price.value && category_address.value && ipfs_address.value && name.value)) {
     return
   }
 
@@ -74,12 +74,12 @@ const upload = async () => {
       name.value,
       title.value,
       description.value,
-      category.value,
+      category_address.value,
       images.value,
       price.value
     )
     uploading.value = false
-    title.value = description.value = category.value = undefined
+    title.value = description.value = category_address.value = undefined
     price.value = 2;
     file_uploader.value.clearFile()
     image_uploader.value.clear()

@@ -99,7 +99,6 @@
 
 
 <script lang="ts" setup>
-import {safeBack} from "@/router";
 import {UseStore} from "@/store";
 import {DateParser, TODO, assertNotEmpty} from "@/assets/lib/utils";
 import {computed, ref, watch} from "vue";
