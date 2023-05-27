@@ -11,7 +11,11 @@ import {VarletUIResolver} from "unplugin-vue-components/resolvers"
 
 export default defineConfig({
   plugins: [
-    Vue(),
+    Vue({
+      script: {
+        defineModel: true
+      }
+    }),
     Icons(),
     DefineOptions(),
     viteCompression(),

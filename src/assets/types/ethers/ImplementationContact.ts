@@ -1118,7 +1118,7 @@ export interface ImplementationContact extends BaseContract {
       ],
       price: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<string>;
 
     init(overrides?: CallOverrides): Promise<void>;
   };

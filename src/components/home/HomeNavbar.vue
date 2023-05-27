@@ -30,20 +30,16 @@
 
 
 <script lang="ts" setup>
-import {withDefaults} from "vue"
 import {useRouter} from "vue-router";
 
-interface Props {
-  active: number
-}
 
+const active = defineModel<number>("active", {required: true, default: 0})
 const router = useRouter()
-const emits = defineEmits(["update:active"])
-withDefaults(defineProps<Props>(), {active: 0})
+
 
 const replace = (page: HomePagePath) => {
   router.replace(page)
-  emits("update:active", ["/home/resource", "/home/reward", "/home/favorite", "/home/profile"].indexOf(page))
+  active.value = ["/home/resource", "/home/reward", "/home/favorite", "/home/profile"].indexOf(page)
 }
 
 defineOptions({

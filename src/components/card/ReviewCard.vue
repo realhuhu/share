@@ -40,9 +40,9 @@
 
     <transition enter-active-class="animate__animated animate__fadeInUp"
                 leave-active-class="animate__animated animate__fadeOutDown">
-      <div class="fixed left-0 md:pl-[64px] bottom-0 w-full flex justify-center items-center bg-white z-10"
+      <div class="fixed left-0 md:pl-[64px] bottom-0 w-full flex justify-center items-center"
            v-if="!show_editor">
-        <div class="w-[960px] max-w-full shadow-around flex justify-between items-center gap-6 pl-4">
+        <div class="w-[960px] max-w-full shadow-around flex justify-between items-center gap-6 pl-4 bg-white z-10">
           <div @click="show_editor=true"
                class="border-gray-200 border-[1px] px-3 py-1 my-2 rounded flex-grow text-gray-500 cursor-pointer hover:bg-gray-100">
             评论...
@@ -74,13 +74,12 @@
 <script lang="ts" setup>
 import {Types} from "@/assets/types/ethers/ImplementationContact";
 import {UseStore} from "@/store";
-import {assertNotEmpty} from "@/assets/lib/utils";
-import {ref, watch} from "vue";
+import {assertNotEmpty, upAndDownCallback, wait} from "@/assets/lib/utils";
+import {defineModel, ref, watch} from "vue";
 import {head_address, tail_address, zero_address} from "@/assets/lib/settings";
+import {BigNumber} from "ethers";
 
-const props = withDefaults(defineProps<{
-  file_info: Types.FileDetailInfoStructOutput
-}>(), {})
+const file_info = defineModel<Types.FileDetailInfoStructOutput>("file_info", {required: true})
 
 const store = UseStore()
 const order = ref(0);
@@ -99,18 +98,17 @@ const root_comment = ref<{
 })
 
 const editor_meta = ref<FileReviewEditorMeta>({})
-
 const contract = assertNotEmpty(store.contract, "合约未初始化")
-
 const upAndDown = async (is_up: boolean) => {
-  await contract.upAndDownFile(props.file_info.file_address, is_up)
+  await wait(contract.upAndDownFile(file_info.value.file_address, is_up))
+  file_info.value = upAndDownCallback(file_info.value, is_up)
 }
 
 const upAndDownComment = async (comment_address: string, is_up: boolean) => {
-  await contract.upAndDownFileComment(props.file_info.file_address, comment_address, is_up)
+  await contract.upAndDownFileComment(file_info.value.file_address, comment_address, is_up)
 }
 const loadRootComments = async () => {
-  const res = await contract.getRootComments(props.file_info.file_address, root_comment.value.cursor, order_by.value.order, order_by.value.reverse)
+  const res = await contract.getRootComments(file_info.value.file_address, root_comment.value.cursor, order_by.value.order, order_by.value.reverse)
   for (const comment of res.root_comments) {
     if (comment.comment_address === zero_address) break
     if (root_comment.value.comments.map(x => x.comment_address).indexOf(comment.comment_address) !== -1) break

@@ -755,7 +755,7 @@ export interface FileContact extends BaseContract {
       ],
       price: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<string>;
 
     getSelfFileBriefInfos(
       cursor: PromiseOrValue<string>,

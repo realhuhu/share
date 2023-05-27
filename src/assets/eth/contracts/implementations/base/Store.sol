@@ -197,6 +197,7 @@ abstract contract Types {
         AddressLinkedList.T file_index;//文件地址
 
         AddressOrderedMap.T _file_by_price;//价格索引
+        AddressOrderedMap.T _file_by_up_num;//购买量索引
         AddressOrderedMap.T _file_by_buyer_num;//购买量索引
     }
 
@@ -395,16 +396,17 @@ library FileLib {
 
     using UserLib for Types.UserStore;
 
-    function isContain(Types.FileStore storage self, address file_address)
-    public view returns (bool is_contain) {
-        is_contain = self.file_index.isContain(file_address);
-    }
-
     function init(Types.FileStore storage self)
     public {
         self.file_index.init();
         self._file_by_price.init();
+        self._file_by_up_num.init();
         self._file_by_buyer_num.init();
+    }
+
+    function isContain(Types.FileStore storage self, address file_address)
+    public view returns (bool is_contain) {
+        is_contain = self.file_index.isContain(file_address);
     }
 
     function uploadFile(
@@ -594,6 +596,8 @@ library FileLib {
                 file.down_num--;
             }
         }
+
+        self._file_by_up_num.update(AddressOrderedMap.Item(file_address, file.up_num));
     }
 
     function addComment(
@@ -659,7 +663,7 @@ library FileLib {
             }
         }
 
-        self.file_info[file_address]._comments_by_up_num.update(AddressOrderedMap.Item(comment.comment_address, comment.up_num));
+        self.file_info[file_address]._comments_by_up_num.update(AddressOrderedMap.Item(comment_address, comment.up_num));
     }
 
     function addSubComment(

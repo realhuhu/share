@@ -2,7 +2,7 @@ import {Snackbar} from "@varlet/ui";
 import "@varlet/ui/es/snackbar/style/index"
 import {experience_list} from "@/assets/lib/settings";
 import Identicon from "identicon.js";
-import {ethers} from "ethers";
+import {BigNumber, ContractTransaction, ethers} from "ethers";
 
 export const TODO = (msg: string) => {
   Snackbar({
@@ -129,4 +129,52 @@ export const datetime = (value: number) => {
 
 export const avatar = (str: string) => {
   return "data:image/png;base64," + new Identicon(ethers.utils.hashMessage(str), {margin: 0.2}).toString()
+}
+
+export const wait = async (func: Promise<ContractTransaction>) => {
+  const res = await func
+  Snackbar({
+    content: "处理中...",
+    type: "warning"
+  })
+  await res.wait()
+  Snackbar({
+    content: "已完成",
+    type: "success"
+  })
+}
+export const upAndDownCallback = <T extends {
+  up_and_down: BigNumber,
+  up_num: BigNumber,
+  down_num: BigNumber
+}>(meta: T, is_up: boolean): T => {
+  meta = {...meta}
+  if (meta.up_and_down.toNumber() === 0) {//未操作
+    if (is_up) {
+      meta.up_num = BigNumber.from(meta.up_num.toNumber() + 1);
+      meta.up_and_down = BigNumber.from(1);
+    } else {
+      meta.down_num = BigNumber.from(meta.down_num.toNumber() + 1);
+      meta.up_and_down = BigNumber.from(2);
+    }
+  } else if (meta.up_and_down.toNumber() === 1) {//已点赞
+    if (is_up) {
+      meta.up_num = BigNumber.from(meta.up_num.toNumber() - 1);
+      meta.up_and_down = BigNumber.from(0);
+    } else {
+      meta.up_num = BigNumber.from(meta.up_num.toNumber() - 1);
+      meta.down_num = BigNumber.from(meta.down_num.toNumber() + 1);
+      meta.up_and_down = BigNumber.from(2);
+    }
+  } else if (meta.up_and_down.toNumber() === 2) {//已点踩
+    if (is_up) {
+      meta.up_num = BigNumber.from(meta.up_num.toNumber() + 1);
+      meta.down_num = BigNumber.from(meta.down_num.toNumber() - 1);
+      meta.up_and_down = BigNumber.from(1);
+    } else {
+      meta.down_num = BigNumber.from(meta.down_num.toNumber() - 1);
+      meta.up_and_down = BigNumber.from(0);
+    }
+  }
+  return meta
 }

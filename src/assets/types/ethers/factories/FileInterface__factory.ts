@@ -105,7 +105,13 @@ const _abi = [
       },
     ],
     name: "uploadFile",
-    outputs: [],
+    outputs: [
+      {
+        internalType: "address",
+        name: "file_address",
+        type: "address",
+      },
+    ],
     stateMutability: "nonpayable",
     type: "function",
   },

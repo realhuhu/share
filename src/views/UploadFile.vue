@@ -9,7 +9,7 @@
         <file-uploader ref="file_uploader" v-model:file="ipfs_address" v-model:name="name"/>
         <var-input variant="outlined" placeholder="标题" :maxlength="64" v-model="title"/>
         <var-input variant="outlined" placeholder="文件描述..." :maxlength="512" resize textarea v-model="description"/>
-        <category-select-bar v-model="category_address"/>
+        <category-select-bar v-model:category="category_address"/>
 
         <div class="flex justify-center items-center gap-6 pr-6 pt-4">
           <div class="w-16 font-bold md:text-lg text-gray-500">图片:</div>
@@ -44,7 +44,7 @@
 <script lang="ts" setup>
 import {ref} from "vue";
 import {UseStore} from "@/store";
-import {assertNotEmpty} from "@/assets/lib/utils";
+import {assertNotEmpty, wait} from "@/assets/lib/utils";
 import ImageUploader from "@/components/uploader/ImageUploader.vue";
 
 const store = UseStore()
@@ -69,7 +69,7 @@ const upload = async () => {
   const contract = assertNotEmpty(store.contract, "合约未初始化")
   uploading.value = true
   try {
-    await contract.uploadFile(
+    await wait(contract.uploadFile(
       ipfs_address.value,
       name.value,
       title.value,
@@ -77,7 +77,8 @@ const upload = async () => {
       category_address.value,
       images.value,
       price.value
-    )
+    ))
+
     uploading.value = false
     title.value = description.value = category_address.value = undefined
     price.value = 2;

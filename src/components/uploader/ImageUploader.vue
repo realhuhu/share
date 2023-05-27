@@ -1,6 +1,6 @@
 <template>
   <var-uploader
-    v-model="images"
+    v-model="_images"
     :maxlength="3"
     :previewed="store.is_mobile"
     :maxsize="5*1024*1024"
@@ -14,14 +14,13 @@
 <script lang="ts" setup>
 
 import {Snackbar, VarFile} from "@varlet/ui";
-import {ref} from "vue";
+import {defineModel, ref} from "vue";
 import {UseStore} from "@/store";
 
-defineProps(["images"])
-const emits = defineEmits(["update:images"])
+const images = defineModel<Images>("images", {required: true})
 
 const store = UseStore()
-const images = ref<VarFile[]>([])
+const _images = ref<VarFile[]>([])
 const cache = ref<Record<number, string>>({})
 const readImage = async (image: VarFile) => {
   if (!image.file) {
@@ -60,7 +59,7 @@ const readImage = async (image: VarFile) => {
     for (let i = 0; i < 3 - length; i++) {
       result.push("")
     }
-    emits("update:images", result)
+    images.value = <Images>result
   } catch {
     Snackbar({
       content: "上传失败",
@@ -81,13 +80,13 @@ const removeImage = async (image: VarFile) => {
   for (let i = 0; i < 3 - length; i++) {
     result.push("")
   }
-  emits("update:images", result)
+  images.value = <Images>result
 }
 
 const clear = () => {
-  images.value = []
+  _images.value = []
   cache.value = {}
-  emits("update:images", ["", "", ""])
+  images.value = ["", "", ""]
 }
 
 defineExpose({clear})

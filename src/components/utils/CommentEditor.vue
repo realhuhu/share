@@ -1,6 +1,6 @@
 <template>
   <var-popup class="md:pl-[64px] bg-transparent flex justify-center items-center shadow-none"
-             v-model:show="_show" position="bottom">
+             v-model:show="show" position="bottom">
     <div class="w-[960px] max-w-[100vw] bg-white p-3 rounded-t-2xl">
       <transition enter-active-class="animate__animated animate__fadeIn"
                   leave-active-class="hidden" appear>
@@ -30,19 +30,17 @@
 
 
 <script lang="ts" setup>
-
-import {computed, ref} from "vue";
+import {computed, defineModel, ref} from "vue";
 import {UseStore} from "@/store";
-import {assertNotEmpty} from "@/assets/lib/utils";
+import {assertNotEmpty, wait} from "@/assets/lib/utils";
 import {Types} from "@/assets/types/ethers/ImplementationContact";
 import {zero_address} from "@/assets/lib/settings";
 
 const props = withDefaults(defineProps<{
   file_info: Types.FileDetailInfoStructOutput
   meta: FileReviewEditorMeta
-  show: boolean
 }>(), {})
-const emits = defineEmits(["update:show"])
+const show = defineModel<boolean>("show", {required: true})
 
 const store = UseStore()
 const upload_image = ref(false)
@@ -58,29 +56,25 @@ const comment = async () => {
   try {
     const {root_comment, target_comment} = props.meta
     if (!root_comment) {
-      await contract.addComment(props.file_info.file_address, content.value, images.value)
+      await wait(contract.addComment(props.file_info.file_address, content.value, images.value))
     } else {
-      await contract.addSubComment(
+      await wait(contract.addSubComment(
         props.file_info.file_address,
         target_comment ? target_comment.sub_comment_address : zero_address,
         root_comment.comment_address,
         content.value
-      )
+      ))
     }
     uploading.value = false
     upload_image.value = false
     images.value = ["", "", ""]
     content.value = ""
-    emits("update:show", false)
-  } catch {
+    show.value = false
+  } catch (e) {
     uploading.value = false
+    throw e
   }
 }
-
-const _show = computed({
-  get: () => props.show,
-  set: (val) => emits("update:show", val)
-})
 
 const tip = computed(() => {
   const {root_comment, target_comment} = props.meta

@@ -96,7 +96,7 @@ export interface FileContactInstance extends Truffle.ContractInstance {
       images: string[],
       price: number | BN | string,
       txDetails?: Truffle.TransactionDetails
-    ): Promise<void>;
+    ): Promise<string>;
     sendTransaction(
       ipfs_address: string,
       name: string,
@@ -426,7 +426,7 @@ export interface FileContactInstance extends Truffle.ContractInstance {
         images: string[],
         price: number | BN | string,
         txDetails?: Truffle.TransactionDetails
-      ): Promise<void>;
+      ): Promise<string>;
       sendTransaction(
         ipfs_address: string,
         name: string,
