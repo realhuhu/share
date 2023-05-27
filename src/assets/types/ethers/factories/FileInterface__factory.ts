@@ -455,7 +455,7 @@ const _abi = [
         type: "bool",
       },
     ],
-    name: "upAndDown",
+    name: "upAndDownFile",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -479,6 +479,29 @@ const _abi = [
       },
     ],
     name: "addComment",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "file_address",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "comment_address",
+        type: "address",
+      },
+      {
+        internalType: "bool",
+        name: "is_up",
+        type: "bool",
+      },
+    ],
+    name: "upAndDownFileComment",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -590,6 +613,33 @@ const _abi = [
                 ],
                 internalType: "struct Types.UserBriefInfo",
                 name: "author",
+                type: "tuple",
+              },
+              {
+                components: [
+                  {
+                    internalType: "address",
+                    name: "user_address",
+                    type: "address",
+                  },
+                  {
+                    internalType: "string",
+                    name: "avatar",
+                    type: "string",
+                  },
+                  {
+                    internalType: "string",
+                    name: "nickname",
+                    type: "string",
+                  },
+                  {
+                    internalType: "uint256",
+                    name: "experience",
+                    type: "uint256",
+                  },
+                ],
+                internalType: "struct Types.UserBriefInfo",
+                name: "target_author",
                 type: "tuple",
               },
               {

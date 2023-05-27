@@ -1,5 +1,8 @@
 <template>
-  <div :class="color_list[level-1]" class="text-gray-50 md:font-bold px-1 rounded-md my-1 text-sm">Lv.{{ level }}</div>
+  <div :class="color_list[level-1]" :style="{fontSize:`${size||10}px`}"
+       class="text-gray-50 md:font-bold px-1 rounded-md my-1 text-sm">
+    Lv.{{ level }}
+  </div>
 </template>
 
 
@@ -7,7 +10,8 @@
 import {ref} from "vue";
 
 defineProps<{
-  level: number
+  level: number,
+  size?: number
 }>()
 
 const color_list = ref([

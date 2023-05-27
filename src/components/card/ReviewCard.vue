@@ -1,29 +1,37 @@
 <template>
-  <div>
-    <div class="px-2 md:px-12 md:py-6 md:shadow pb-32 overflow-x-hidden">
-      <div class="flex justify-between items-center">
-        <var-tabs class="flex" style="padding: 0" v-model:active="order">
-          <var-tab class="md:w-24">最新</var-tab>
-          <var-tab class="md:w-24">最早</var-tab>
-          <var-tab class="md:w-24">最多赞</var-tab>
-        </var-tabs>
-        <div class="text-gray-500 mr-2">{{ file_info.comment_num }}评论</div>
-      </div>
+  <div class=" min-h-screen">
+    <div class="px-2 md:px-12 md:py-6 md:shadow pb-32">
+      <var-sticky>
+        <div class="flex justify-between items-center bg-white">
+          <var-tabs class="flex" style="padding: 0" v-model:active="order">
+            <var-tab class="md:w-24">最新</var-tab>
+            <var-tab class="md:w-24">最早</var-tab>
+            <var-tab class="md:w-24">最多赞</var-tab>
+          </var-tabs>
+          <div class="text-gray-500 mr-2">{{ file_info.comment_num }}评论</div>
+        </div>
+        <var-divider margin="0"/>
+      </var-sticky>
 
-      <var-divider margin="0"/>
 
       <div v-if="file_info.comment_num.toNumber()">
         <var-list
-          class="w-[720px] max-w-full p-3"
+          class="p-3"
           :finished="root_comment.finished"
           v-model:loading="root_comment.loading"
           @load="loadRootComments"
           :immediate-check="false"
         >
-          <root-commend-card v-for="(comment,k) in root_comment.comments" :key="k"
-                             :comment="comment as Types.FileRootCommentStructOutput"/>
+          <div v-for="(comment,k) in root_comment.comments" :key="k">
+            <transition enter-active-class="animate__animated animate__fadeIn" appear>
+              <root-commend-card :comment="comment as Types.FileRootCommentStructOutput"
+                                 @clickRootComment="openEditor"
+                                 @upAndDownRootComment="upAndDownComment"/>
+            </transition>
+          </div>
         </var-list>
       </div>
+
       <div v-else class="flex justify-center items-center h-32 text-gray-500">
         还没有评论...
       </div>
@@ -32,7 +40,7 @@
 
     <transition enter-active-class="animate__animated animate__fadeInUp"
                 leave-active-class="animate__animated animate__fadeOutDown">
-      <div class="fixed left-0 md:pl-[64px] bottom-0 w-full flex justify-center items-center bg-white"
+      <div class="fixed left-0 md:pl-[64px] bottom-0 w-full flex justify-center items-center bg-white z-10"
            v-if="!show_editor">
         <div class="w-[960px] max-w-full shadow-around flex justify-between items-center gap-6 pl-4">
           <div @click="show_editor=true"
@@ -58,7 +66,7 @@
       </div>
     </transition>
 
-    <comment-editor v-model:show="show_editor" :file_info="file_info"/>
+    <comment-editor v-model:show="show_editor" :file_info="file_info" :meta="editor_meta as FileReviewEditorMeta"/>
   </div>
 </template>
 
@@ -68,7 +76,7 @@ import {Types} from "@/assets/types/ethers/ImplementationContact";
 import {UseStore} from "@/store";
 import {assertNotEmpty} from "@/assets/lib/utils";
 import {ref, watch} from "vue";
-import {tail_address, zero_address} from "@/assets/lib/settings";
+import {head_address, tail_address, zero_address} from "@/assets/lib/settings";
 
 const props = withDefaults(defineProps<{
   file_info: Types.FileDetailInfoStructOutput
@@ -90,27 +98,64 @@ const root_comment = ref<{
   comments: []
 })
 
+const editor_meta = ref<FileReviewEditorMeta>({})
+
 const contract = assertNotEmpty(store.contract, "合约未初始化")
+
 const upAndDown = async (is_up: boolean) => {
-  await contract.upAndDown(props.file_info.file_address, is_up)
+  await contract.upAndDownFile(props.file_info.file_address, is_up)
 }
 
+const upAndDownComment = async (comment_address: string, is_up: boolean) => {
+  await contract.upAndDownFileComment(props.file_info.file_address, comment_address, is_up)
+}
 const loadRootComments = async () => {
   const res = await contract.getRootComments(props.file_info.file_address, root_comment.value.cursor, order_by.value.order, order_by.value.reverse)
   for (const comment of res.root_comments) {
     if (comment.comment_address === zero_address) break
+    if (root_comment.value.comments.map(x => x.comment_address).indexOf(comment.comment_address) !== -1) break
     root_comment.value.comments.push(comment)
   }
 
   root_comment.value.finished = res.finished
   root_comment.value.cursor = res.next
+  root_comment.value.loading = false
 }
 
-loadRootComments()
+const openEditor = (
+  root_comment?: Types.FileRootCommentStructOutput,
+  target_comment?: Types.FileChildrenCommentStructOutput
+) => {
+  editor_meta.value = {root_comment, target_comment}
+  show_editor.value = true
+}
 
-watch(order, (new_value: number) => {
-  console.log(new_value);
+
+watch(order, async (new_value: number) => {
+  root_comment.value = {
+    cursor: tail_address,
+    loading: false,
+    finished: false,
+    comments: []
+  }
+
+  if (new_value === 0) {
+    order_by.value = {order: 0, reverse: true}
+  } else if (new_value === 1) {
+    order_by.value = {order: 0, reverse: false}
+    root_comment.value.cursor = head_address
+  } else if (new_value === 2) {
+    order_by.value = {order: 1, reverse: true}
+  }
+
+  await loadRootComments()
 })
+
+watch(show_editor, (new_value) => {
+  if (!new_value) editor_meta.value = {}
+})
+
+loadRootComments()
 
 defineOptions({
   name: "ReviewCard"

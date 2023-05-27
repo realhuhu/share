@@ -16,6 +16,10 @@ declare global {
     stack: string
   }
 
+  type FileReviewEditorMeta = {
+    root_comment?: Types.FileRootCommentStructOutput
+    target_comment?: Types.FileChildrenCommentStructOutput
+  }
 
   type User = ({
     is_registered: true

@@ -206,6 +206,7 @@ export declare namespace Types {
     sub_comment_address: PromiseOrValue<string>;
     content: PromiseOrValue<string>;
     author: Types.UserBriefInfoStruct;
+    target_author: Types.UserBriefInfoStruct;
     up_num: PromiseOrValue<BigNumberish>;
     down_num: PromiseOrValue<BigNumberish>;
     up_and_down: PromiseOrValue<BigNumberish>;
@@ -218,6 +219,7 @@ export declare namespace Types {
     string,
     string,
     Types.UserBriefInfoStructOutput,
+    Types.UserBriefInfoStructOutput,
     BigNumber,
     BigNumber,
     BigNumber,
@@ -228,6 +230,7 @@ export declare namespace Types {
     sub_comment_address: string;
     content: string;
     author: Types.UserBriefInfoStructOutput;
+    target_author: Types.UserBriefInfoStructOutput;
     up_num: BigNumber;
     down_num: BigNumber;
     up_and_down: BigNumber;
@@ -344,7 +347,8 @@ export interface ImplementationInterfaceInterface extends utils.Interface {
     "register(string)": FunctionFragment;
     "renounceAdmin()": FunctionFragment;
     "transferAdmin(address)": FunctionFragment;
-    "upAndDown(address,bool)": FunctionFragment;
+    "upAndDownFile(address,bool)": FunctionFragment;
+    "upAndDownFileComment(address,address,bool)": FunctionFragment;
     "updateAvatar(string)": FunctionFragment;
     "updateNickname(string)": FunctionFragment;
     "updateSignature(string)": FunctionFragment;
@@ -368,7 +372,8 @@ export interface ImplementationInterfaceInterface extends utils.Interface {
       | "register"
       | "renounceAdmin"
       | "transferAdmin"
-      | "upAndDown"
+      | "upAndDownFile"
+      | "upAndDownFileComment"
       | "updateAvatar"
       | "updateNickname"
       | "updateSignature"
@@ -452,8 +457,16 @@ export interface ImplementationInterfaceInterface extends utils.Interface {
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
-    functionFragment: "upAndDown",
+    functionFragment: "upAndDownFile",
     values: [PromiseOrValue<string>, PromiseOrValue<boolean>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "upAndDownFileComment",
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<boolean>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "updateAvatar",
@@ -531,7 +544,14 @@ export interface ImplementationInterfaceInterface extends utils.Interface {
     functionFragment: "transferAdmin",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "upAndDown", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "upAndDownFile",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "upAndDownFileComment",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "updateAvatar",
     data: BytesLike
@@ -697,8 +717,15 @@ export interface ImplementationInterface extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    upAndDown(
+    upAndDownFile(
       file_address: PromiseOrValue<string>,
+      is_up: PromiseOrValue<boolean>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    upAndDownFileComment(
+      file_address: PromiseOrValue<string>,
+      comment_address: PromiseOrValue<string>,
       is_up: PromiseOrValue<boolean>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
@@ -846,8 +873,15 @@ export interface ImplementationInterface extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  upAndDown(
+  upAndDownFile(
     file_address: PromiseOrValue<string>,
+    is_up: PromiseOrValue<boolean>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  upAndDownFileComment(
+    file_address: PromiseOrValue<string>,
+    comment_address: PromiseOrValue<string>,
     is_up: PromiseOrValue<boolean>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
@@ -993,8 +1027,15 @@ export interface ImplementationInterface extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    upAndDown(
+    upAndDownFile(
       file_address: PromiseOrValue<string>,
+      is_up: PromiseOrValue<boolean>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    upAndDownFileComment(
+      file_address: PromiseOrValue<string>,
+      comment_address: PromiseOrValue<string>,
       is_up: PromiseOrValue<boolean>,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -1117,8 +1158,15 @@ export interface ImplementationInterface extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    upAndDown(
+    upAndDownFile(
       file_address: PromiseOrValue<string>,
+      is_up: PromiseOrValue<boolean>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    upAndDownFileComment(
+      file_address: PromiseOrValue<string>,
+      comment_address: PromiseOrValue<string>,
       is_up: PromiseOrValue<boolean>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
@@ -1241,8 +1289,15 @@ export interface ImplementationInterface extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    upAndDown(
+    upAndDownFile(
       file_address: PromiseOrValue<string>,
+      is_up: PromiseOrValue<boolean>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    upAndDownFileComment(
+      file_address: PromiseOrValue<string>,
+      comment_address: PromiseOrValue<string>,
       is_up: PromiseOrValue<boolean>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;

@@ -195,7 +195,7 @@ export interface FileContactInstance extends Truffle.ContractInstance {
     upload_timestamp: BN;
   }>;
 
-  upAndDown: {
+  upAndDownFile: {
     (
       file_address: string,
       is_up: boolean,
@@ -241,6 +241,33 @@ export interface FileContactInstance extends Truffle.ContractInstance {
       file_address: string,
       content: string,
       images: string[],
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<number>;
+  };
+
+  upAndDownFileComment: {
+    (
+      file_address: string,
+      comment_address: string,
+      is_up: boolean,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<Truffle.TransactionResponse<AllEvents>>;
+    call(
+      file_address: string,
+      comment_address: string,
+      is_up: boolean,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<void>;
+    sendTransaction(
+      file_address: string,
+      comment_address: string,
+      is_up: boolean,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<string>;
+    estimateGas(
+      file_address: string,
+      comment_address: string,
+      is_up: boolean,
       txDetails?: Truffle.TransactionDetails
     ): Promise<number>;
   };
@@ -291,6 +318,12 @@ export interface FileContactInstance extends Truffle.ContractInstance {
         sub_comment_address: string;
         content: string;
         author: {
+          user_address: string;
+          avatar: string;
+          nickname: string;
+          experience: BN;
+        };
+        target_author: {
           user_address: string;
           avatar: string;
           nickname: string;
@@ -492,7 +525,7 @@ export interface FileContactInstance extends Truffle.ContractInstance {
       upload_timestamp: BN;
     }>;
 
-    upAndDown: {
+    upAndDownFile: {
       (
         file_address: string,
         is_up: boolean,
@@ -538,6 +571,33 @@ export interface FileContactInstance extends Truffle.ContractInstance {
         file_address: string,
         content: string,
         images: string[],
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<number>;
+    };
+
+    upAndDownFileComment: {
+      (
+        file_address: string,
+        comment_address: string,
+        is_up: boolean,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<Truffle.TransactionResponse<AllEvents>>;
+      call(
+        file_address: string,
+        comment_address: string,
+        is_up: boolean,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<void>;
+      sendTransaction(
+        file_address: string,
+        comment_address: string,
+        is_up: boolean,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<string>;
+      estimateGas(
+        file_address: string,
+        comment_address: string,
+        is_up: boolean,
         txDetails?: Truffle.TransactionDetails
       ): Promise<number>;
     };
@@ -588,6 +648,12 @@ export interface FileContactInstance extends Truffle.ContractInstance {
           sub_comment_address: string;
           content: string;
           author: {
+            user_address: string;
+            avatar: string;
+            nickname: string;
+            experience: BN;
+          };
+          target_author: {
             user_address: string;
             avatar: string;
             nickname: string;

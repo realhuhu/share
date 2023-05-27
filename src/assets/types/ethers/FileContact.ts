@@ -176,6 +176,7 @@ export declare namespace Types {
     sub_comment_address: PromiseOrValue<string>;
     content: PromiseOrValue<string>;
     author: Types.UserBriefInfoStruct;
+    target_author: Types.UserBriefInfoStruct;
     up_num: PromiseOrValue<BigNumberish>;
     down_num: PromiseOrValue<BigNumberish>;
     up_and_down: PromiseOrValue<BigNumberish>;
@@ -188,6 +189,7 @@ export declare namespace Types {
     string,
     string,
     Types.UserBriefInfoStructOutput,
+    Types.UserBriefInfoStructOutput,
     BigNumber,
     BigNumber,
     BigNumber,
@@ -198,6 +200,7 @@ export declare namespace Types {
     sub_comment_address: string;
     content: string;
     author: Types.UserBriefInfoStructOutput;
+    target_author: Types.UserBriefInfoStructOutput;
     up_num: BigNumber;
     down_num: BigNumber;
     up_and_down: BigNumber;
@@ -266,8 +269,9 @@ export interface FileContactInterface extends utils.Interface {
     "getSelfFileBriefInfos(address,bool)": FunctionFragment;
     "getFileBriefInfos(address,address,uint256,bool)": FunctionFragment;
     "getFileDetailInfo(address)": FunctionFragment;
-    "upAndDown(address,bool)": FunctionFragment;
+    "upAndDownFile(address,bool)": FunctionFragment;
     "addComment(address,string,string[3])": FunctionFragment;
+    "upAndDownFileComment(address,address,bool)": FunctionFragment;
     "addSubComment(address,address,address,string)": FunctionFragment;
     "getRootComments(address,address,uint256,bool)": FunctionFragment;
   };
@@ -283,8 +287,9 @@ export interface FileContactInterface extends utils.Interface {
       | "getSelfFileBriefInfos"
       | "getFileBriefInfos"
       | "getFileDetailInfo"
-      | "upAndDown"
+      | "upAndDownFile"
       | "addComment"
+      | "upAndDownFileComment"
       | "addSubComment"
       | "getRootComments"
   ): FunctionFragment;
@@ -336,7 +341,7 @@ export interface FileContactInterface extends utils.Interface {
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
-    functionFragment: "upAndDown",
+    functionFragment: "upAndDownFile",
     values: [PromiseOrValue<string>, PromiseOrValue<boolean>]
   ): string;
   encodeFunctionData(
@@ -345,6 +350,14 @@ export interface FileContactInterface extends utils.Interface {
       PromiseOrValue<string>,
       PromiseOrValue<string>,
       [PromiseOrValue<string>, PromiseOrValue<string>, PromiseOrValue<string>]
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "upAndDownFileComment",
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<boolean>
     ]
   ): string;
   encodeFunctionData(
@@ -396,8 +409,15 @@ export interface FileContactInterface extends utils.Interface {
     functionFragment: "getFileDetailInfo",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "upAndDown", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "upAndDownFile",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "addComment", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "upAndDownFileComment",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "addSubComment",
     data: BytesLike
@@ -530,7 +550,7 @@ export interface FileContact extends BaseContract {
       }
     >;
 
-    upAndDown(
+    upAndDownFile(
       file_address: PromiseOrValue<string>,
       is_up: PromiseOrValue<boolean>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -544,6 +564,13 @@ export interface FileContact extends BaseContract {
         PromiseOrValue<string>,
         PromiseOrValue<string>
       ],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    upAndDownFileComment(
+      file_address: PromiseOrValue<string>,
+      comment_address: PromiseOrValue<string>,
+      is_up: PromiseOrValue<boolean>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -643,7 +670,7 @@ export interface FileContact extends BaseContract {
     overrides?: CallOverrides
   ): Promise<Types.FileDetailInfoStructOutput>;
 
-  upAndDown(
+  upAndDownFile(
     file_address: PromiseOrValue<string>,
     is_up: PromiseOrValue<boolean>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -657,6 +684,13 @@ export interface FileContact extends BaseContract {
       PromiseOrValue<string>,
       PromiseOrValue<string>
     ],
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  upAndDownFileComment(
+    file_address: PromiseOrValue<string>,
+    comment_address: PromiseOrValue<string>,
+    is_up: PromiseOrValue<boolean>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -754,7 +788,7 @@ export interface FileContact extends BaseContract {
       overrides?: CallOverrides
     ): Promise<Types.FileDetailInfoStructOutput>;
 
-    upAndDown(
+    upAndDownFile(
       file_address: PromiseOrValue<string>,
       is_up: PromiseOrValue<boolean>,
       overrides?: CallOverrides
@@ -768,6 +802,13 @@ export interface FileContact extends BaseContract {
         PromiseOrValue<string>,
         PromiseOrValue<string>
       ],
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    upAndDownFileComment(
+      file_address: PromiseOrValue<string>,
+      comment_address: PromiseOrValue<string>,
+      is_up: PromiseOrValue<boolean>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -861,7 +902,7 @@ export interface FileContact extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    upAndDown(
+    upAndDownFile(
       file_address: PromiseOrValue<string>,
       is_up: PromiseOrValue<boolean>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -875,6 +916,13 @@ export interface FileContact extends BaseContract {
         PromiseOrValue<string>,
         PromiseOrValue<string>
       ],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    upAndDownFileComment(
+      file_address: PromiseOrValue<string>,
+      comment_address: PromiseOrValue<string>,
+      is_up: PromiseOrValue<boolean>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -951,7 +999,7 @@ export interface FileContact extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    upAndDown(
+    upAndDownFile(
       file_address: PromiseOrValue<string>,
       is_up: PromiseOrValue<boolean>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -965,6 +1013,13 @@ export interface FileContact extends BaseContract {
         PromiseOrValue<string>,
         PromiseOrValue<string>
       ],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    upAndDownFileComment(
+      file_address: PromiseOrValue<string>,
+      comment_address: PromiseOrValue<string>,
+      is_up: PromiseOrValue<boolean>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

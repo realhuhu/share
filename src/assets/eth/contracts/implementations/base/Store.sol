@@ -182,6 +182,7 @@ abstract contract Types {
         string content;//内容
 
         UserBriefInfo author;
+        UserBriefInfo target_author;
 
         uint up_num;//点赞次数
         uint down_num;//点踩次数
@@ -622,6 +623,45 @@ library FileLib {
         file._comments_by_up_num.update(AddressOrderedMap.Item(comment_address, file.comment_num));
     }
 
+    function upAndDownComment(
+        Types.FileStore storage self,
+        address file_address,
+        address comment_address,
+        bool is_up
+    ) public {
+        Types.FileComment storage comment = self.file_info[file_address].comment_info[comment_address];
+        uint up_and_down = comment.up_and_downs[msg.sender];
+        if (up_and_down == 0) {//未操作
+            if (is_up) {
+                comment.up_and_downs[msg.sender] = 1;
+                comment.up_num++;
+            } else {
+                comment.up_and_downs[msg.sender] = 2;
+                comment.down_num++;
+            }
+        } else if (up_and_down == 1) {//已点赞
+            if (is_up) {
+                comment.up_and_downs[msg.sender] = 0;
+                comment.up_num--;
+            } else {
+                comment.up_and_downs[msg.sender] = 2;
+                comment.up_num--;
+                comment.down_num++;
+            }
+        } else if (up_and_down == 2) {//已点踩
+            if (is_up) {
+                comment.up_and_downs[msg.sender] = 1;
+                comment.up_num++;
+                comment.down_num--;
+            } else {
+                comment.up_and_downs[msg.sender] = 0;
+                comment.down_num--;
+            }
+        }
+
+        self.file_info[file_address]._comments_by_up_num.update(AddressOrderedMap.Item(comment.comment_address, comment.up_num));
+    }
+
     function addSubComment(
         Types.FileStore storage self,
         address file_address,
@@ -702,6 +742,7 @@ library FileLib {
                     sub_comment_address: sub_comment.sub_comment_address,
                     content: sub_comment.content,
                     author: users.getOtherBriefInfo(sub_comment.author),
+                    target_author: users.getOtherBriefInfo(file_comment.sub_comment_info[sub_comment.target_address].author),
                     up_num: sub_comment.up_num,
                     down_num: sub_comment.down_num,
                     up_and_down: sub_comment.up_and_downs[msg.sender],

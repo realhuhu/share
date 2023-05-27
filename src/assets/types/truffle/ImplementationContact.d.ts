@@ -204,6 +204,12 @@ export interface ImplementationContactInstance
           nickname: string;
           experience: BN;
         };
+        target_author: {
+          user_address: string;
+          avatar: string;
+          nickname: string;
+          experience: BN;
+        };
         up_num: BN;
         down_num: BN;
         up_and_down: BN;
@@ -320,7 +326,7 @@ export interface ImplementationContactInstance
     ): Promise<number>;
   };
 
-  upAndDown: {
+  upAndDownFile: {
     (
       file_address: string,
       is_up: boolean,
@@ -338,6 +344,33 @@ export interface ImplementationContactInstance
     ): Promise<string>;
     estimateGas(
       file_address: string,
+      is_up: boolean,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<number>;
+  };
+
+  upAndDownFileComment: {
+    (
+      file_address: string,
+      comment_address: string,
+      is_up: boolean,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<Truffle.TransactionResponse<AllEvents>>;
+    call(
+      file_address: string,
+      comment_address: string,
+      is_up: boolean,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<void>;
+    sendTransaction(
+      file_address: string,
+      comment_address: string,
+      is_up: boolean,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<string>;
+    estimateGas(
+      file_address: string,
+      comment_address: string,
       is_up: boolean,
       txDetails?: Truffle.TransactionDetails
     ): Promise<number>;
@@ -625,6 +658,12 @@ export interface ImplementationContactInstance
             nickname: string;
             experience: BN;
           };
+          target_author: {
+            user_address: string;
+            avatar: string;
+            nickname: string;
+            experience: BN;
+          };
           up_num: BN;
           down_num: BN;
           up_and_down: BN;
@@ -741,7 +780,7 @@ export interface ImplementationContactInstance
       ): Promise<number>;
     };
 
-    upAndDown: {
+    upAndDownFile: {
       (
         file_address: string,
         is_up: boolean,
@@ -759,6 +798,33 @@ export interface ImplementationContactInstance
       ): Promise<string>;
       estimateGas(
         file_address: string,
+        is_up: boolean,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<number>;
+    };
+
+    upAndDownFileComment: {
+      (
+        file_address: string,
+        comment_address: string,
+        is_up: boolean,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<Truffle.TransactionResponse<AllEvents>>;
+      call(
+        file_address: string,
+        comment_address: string,
+        is_up: boolean,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<void>;
+      sendTransaction(
+        file_address: string,
+        comment_address: string,
+        is_up: boolean,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<string>;
+      estimateGas(
+        file_address: string,
+        comment_address: string,
         is_up: boolean,
         txDetails?: Truffle.TransactionDetails
       ): Promise<number>;

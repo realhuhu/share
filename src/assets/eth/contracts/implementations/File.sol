@@ -16,9 +16,11 @@ interface FileInterface {
 
     function getFileDetailInfo(address file_address) external view returns (Types.FileDetailInfo memory detail_info);
 
-    function upAndDown(address file_address, bool is_up) external;
+    function upAndDownFile(address file_address, bool is_up) external;
 
     function addComment(address file_address, string memory content, string[3] memory images) external;
+
+    function upAndDownFileComment(address file_address, address comment_address, bool is_up) external;
 
     function addSubComment(address file_address, address target_address, address comment_address, string memory content) external;
 
@@ -102,7 +104,7 @@ abstract contract FileContact is BaseContact, FileInterface {
         detail_info = files.getFileDetailInfo(file_address);
     }
 
-    function upAndDown(address file_address, bool is_up)
+    function upAndDownFile(address file_address, bool is_up)
     external {
         files.upAndDown(file_address, is_up);
     }
@@ -110,6 +112,11 @@ abstract contract FileContact is BaseContact, FileInterface {
     function addComment(address file_address, string memory content, string[3] memory images)
     external {
         files.addComment(file_address, content, images);
+    }
+
+    function upAndDownFileComment(address file_address, address comment_address, bool is_up)
+    external {
+        files.upAndDownComment(file_address, comment_address, is_up);
     }
 
     function addSubComment(address file_address, address target_address, address comment_address, string memory content)

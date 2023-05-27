@@ -114,8 +114,10 @@ const load = async () => {
   cursor.value = res.next
   for (let file_info of res.file_infos) {
     if (file_info.file_address === zero_address) break
+    if (files.value.map(x => x.file_address).indexOf(file_info.file_address) !== -1) break
     files.value.push(file_info)
   }
+  loading.value = false
 }
 
 watch(current_order, async () => {
