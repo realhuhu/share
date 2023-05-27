@@ -88,6 +88,62 @@ export declare namespace Types {
     upload_timestamp: BigNumber;
   };
 
+  export type UserBriefInfoStruct = {
+    user_address: PromiseOrValue<string>;
+    avatar: PromiseOrValue<string>;
+    nickname: PromiseOrValue<string>;
+    experience: PromiseOrValue<BigNumberish>;
+  };
+
+  export type UserBriefInfoStructOutput = [
+    string,
+    string,
+    string,
+    BigNumber
+  ] & {
+    user_address: string;
+    avatar: string;
+    nickname: string;
+    experience: BigNumber;
+  };
+
+  export type FileChildrenCommentStruct = {
+    target_address: PromiseOrValue<string>;
+    comment_address: PromiseOrValue<string>;
+    sub_comment_address: PromiseOrValue<string>;
+    content: PromiseOrValue<string>;
+    author: Types.UserBriefInfoStruct;
+    target_author: Types.UserBriefInfoStruct;
+    up_num: PromiseOrValue<BigNumberish>;
+    down_num: PromiseOrValue<BigNumberish>;
+    up_and_down: PromiseOrValue<BigNumberish>;
+    comment_timestamp: PromiseOrValue<BigNumberish>;
+  };
+
+  export type FileChildrenCommentStructOutput = [
+    string,
+    string,
+    string,
+    string,
+    Types.UserBriefInfoStructOutput,
+    Types.UserBriefInfoStructOutput,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber
+  ] & {
+    target_address: string;
+    comment_address: string;
+    sub_comment_address: string;
+    content: string;
+    author: Types.UserBriefInfoStructOutput;
+    target_author: Types.UserBriefInfoStructOutput;
+    up_num: BigNumber;
+    down_num: BigNumber;
+    up_and_down: BigNumber;
+    comment_timestamp: BigNumber;
+  };
+
   export type FileDetailInfoStruct = {
     owner: PromiseOrValue<string>;
     file_address: PromiseOrValue<string>;
@@ -147,96 +203,6 @@ export declare namespace Types {
     upload_timestamp: BigNumber;
   };
 
-  export type UserSimpleInfoStruct = {
-    major: PromiseOrValue<string>;
-    avatar: PromiseOrValue<string>;
-    nickname: PromiseOrValue<string>;
-    signature: PromiseOrValue<string>;
-    heart: PromiseOrValue<BigNumberish>;
-    medal_num: PromiseOrValue<BigNumberish>;
-    experience: PromiseOrValue<BigNumberish>;
-    follower_num: PromiseOrValue<BigNumberish>;
-    uploaded_file_num: PromiseOrValue<BigNumberish>;
-  };
-
-  export type UserSimpleInfoStructOutput = [
-    string,
-    string,
-    string,
-    string,
-    BigNumber,
-    BigNumber,
-    BigNumber,
-    BigNumber,
-    BigNumber
-  ] & {
-    major: string;
-    avatar: string;
-    nickname: string;
-    signature: string;
-    heart: BigNumber;
-    medal_num: BigNumber;
-    experience: BigNumber;
-    follower_num: BigNumber;
-    uploaded_file_num: BigNumber;
-  };
-
-  export type UserBriefInfoStruct = {
-    user_address: PromiseOrValue<string>;
-    avatar: PromiseOrValue<string>;
-    nickname: PromiseOrValue<string>;
-    experience: PromiseOrValue<BigNumberish>;
-  };
-
-  export type UserBriefInfoStructOutput = [
-    string,
-    string,
-    string,
-    BigNumber
-  ] & {
-    user_address: string;
-    avatar: string;
-    nickname: string;
-    experience: BigNumber;
-  };
-
-  export type FileChildrenCommentStruct = {
-    target_address: PromiseOrValue<string>;
-    comment_address: PromiseOrValue<string>;
-    sub_comment_address: PromiseOrValue<string>;
-    content: PromiseOrValue<string>;
-    author: Types.UserBriefInfoStruct;
-    target_author: Types.UserBriefInfoStruct;
-    up_num: PromiseOrValue<BigNumberish>;
-    down_num: PromiseOrValue<BigNumberish>;
-    up_and_down: PromiseOrValue<BigNumberish>;
-    comment_timestamp: PromiseOrValue<BigNumberish>;
-  };
-
-  export type FileChildrenCommentStructOutput = [
-    string,
-    string,
-    string,
-    string,
-    Types.UserBriefInfoStructOutput,
-    Types.UserBriefInfoStructOutput,
-    BigNumber,
-    BigNumber,
-    BigNumber,
-    BigNumber
-  ] & {
-    target_address: string;
-    comment_address: string;
-    sub_comment_address: string;
-    content: string;
-    author: Types.UserBriefInfoStructOutput;
-    target_author: Types.UserBriefInfoStructOutput;
-    up_num: BigNumber;
-    down_num: BigNumber;
-    up_and_down: BigNumber;
-    comment_timestamp: BigNumber;
-  };
-
   export type FileRootCommentStruct = {
     comment_address: PromiseOrValue<string>;
     children_comments: [
@@ -287,6 +253,40 @@ export declare namespace Types {
     comment_timestamp: BigNumber;
   };
 
+  export type UserSimpleInfoStruct = {
+    major: PromiseOrValue<string>;
+    avatar: PromiseOrValue<string>;
+    nickname: PromiseOrValue<string>;
+    signature: PromiseOrValue<string>;
+    heart: PromiseOrValue<BigNumberish>;
+    medal_num: PromiseOrValue<BigNumberish>;
+    experience: PromiseOrValue<BigNumberish>;
+    follower_num: PromiseOrValue<BigNumberish>;
+    uploaded_file_num: PromiseOrValue<BigNumberish>;
+  };
+
+  export type UserSimpleInfoStructOutput = [
+    string,
+    string,
+    string,
+    string,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber
+  ] & {
+    major: string;
+    avatar: string;
+    nickname: string;
+    signature: string;
+    heart: BigNumber;
+    medal_num: BigNumber;
+    experience: BigNumber;
+    follower_num: BigNumber;
+    uploaded_file_num: BigNumber;
+  };
+
   export type UserSelfInfoStruct = {
     major: PromiseOrValue<string>;
     avatar: PromiseOrValue<string>;
@@ -334,13 +334,14 @@ export declare namespace Types {
 export interface ImplementationInterfaceInterface extends utils.Interface {
   functions: {
     "addCategory(string)": FunctionFragment;
-    "addComment(address,string,string[3])": FunctionFragment;
-    "addSubComment(address,address,address,string)": FunctionFragment;
+    "addFileComment(address,string,string[3])": FunctionFragment;
+    "addFileSubComment(address,address,address,string)": FunctionFragment;
     "getCategorySlice(address)": FunctionFragment;
     "getFileBriefInfos(address,address,uint256,bool)": FunctionFragment;
+    "getFileChildrenComments(address,address,address)": FunctionFragment;
     "getFileDetailInfo(address)": FunctionFragment;
+    "getFileRootComments(address,address,uint256,bool)": FunctionFragment;
     "getOtherSimpleInfo(address)": FunctionFragment;
-    "getRootComments(address,address,uint256,bool)": FunctionFragment;
     "getSelfFileBriefInfos(address,bool)": FunctionFragment;
     "getSelfInfo()": FunctionFragment;
     "isRegistered(address)": FunctionFragment;
@@ -349,6 +350,7 @@ export interface ImplementationInterfaceInterface extends utils.Interface {
     "transferAdmin(address)": FunctionFragment;
     "upAndDownFile(address,bool)": FunctionFragment;
     "upAndDownFileComment(address,address,bool)": FunctionFragment;
+    "upAndDownFileSubComment(address,address,address,bool)": FunctionFragment;
     "updateAvatar(string)": FunctionFragment;
     "updateNickname(string)": FunctionFragment;
     "updateSignature(string)": FunctionFragment;
@@ -359,13 +361,14 @@ export interface ImplementationInterfaceInterface extends utils.Interface {
   getFunction(
     nameOrSignatureOrTopic:
       | "addCategory"
-      | "addComment"
-      | "addSubComment"
+      | "addFileComment"
+      | "addFileSubComment"
       | "getCategorySlice"
       | "getFileBriefInfos"
+      | "getFileChildrenComments"
       | "getFileDetailInfo"
+      | "getFileRootComments"
       | "getOtherSimpleInfo"
-      | "getRootComments"
       | "getSelfFileBriefInfos"
       | "getSelfInfo"
       | "isRegistered"
@@ -374,6 +377,7 @@ export interface ImplementationInterfaceInterface extends utils.Interface {
       | "transferAdmin"
       | "upAndDownFile"
       | "upAndDownFileComment"
+      | "upAndDownFileSubComment"
       | "updateAvatar"
       | "updateNickname"
       | "updateSignature"
@@ -386,7 +390,7 @@ export interface ImplementationInterfaceInterface extends utils.Interface {
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
-    functionFragment: "addComment",
+    functionFragment: "addFileComment",
     values: [
       PromiseOrValue<string>,
       PromiseOrValue<string>,
@@ -394,7 +398,7 @@ export interface ImplementationInterfaceInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: "addSubComment",
+    functionFragment: "addFileSubComment",
     values: [
       PromiseOrValue<string>,
       PromiseOrValue<string>,
@@ -416,21 +420,29 @@ export interface ImplementationInterfaceInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
+    functionFragment: "getFileChildrenComments",
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<string>
+    ]
+  ): string;
+  encodeFunctionData(
     functionFragment: "getFileDetailInfo",
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
-    functionFragment: "getOtherSimpleInfo",
-    values: [PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getRootComments",
+    functionFragment: "getFileRootComments",
     values: [
       PromiseOrValue<string>,
       PromiseOrValue<string>,
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<boolean>
     ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getOtherSimpleInfo",
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "getSelfFileBriefInfos",
@@ -469,6 +481,15 @@ export interface ImplementationInterfaceInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
+    functionFragment: "upAndDownFileSubComment",
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<boolean>
+    ]
+  ): string;
+  encodeFunctionData(
     functionFragment: "updateAvatar",
     values: [PromiseOrValue<string>]
   ): string;
@@ -498,9 +519,12 @@ export interface ImplementationInterfaceInterface extends utils.Interface {
     functionFragment: "addCategory",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "addComment", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "addSubComment",
+    functionFragment: "addFileComment",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "addFileSubComment",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -512,15 +536,19 @@ export interface ImplementationInterfaceInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "getFileChildrenComments",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "getFileDetailInfo",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getOtherSimpleInfo",
+    functionFragment: "getFileRootComments",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getRootComments",
+    functionFragment: "getOtherSimpleInfo",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -550,6 +578,10 @@ export interface ImplementationInterfaceInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "upAndDownFileComment",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "upAndDownFileSubComment",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -602,7 +634,7 @@ export interface ImplementationInterface extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    addComment(
+    addFileComment(
       file_address: PromiseOrValue<string>,
       content: PromiseOrValue<string>,
       images: [
@@ -613,7 +645,7 @@ export interface ImplementationInterface extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    addSubComment(
+    addFileSubComment(
       file_address: PromiseOrValue<string>,
       target_address: PromiseOrValue<string>,
       comment_address: PromiseOrValue<string>,
@@ -646,6 +678,19 @@ export interface ImplementationInterface extends BaseContract {
       }
     >;
 
+    getFileChildrenComments(
+      file_address: PromiseOrValue<string>,
+      comment_address: PromiseOrValue<string>,
+      cursor: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<
+      [Types.FileChildrenCommentStructOutput[], string, boolean] & {
+        children_comments: Types.FileChildrenCommentStructOutput[];
+        next: string;
+        finished: boolean;
+      }
+    >;
+
     getFileDetailInfo(
       file_address: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -655,16 +700,7 @@ export interface ImplementationInterface extends BaseContract {
       }
     >;
 
-    getOtherSimpleInfo(
-      user_address: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<
-      [Types.UserSimpleInfoStructOutput] & {
-        simple_info: Types.UserSimpleInfoStructOutput;
-      }
-    >;
-
-    getRootComments(
+    getFileRootComments(
       file_address: PromiseOrValue<string>,
       cursor: PromiseOrValue<string>,
       order: PromiseOrValue<BigNumberish>,
@@ -675,6 +711,15 @@ export interface ImplementationInterface extends BaseContract {
         root_comments: Types.FileRootCommentStructOutput[];
         next: string;
         finished: boolean;
+      }
+    >;
+
+    getOtherSimpleInfo(
+      user_address: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<
+      [Types.UserSimpleInfoStructOutput] & {
+        simple_info: Types.UserSimpleInfoStructOutput;
       }
     >;
 
@@ -730,6 +775,14 @@ export interface ImplementationInterface extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    upAndDownFileSubComment(
+      file_address: PromiseOrValue<string>,
+      comment_address: PromiseOrValue<string>,
+      sub_comment_address: PromiseOrValue<string>,
+      is_up: PromiseOrValue<boolean>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     updateAvatar(
       avatar: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -770,7 +823,7 @@ export interface ImplementationInterface extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  addComment(
+  addFileComment(
     file_address: PromiseOrValue<string>,
     content: PromiseOrValue<string>,
     images: [
@@ -781,7 +834,7 @@ export interface ImplementationInterface extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  addSubComment(
+  addFileSubComment(
     file_address: PromiseOrValue<string>,
     target_address: PromiseOrValue<string>,
     comment_address: PromiseOrValue<string>,
@@ -814,17 +867,25 @@ export interface ImplementationInterface extends BaseContract {
     }
   >;
 
+  getFileChildrenComments(
+    file_address: PromiseOrValue<string>,
+    comment_address: PromiseOrValue<string>,
+    cursor: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<
+    [Types.FileChildrenCommentStructOutput[], string, boolean] & {
+      children_comments: Types.FileChildrenCommentStructOutput[];
+      next: string;
+      finished: boolean;
+    }
+  >;
+
   getFileDetailInfo(
     file_address: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<Types.FileDetailInfoStructOutput>;
 
-  getOtherSimpleInfo(
-    user_address: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<Types.UserSimpleInfoStructOutput>;
-
-  getRootComments(
+  getFileRootComments(
     file_address: PromiseOrValue<string>,
     cursor: PromiseOrValue<string>,
     order: PromiseOrValue<BigNumberish>,
@@ -837,6 +898,11 @@ export interface ImplementationInterface extends BaseContract {
       finished: boolean;
     }
   >;
+
+  getOtherSimpleInfo(
+    user_address: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<Types.UserSimpleInfoStructOutput>;
 
   getSelfFileBriefInfos(
     cursor: PromiseOrValue<string>,
@@ -886,6 +952,14 @@ export interface ImplementationInterface extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  upAndDownFileSubComment(
+    file_address: PromiseOrValue<string>,
+    comment_address: PromiseOrValue<string>,
+    sub_comment_address: PromiseOrValue<string>,
+    is_up: PromiseOrValue<boolean>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   updateAvatar(
     avatar: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -926,7 +1000,7 @@ export interface ImplementationInterface extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    addComment(
+    addFileComment(
       file_address: PromiseOrValue<string>,
       content: PromiseOrValue<string>,
       images: [
@@ -937,7 +1011,7 @@ export interface ImplementationInterface extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    addSubComment(
+    addFileSubComment(
       file_address: PromiseOrValue<string>,
       target_address: PromiseOrValue<string>,
       comment_address: PromiseOrValue<string>,
@@ -970,17 +1044,25 @@ export interface ImplementationInterface extends BaseContract {
       }
     >;
 
+    getFileChildrenComments(
+      file_address: PromiseOrValue<string>,
+      comment_address: PromiseOrValue<string>,
+      cursor: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<
+      [Types.FileChildrenCommentStructOutput[], string, boolean] & {
+        children_comments: Types.FileChildrenCommentStructOutput[];
+        next: string;
+        finished: boolean;
+      }
+    >;
+
     getFileDetailInfo(
       file_address: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<Types.FileDetailInfoStructOutput>;
 
-    getOtherSimpleInfo(
-      user_address: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<Types.UserSimpleInfoStructOutput>;
-
-    getRootComments(
+    getFileRootComments(
       file_address: PromiseOrValue<string>,
       cursor: PromiseOrValue<string>,
       order: PromiseOrValue<BigNumberish>,
@@ -993,6 +1075,11 @@ export interface ImplementationInterface extends BaseContract {
         finished: boolean;
       }
     >;
+
+    getOtherSimpleInfo(
+      user_address: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<Types.UserSimpleInfoStructOutput>;
 
     getSelfFileBriefInfos(
       cursor: PromiseOrValue<string>,
@@ -1040,6 +1127,14 @@ export interface ImplementationInterface extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    upAndDownFileSubComment(
+      file_address: PromiseOrValue<string>,
+      comment_address: PromiseOrValue<string>,
+      sub_comment_address: PromiseOrValue<string>,
+      is_up: PromiseOrValue<boolean>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     updateAvatar(
       avatar: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -1068,7 +1163,7 @@ export interface ImplementationInterface extends BaseContract {
       ],
       price: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<string>;
+    ): Promise<void>;
 
     init(overrides?: CallOverrides): Promise<void>;
   };
@@ -1081,7 +1176,7 @@ export interface ImplementationInterface extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    addComment(
+    addFileComment(
       file_address: PromiseOrValue<string>,
       content: PromiseOrValue<string>,
       images: [
@@ -1092,7 +1187,7 @@ export interface ImplementationInterface extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    addSubComment(
+    addFileSubComment(
       file_address: PromiseOrValue<string>,
       target_address: PromiseOrValue<string>,
       comment_address: PromiseOrValue<string>,
@@ -1113,21 +1208,28 @@ export interface ImplementationInterface extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getFileChildrenComments(
+      file_address: PromiseOrValue<string>,
+      comment_address: PromiseOrValue<string>,
+      cursor: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getFileDetailInfo(
       file_address: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getOtherSimpleInfo(
-      user_address: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getRootComments(
+    getFileRootComments(
       file_address: PromiseOrValue<string>,
       cursor: PromiseOrValue<string>,
       order: PromiseOrValue<BigNumberish>,
       reverse: PromiseOrValue<boolean>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getOtherSimpleInfo(
+      user_address: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1167,6 +1269,14 @@ export interface ImplementationInterface extends BaseContract {
     upAndDownFileComment(
       file_address: PromiseOrValue<string>,
       comment_address: PromiseOrValue<string>,
+      is_up: PromiseOrValue<boolean>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    upAndDownFileSubComment(
+      file_address: PromiseOrValue<string>,
+      comment_address: PromiseOrValue<string>,
+      sub_comment_address: PromiseOrValue<string>,
       is_up: PromiseOrValue<boolean>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
@@ -1212,7 +1322,7 @@ export interface ImplementationInterface extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    addComment(
+    addFileComment(
       file_address: PromiseOrValue<string>,
       content: PromiseOrValue<string>,
       images: [
@@ -1223,7 +1333,7 @@ export interface ImplementationInterface extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    addSubComment(
+    addFileSubComment(
       file_address: PromiseOrValue<string>,
       target_address: PromiseOrValue<string>,
       comment_address: PromiseOrValue<string>,
@@ -1244,21 +1354,28 @@ export interface ImplementationInterface extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    getFileChildrenComments(
+      file_address: PromiseOrValue<string>,
+      comment_address: PromiseOrValue<string>,
+      cursor: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     getFileDetailInfo(
       file_address: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getOtherSimpleInfo(
-      user_address: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getRootComments(
+    getFileRootComments(
       file_address: PromiseOrValue<string>,
       cursor: PromiseOrValue<string>,
       order: PromiseOrValue<BigNumberish>,
       reverse: PromiseOrValue<boolean>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getOtherSimpleInfo(
+      user_address: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1298,6 +1415,14 @@ export interface ImplementationInterface extends BaseContract {
     upAndDownFileComment(
       file_address: PromiseOrValue<string>,
       comment_address: PromiseOrValue<string>,
+      is_up: PromiseOrValue<boolean>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    upAndDownFileSubComment(
+      file_address: PromiseOrValue<string>,
+      comment_address: PromiseOrValue<string>,
+      sub_comment_address: PromiseOrValue<string>,
       is_up: PromiseOrValue<boolean>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;

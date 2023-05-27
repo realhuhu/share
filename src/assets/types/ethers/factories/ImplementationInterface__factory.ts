@@ -41,7 +41,7 @@ const _abi = [
         type: "string[3]",
       },
     ],
-    name: "addComment",
+    name: "addFileComment",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -69,7 +69,7 @@ const _abi = [
         type: "string",
       },
     ],
-    name: "addSubComment",
+    name: "addFileSubComment",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -248,6 +248,141 @@ const _abi = [
         name: "file_address",
         type: "address",
       },
+      {
+        internalType: "address",
+        name: "comment_address",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "cursor",
+        type: "address",
+      },
+    ],
+    name: "getFileChildrenComments",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "address",
+            name: "target_address",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "comment_address",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "sub_comment_address",
+            type: "address",
+          },
+          {
+            internalType: "string",
+            name: "content",
+            type: "string",
+          },
+          {
+            components: [
+              {
+                internalType: "address",
+                name: "user_address",
+                type: "address",
+              },
+              {
+                internalType: "string",
+                name: "avatar",
+                type: "string",
+              },
+              {
+                internalType: "string",
+                name: "nickname",
+                type: "string",
+              },
+              {
+                internalType: "uint256",
+                name: "experience",
+                type: "uint256",
+              },
+            ],
+            internalType: "struct Types.UserBriefInfo",
+            name: "author",
+            type: "tuple",
+          },
+          {
+            components: [
+              {
+                internalType: "address",
+                name: "user_address",
+                type: "address",
+              },
+              {
+                internalType: "string",
+                name: "avatar",
+                type: "string",
+              },
+              {
+                internalType: "string",
+                name: "nickname",
+                type: "string",
+              },
+              {
+                internalType: "uint256",
+                name: "experience",
+                type: "uint256",
+              },
+            ],
+            internalType: "struct Types.UserBriefInfo",
+            name: "target_author",
+            type: "tuple",
+          },
+          {
+            internalType: "uint256",
+            name: "up_num",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "down_num",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "up_and_down",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "comment_timestamp",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct Types.FileChildrenComment[10]",
+        name: "children_comments",
+        type: "tuple[10]",
+      },
+      {
+        internalType: "address",
+        name: "next",
+        type: "address",
+      },
+      {
+        internalType: "bool",
+        name: "finished",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "file_address",
+        type: "address",
+      },
     ],
     name: "getFileDetailInfo",
     outputs: [
@@ -346,72 +481,6 @@ const _abi = [
     inputs: [
       {
         internalType: "address",
-        name: "user_address",
-        type: "address",
-      },
-    ],
-    name: "getOtherSimpleInfo",
-    outputs: [
-      {
-        components: [
-          {
-            internalType: "string",
-            name: "major",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "avatar",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "nickname",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "signature",
-            type: "string",
-          },
-          {
-            internalType: "uint256",
-            name: "heart",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "medal_num",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "experience",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "follower_num",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "uploaded_file_num",
-            type: "uint256",
-          },
-        ],
-        internalType: "struct Types.UserSimpleInfo",
-        name: "simple_info",
-        type: "tuple",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
         name: "file_address",
         type: "address",
       },
@@ -431,7 +500,7 @@ const _abi = [
         type: "bool",
       },
     ],
-    name: "getRootComments",
+    name: "getFileRootComments",
     outputs: [
       {
         components: [
@@ -617,6 +686,72 @@ const _abi = [
         internalType: "bool",
         name: "finished",
         type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "user_address",
+        type: "address",
+      },
+    ],
+    name: "getOtherSimpleInfo",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "string",
+            name: "major",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "avatar",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "nickname",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "signature",
+            type: "string",
+          },
+          {
+            internalType: "uint256",
+            name: "heart",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "medal_num",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "experience",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "follower_num",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "uploaded_file_num",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct Types.UserSimpleInfo",
+        name: "simple_info",
+        type: "tuple",
       },
     ],
     stateMutability: "view",
@@ -904,6 +1039,34 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "address",
+        name: "file_address",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "comment_address",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "sub_comment_address",
+        type: "address",
+      },
+      {
+        internalType: "bool",
+        name: "is_up",
+        type: "bool",
+      },
+    ],
+    name: "upAndDownFileSubComment",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "string",
         name: "avatar",
         type: "string",
@@ -979,13 +1142,7 @@ const _abi = [
       },
     ],
     name: "uploadFile",
-    outputs: [
-      {
-        internalType: "address",
-        name: "file_address",
-        type: "address",
-      },
-    ],
+    outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },

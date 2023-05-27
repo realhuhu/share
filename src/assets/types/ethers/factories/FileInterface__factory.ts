@@ -105,13 +105,7 @@ const _abi = [
       },
     ],
     name: "uploadFile",
-    outputs: [
-      {
-        internalType: "address",
-        name: "file_address",
-        type: "address",
-      },
-    ],
+    outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },
@@ -484,7 +478,7 @@ const _abi = [
         type: "string[3]",
       },
     ],
-    name: "addComment",
+    name: "addFileComment",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -535,7 +529,35 @@ const _abi = [
         type: "string",
       },
     ],
-    name: "addSubComment",
+    name: "addFileSubComment",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "file_address",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "comment_address",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "sub_comment_address",
+        type: "address",
+      },
+      {
+        internalType: "bool",
+        name: "is_up",
+        type: "bool",
+      },
+    ],
+    name: "upAndDownFileSubComment",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -563,7 +585,7 @@ const _abi = [
         type: "bool",
       },
     ],
-    name: "getRootComments",
+    name: "getFileRootComments",
     outputs: [
       {
         components: [
@@ -738,6 +760,141 @@ const _abi = [
         ],
         internalType: "struct Types.FileRootComment[10]",
         name: "root_comments",
+        type: "tuple[10]",
+      },
+      {
+        internalType: "address",
+        name: "next",
+        type: "address",
+      },
+      {
+        internalType: "bool",
+        name: "finished",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "file_address",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "comment_address",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "cursor",
+        type: "address",
+      },
+    ],
+    name: "getFileChildrenComments",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "address",
+            name: "target_address",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "comment_address",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "sub_comment_address",
+            type: "address",
+          },
+          {
+            internalType: "string",
+            name: "content",
+            type: "string",
+          },
+          {
+            components: [
+              {
+                internalType: "address",
+                name: "user_address",
+                type: "address",
+              },
+              {
+                internalType: "string",
+                name: "avatar",
+                type: "string",
+              },
+              {
+                internalType: "string",
+                name: "nickname",
+                type: "string",
+              },
+              {
+                internalType: "uint256",
+                name: "experience",
+                type: "uint256",
+              },
+            ],
+            internalType: "struct Types.UserBriefInfo",
+            name: "author",
+            type: "tuple",
+          },
+          {
+            components: [
+              {
+                internalType: "address",
+                name: "user_address",
+                type: "address",
+              },
+              {
+                internalType: "string",
+                name: "avatar",
+                type: "string",
+              },
+              {
+                internalType: "string",
+                name: "nickname",
+                type: "string",
+              },
+              {
+                internalType: "uint256",
+                name: "experience",
+                type: "uint256",
+              },
+            ],
+            internalType: "struct Types.UserBriefInfo",
+            name: "target_author",
+            type: "tuple",
+          },
+          {
+            internalType: "uint256",
+            name: "up_num",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "down_num",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "up_and_down",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "comment_timestamp",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct Types.FileChildrenComment[10]",
+        name: "children_comments",
         type: "tuple[10]",
       },
       {

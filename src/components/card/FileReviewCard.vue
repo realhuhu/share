@@ -24,9 +24,13 @@
         >
           <div v-for="(comment,k) in root_comment.comments" :key="k">
             <transition enter-active-class="animate__animated animate__fadeIn" appear>
-              <root-commend-card :comment="comment as Types.FileRootCommentStructOutput"
-                                 @clickRootComment="openEditor"
-                                 @upAndDownRootComment="upAndDownComment"/>
+              <file-root-commend-card
+                :comment="comment as Types.FileRootCommentStructOutput"
+                :index="k"
+                @clickRootComment="openEditor"
+                @upAndDownRootComment="upAndDownRootComment"
+                @openChildrenComment="openChildrenComment"
+              />
             </transition>
           </div>
         </var-list>
@@ -37,36 +41,18 @@
       </div>
     </div>
 
-
-    <transition enter-active-class="animate__animated animate__fadeInUp"
-                leave-active-class="animate__animated animate__fadeOutDown">
-      <div class="fixed left-0 md:pl-[64px] bottom-0 w-full flex justify-center items-center"
-           v-if="!show_editor">
-        <div class="w-[960px] max-w-full shadow-around flex justify-between items-center gap-6 pl-4 bg-white z-10">
-          <div @click="show_editor=true"
-               class="border-gray-200 border-[1px] px-3 py-1 my-2 rounded flex-grow text-gray-500 cursor-pointer hover:bg-gray-100">
-            评论...
-          </div>
-
-          <div class="flex justify-end items-center">
-            <div class="flex justify-center items-center cursor-pointer hover:bg-gray-100 p-2 md:p-4"
-                 @click="upAndDown(true)"
-                 :class="file_info.up_and_down.toNumber()===1?'text-[#4ebaee]':'text-gray-500'">
-              <i-mdi-like-outline class="w-5 h-5 md:w-7 md:h-7"/>
-              <div class="text-sm md:text-lg ml-1">{{ file_info.up_num }}</div>
-            </div>
-            <div class="flex justify-center items-center cursor-pointer hover:bg-gray-100 p-2 md:p-4"
-                 @click="upAndDown(false)"
-                 :class="file_info.up_and_down.toNumber()===2?'text-[#4ebaee]':'text-gray-500'">
-              <i-mdi-dislike-outline class="w-5 h-5  md:w-7 md:h-7"/>
-              <div class="text-sm md:text-lg ml-1">{{ file_info.down_num }}</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </transition>
-
-    <comment-editor v-model:show="show_editor" :file_info="file_info" :meta="editor_meta as FileReviewEditorMeta"/>
+    <file-review-input-bar v-model:show_editor="show_editor" :file_info="file_info" @upAndDown="upAndDown"/>
+    <file-comment-editor v-model:show="show_editor" :file_info="file_info" :meta="editor_meta as FileReviewEditorMeta"/>
+    <file-children-comment-modal
+      v-if="opened_comment_index!==undefined"
+      v-model:show="show_children"
+      :file_info="file_info"
+      :root_comment="root_comment.comments[opened_comment_index] as Types.FileRootCommentStructOutput"
+      :root_comment_index="opened_comment_index"
+      @clickRootComment="openEditor"
+      @clickChildrenComment="openEditor"
+      @upAndDownRootComment="upAndDownRootComment"
+    />
   </div>
 </template>
 
@@ -75,16 +61,15 @@
 import {Types} from "@/assets/types/ethers/ImplementationContact";
 import {UseStore} from "@/store";
 import {assertNotEmpty, upAndDownCallback, wait} from "@/assets/lib/utils";
-import {defineModel, ref, watch} from "vue";
+import {ref, watch} from "vue";
 import {head_address, tail_address, zero_address} from "@/assets/lib/settings";
-import {BigNumber} from "ethers";
 
 const file_info = defineModel<Types.FileDetailInfoStructOutput>("file_info", {required: true})
 
 const store = UseStore()
+
 const order = ref(0);
 const order_by = ref({order: 0, reverse: true})
-const show_editor = ref(false)
 const root_comment = ref<{
   cursor: string
   loading: boolean
@@ -97,18 +82,26 @@ const root_comment = ref<{
   comments: []
 })
 
+const show_editor = ref(false)
 const editor_meta = ref<FileReviewEditorMeta>({})
+
+const show_children = ref(false)
+const opened_comment_index = ref<number>()
+
 const contract = assertNotEmpty(store.contract, "合约未初始化")
+
 const upAndDown = async (is_up: boolean) => {
   await wait(contract.upAndDownFile(file_info.value.file_address, is_up))
   file_info.value = upAndDownCallback(file_info.value, is_up)
 }
 
-const upAndDownComment = async (comment_address: string, is_up: boolean) => {
-  await contract.upAndDownFileComment(file_info.value.file_address, comment_address, is_up)
+const upAndDownRootComment = async (comment_index: number, is_up: boolean) => {
+  await wait(contract.upAndDownFileComment(file_info.value.file_address, root_comment.value.comments[comment_index].comment_address, is_up))
+  root_comment.value.comments[comment_index] = upAndDownCallback(root_comment.value.comments[comment_index], is_up)
 }
+
 const loadRootComments = async () => {
-  const res = await contract.getRootComments(file_info.value.file_address, root_comment.value.cursor, order_by.value.order, order_by.value.reverse)
+  const res = await contract.getFileRootComments(file_info.value.file_address, root_comment.value.cursor, order_by.value.order, order_by.value.reverse)
   for (const comment of res.root_comments) {
     if (comment.comment_address === zero_address) break
     if (root_comment.value.comments.map(x => x.comment_address).indexOf(comment.comment_address) !== -1) break
@@ -128,6 +121,10 @@ const openEditor = (
   show_editor.value = true
 }
 
+const openChildrenComment = (comment_index: number) => {
+  show_children.value = true
+  opened_comment_index.value = comment_index
+}
 
 watch(order, async (new_value: number) => {
   root_comment.value = {
@@ -156,7 +153,7 @@ watch(show_editor, (new_value) => {
 loadRootComments()
 
 defineOptions({
-  name: "ReviewCard"
+  name: "FileReviewCard"
 })
 </script>
 

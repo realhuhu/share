@@ -57,7 +57,7 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
       images: string[],
       price: number | BN | string,
       txDetails?: Truffle.TransactionDetails
-    ): Promise<string>;
+    ): Promise<void>;
     sendTransaction(
       ipfs_address: string,
       name: string,
@@ -179,7 +179,7 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
     ): Promise<number>;
   };
 
-  addComment: {
+  addFileComment: {
     (
       file_address: string,
       content: string,
@@ -233,7 +233,7 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
     ): Promise<number>;
   };
 
-  addSubComment: {
+  addFileSubComment: {
     (
       file_address: string,
       target_address: string,
@@ -264,7 +264,38 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
     ): Promise<number>;
   };
 
-  getRootComments(
+  upAndDownFileSubComment: {
+    (
+      file_address: string,
+      comment_address: string,
+      sub_comment_address: string,
+      is_up: boolean,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<Truffle.TransactionResponse<AllEvents>>;
+    call(
+      file_address: string,
+      comment_address: string,
+      sub_comment_address: string,
+      is_up: boolean,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<void>;
+    sendTransaction(
+      file_address: string,
+      comment_address: string,
+      sub_comment_address: string,
+      is_up: boolean,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<string>;
+    estimateGas(
+      file_address: string,
+      comment_address: string,
+      sub_comment_address: string,
+      is_up: boolean,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<number>;
+  };
+
+  getFileRootComments(
     file_address: string,
     cursor: string,
     order: number | BN | string,
@@ -307,6 +338,38 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
       down_num: BN;
       up_and_down: BN;
       comment_num: BN;
+      comment_timestamp: BN;
+    }[];
+    1: string;
+    2: boolean;
+  }>;
+
+  getFileChildrenComments(
+    file_address: string,
+    comment_address: string,
+    cursor: string,
+    txDetails?: Truffle.TransactionDetails
+  ): Promise<{
+    0: {
+      target_address: string;
+      comment_address: string;
+      sub_comment_address: string;
+      content: string;
+      author: {
+        user_address: string;
+        avatar: string;
+        nickname: string;
+        experience: BN;
+      };
+      target_author: {
+        user_address: string;
+        avatar: string;
+        nickname: string;
+        experience: BN;
+      };
+      up_num: BN;
+      down_num: BN;
+      up_and_down: BN;
       comment_timestamp: BN;
     }[];
     1: string;
@@ -358,7 +421,7 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
         images: string[],
         price: number | BN | string,
         txDetails?: Truffle.TransactionDetails
-      ): Promise<string>;
+      ): Promise<void>;
       sendTransaction(
         ipfs_address: string,
         name: string,
@@ -480,7 +543,7 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
       ): Promise<number>;
     };
 
-    addComment: {
+    addFileComment: {
       (
         file_address: string,
         content: string,
@@ -534,7 +597,7 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
       ): Promise<number>;
     };
 
-    addSubComment: {
+    addFileSubComment: {
       (
         file_address: string,
         target_address: string,
@@ -565,7 +628,38 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
       ): Promise<number>;
     };
 
-    getRootComments(
+    upAndDownFileSubComment: {
+      (
+        file_address: string,
+        comment_address: string,
+        sub_comment_address: string,
+        is_up: boolean,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<Truffle.TransactionResponse<AllEvents>>;
+      call(
+        file_address: string,
+        comment_address: string,
+        sub_comment_address: string,
+        is_up: boolean,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<void>;
+      sendTransaction(
+        file_address: string,
+        comment_address: string,
+        sub_comment_address: string,
+        is_up: boolean,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<string>;
+      estimateGas(
+        file_address: string,
+        comment_address: string,
+        sub_comment_address: string,
+        is_up: boolean,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<number>;
+    };
+
+    getFileRootComments(
       file_address: string,
       cursor: string,
       order: number | BN | string,
@@ -608,6 +702,38 @@ export interface FileInterfaceInstance extends Truffle.ContractInstance {
         down_num: BN;
         up_and_down: BN;
         comment_num: BN;
+        comment_timestamp: BN;
+      }[];
+      1: string;
+      2: boolean;
+    }>;
+
+    getFileChildrenComments(
+      file_address: string,
+      comment_address: string,
+      cursor: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<{
+      0: {
+        target_address: string;
+        comment_address: string;
+        sub_comment_address: string;
+        content: string;
+        author: {
+          user_address: string;
+          avatar: string;
+          nickname: string;
+          experience: BN;
+        };
+        target_author: {
+          user_address: string;
+          avatar: string;
+          nickname: string;
+          experience: BN;
+        };
+        up_num: BN;
+        down_num: BN;
+        up_and_down: BN;
         comment_timestamp: BN;
       }[];
       1: string;

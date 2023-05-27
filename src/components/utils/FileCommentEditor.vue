@@ -30,7 +30,7 @@
 
 
 <script lang="ts" setup>
-import {computed, defineModel, ref} from "vue";
+import {computed, ref} from "vue";
 import {UseStore} from "@/store";
 import {assertNotEmpty, wait} from "@/assets/lib/utils";
 import {Types} from "@/assets/types/ethers/ImplementationContact";
@@ -56,9 +56,9 @@ const comment = async () => {
   try {
     const {root_comment, target_comment} = props.meta
     if (!root_comment) {
-      await wait(contract.addComment(props.file_info.file_address, content.value, images.value))
+      await wait(contract.addFileComment(props.file_info.file_address, content.value, images.value))
     } else {
-      await wait(contract.addSubComment(
+      await wait(contract.addFileSubComment(
         props.file_info.file_address,
         target_comment ? target_comment.sub_comment_address : zero_address,
         root_comment.comment_address,
@@ -88,7 +88,7 @@ const tip = computed(() => {
 })
 
 defineOptions({
-  name: "CommentEditor"
+  name: "FileCommentEditor"
 })
 </script>
 

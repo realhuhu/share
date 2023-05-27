@@ -8,7 +8,6 @@
 
 <script lang="ts" setup>
 import {UseStore} from "@/store";
-import {defineModel} from "vue";
 import {zero_address} from "@/assets/lib/settings";
 
 const category = defineModel("category", {required: true})

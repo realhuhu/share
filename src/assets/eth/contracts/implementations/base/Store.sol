@@ -503,34 +503,18 @@ library FileLib {
     ) public view returns (Types.FileBriefInfo[10] memory file_infos, address next, bool finished){
         uint index = 0;
         while (index < 10) {
-            if (reverse) {
-                if (order == 1) {
-                    cursor = self._file_by_price.getPrev(cursor);
-                } else if (order == 2) {
-                    cursor = self._file_by_buyer_num.getPrev(cursor);
-                } else {
-                    cursor = self.file_index.getPrev(cursor);
-                }
-
-                if (cursor == address(0x1)) {
-                    finished = true;
-                    break;
-                }
+            if (order == 1) {
+                cursor = self._file_by_price.get(cursor, !reverse);
+            } else if (order == 2) {
+                cursor = self._file_by_buyer_num.get(cursor, !reverse);
             } else {
-                if (order == 1) {
-                    cursor = self._file_by_price.getNext(cursor);
-                } else if (order == 2) {
-                    cursor = self._file_by_buyer_num.getNext(cursor);
-                } else {
-                    cursor = self.file_index.getNext(cursor);
-                }
-
-                if (cursor == address(0x2)) {
-                    finished = true;
-                    break;
-                }
+                cursor = self.file_index.get(cursor, !reverse);
             }
 
+            if (reverse && cursor == address(0x1) || !reverse && cursor == address(0x2)) {
+                finished = true;
+                break;
+            }
 
             if (self.file_info[cursor].category_address == category_address || category_address == address(0x0)) {
                 file_infos[index] = getFileBriefInfo(self, cursor, users);
@@ -694,6 +678,44 @@ library FileLib {
         file.comment_num++;
     }
 
+    function upAndDownSubComment(
+        Types.FileStore storage self,
+        address file_address,
+        address comment_address,
+        address sub_comment_address,
+        bool is_up
+    ) public {
+        Types.FileSubComment storage comment = self.file_info[file_address].comment_info[comment_address].sub_comment_info[sub_comment_address];
+        uint up_and_down = comment.up_and_downs[msg.sender];
+        if (up_and_down == 0) {//未操作
+            if (is_up) {
+                comment.up_and_downs[msg.sender] = 1;
+                comment.up_num++;
+            } else {
+                comment.up_and_downs[msg.sender] = 2;
+                comment.down_num++;
+            }
+        } else if (up_and_down == 1) {//已点赞
+            if (is_up) {
+                comment.up_and_downs[msg.sender] = 0;
+                comment.up_num--;
+            } else {
+                comment.up_and_downs[msg.sender] = 2;
+                comment.up_num--;
+                comment.down_num++;
+            }
+        } else if (up_and_down == 2) {//已点踩
+            if (is_up) {
+                comment.up_and_downs[msg.sender] = 1;
+                comment.up_num++;
+                comment.down_num--;
+            } else {
+                comment.up_and_downs[msg.sender] = 0;
+                comment.down_num--;
+            }
+        }
+    }
+
     function getRootComments(
         Types.FileStore storage self,
         address file_address,
@@ -706,47 +728,34 @@ library FileLib {
 
         uint index = 0;
         while (index < 10) {
-            if (reverse) {
-                if (order == 1) {
-                    cursor = file._comments_by_up_num.getPrev(cursor);
-                } else {
-                    cursor = file.comment_index.getPrev(cursor);
-                }
-
-                if (cursor == address(0x1)) {
-                    finished = true;
-                    break;
-                }
+            if (order == 1) {
+                cursor = file._comments_by_up_num.get(cursor, !reverse);
             } else {
-                if (order == 1) {
-                    cursor = file._comments_by_up_num.getNext(cursor);
-                } else {
-                    cursor = file.comment_index.getNext(cursor);
-                }
-
-                if (cursor == address(0x2)) {
-                    finished = true;
-                    break;
-                }
+                cursor = file.comment_index.get(cursor, !reverse);
             }
 
-            Types.FileComment storage file_comment = file.comment_info[cursor];
+            if (reverse && cursor == address(0x1) || !reverse && cursor == address(0x2)) {
+                finished = true;
+                break;
+            }
+
+            Types.FileComment storage comment = file.comment_info[cursor];
             Types.FileChildrenComment[2] memory children_comments;
 
             address current = address(0x1);
             Types.FileSubComment storage sub_comment;
 
             for (uint i = 0; i < 2; i++) {
-                current = file_comment.sub_comment_index.getNext(current);
+                current = comment.sub_comment_index.getNext(current);
                 if (current == address(0x2)) break;
-                sub_comment = file_comment.sub_comment_info[current];
+                sub_comment = comment.sub_comment_info[current];
                 children_comments[i] = Types.FileChildrenComment({
                     target_address: sub_comment.target_address,
                     comment_address: sub_comment.comment_address,
                     sub_comment_address: sub_comment.sub_comment_address,
                     content: sub_comment.content,
                     author: users.getOtherBriefInfo(sub_comment.author),
-                    target_author: users.getOtherBriefInfo(file_comment.sub_comment_info[sub_comment.target_address].author),
+                    target_author: users.getOtherBriefInfo(comment.sub_comment_info[sub_comment.target_address].author),
                     up_num: sub_comment.up_num,
                     down_num: sub_comment.down_num,
                     up_and_down: sub_comment.up_and_downs[msg.sender],
@@ -756,16 +765,16 @@ library FileLib {
 
 
             root_comments[index] = Types.FileRootComment({
-                comment_address: file_comment.comment_address,
+                comment_address: comment.comment_address,
                 children_comments: children_comments,
-                content: file_comment.content,
-                images: file_comment.images,
-                author: users.getOtherBriefInfo(file_comment.author),
-                up_num: file_comment.up_num,
-                down_num: file_comment.down_num,
-                up_and_down: file_comment.up_and_downs[msg.sender],
-                comment_num: file_comment.sub_comment_index.length,
-                comment_timestamp: file_comment.comment_timestamp
+                content: comment.content,
+                images: comment.images,
+                author: users.getOtherBriefInfo(comment.author),
+                up_num: comment.up_num,
+                down_num: comment.down_num,
+                up_and_down: comment.up_and_downs[msg.sender],
+                comment_num: comment.sub_comment_index.length,
+                comment_timestamp: comment.comment_timestamp
             });
 
             index++;
@@ -773,6 +782,45 @@ library FileLib {
         }
     }
 
+    function getChildrenComments(
+        Types.FileStore storage self,
+        address file_address,
+        address comment_address,
+        address cursor,
+        Types.UserStore storage users
+    ) public view returns (Types.FileChildrenComment[10] memory children_comments, address next, bool finished) {
+        Types.FileComment storage comment = self.file_info[file_address].comment_info[comment_address];
+
+        uint index = 0;
+        Types.FileSubComment storage sub_comment;
+
+        while (index < 10) {
+            cursor = comment.sub_comment_index.getNext(cursor);
+
+            if (cursor == address(0x2)) {
+                finished = true;
+                break;
+            }
+
+            sub_comment = comment.sub_comment_info[cursor];
+
+            children_comments[index] = Types.FileChildrenComment({
+                target_address: sub_comment.target_address,
+                comment_address: sub_comment.comment_address,
+                sub_comment_address: sub_comment.sub_comment_address,
+                content: sub_comment.content,
+                author: users.getOtherBriefInfo(sub_comment.author),
+                target_author: users.getOtherBriefInfo(comment.sub_comment_info[sub_comment.target_address].author),
+                up_num: sub_comment.up_num,
+                down_num: sub_comment.down_num,
+                up_and_down: sub_comment.up_and_downs[msg.sender],
+                comment_timestamp: sub_comment.comment_timestamp
+            });
+
+            index++;
+            next = cursor;
+        }
+    }
 }
 
 library CategoryLib {

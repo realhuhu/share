@@ -92,6 +92,15 @@ library AddressOrderedMap {
         prev = self._keys.getPrev(key);
     }
 
+    function get(T storage self, address key, bool behind)
+    public view returns (address res){
+        if (behind) {
+            res = getNext(self, key);
+        } else {
+            res = getPrev(self, key);
+        }
+    }
+
     function getKeys(T storage self, address cursor, bool reverse)
     public view returns (address[10] memory keys) {
         address[10] memory results = self._keys.slice(cursor, reverse);

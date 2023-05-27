@@ -18,13 +18,17 @@ interface FileInterface {
 
     function upAndDownFile(address file_address, bool is_up) external;
 
-    function addComment(address file_address, string memory content, string[3] memory images) external;
+    function addFileComment(address file_address, string memory content, string[3] memory images) external;
 
     function upAndDownFileComment(address file_address, address comment_address, bool is_up) external;
 
-    function addSubComment(address file_address, address target_address, address comment_address, string memory content) external;
+    function addFileSubComment(address file_address, address target_address, address comment_address, string memory content) external;
 
-    function getRootComments(address file_address, address cursor, uint order, bool reverse) external view returns (Types.FileRootComment[10] memory root_comments, address next, bool finished);
+    function upAndDownFileSubComment(address file_address, address comment_address, address sub_comment_address, bool is_up) external;
+
+    function getFileRootComments(address file_address, address cursor, uint order, bool reverse) external view returns (Types.FileRootComment[10] memory root_comments, address next, bool finished);
+
+    function getFileChildrenComments(address file_address, address comment_address, address cursor) external view returns (Types.FileChildrenComment[10] memory children_comments, address next, bool finished);
 }
 
 
@@ -109,7 +113,7 @@ abstract contract FileContact is BaseContact, FileInterface {
         files.upAndDown(file_address, is_up);
     }
 
-    function addComment(address file_address, string memory content, string[3] memory images)
+    function addFileComment(address file_address, string memory content, string[3] memory images)
     external {
         files.addComment(file_address, content, images);
     }
@@ -119,13 +123,23 @@ abstract contract FileContact is BaseContact, FileInterface {
         files.upAndDownComment(file_address, comment_address, is_up);
     }
 
-    function addSubComment(address file_address, address target_address, address comment_address, string memory content)
+    function addFileSubComment(address file_address, address target_address, address comment_address, string memory content)
     external {
         files.addSubComment(file_address, target_address, comment_address, content);
     }
 
-    function getRootComments(address file_address, address cursor, uint order, bool reverse)
+    function upAndDownFileSubComment(address file_address, address comment_address, address sub_comment_address, bool is_up)
+    external {
+        files.upAndDownSubComment(file_address, comment_address, sub_comment_address, is_up);
+    }
+
+    function getFileRootComments(address file_address, address cursor, uint order, bool reverse)
     external view returns (Types.FileRootComment[10] memory root_comments, address next, bool finished){
         (root_comments, next, finished) = files.getRootComments(file_address, cursor, order, reverse, users);
+    }
+
+    function getFileChildrenComments(address file_address, address comment_address, address cursor)
+    external view returns (Types.FileChildrenComment[10] memory children_comments, address next, bool finished){
+        (children_comments, next, finished) = files.getChildrenComments(file_address, comment_address, cursor, users);
     }
 }

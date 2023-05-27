@@ -31,7 +31,7 @@ export interface ImplementationInterfaceInstance
     ): Promise<number>;
   };
 
-  addComment: {
+  addFileComment: {
     (
       file_address: string,
       content: string,
@@ -58,7 +58,7 @@ export interface ImplementationInterfaceInstance
     ): Promise<number>;
   };
 
-  addSubComment: {
+  addFileSubComment: {
     (
       file_address: string,
       target_address: string,
@@ -126,6 +126,38 @@ export interface ImplementationInterfaceInstance
     2: boolean;
   }>;
 
+  getFileChildrenComments(
+    file_address: string,
+    comment_address: string,
+    cursor: string,
+    txDetails?: Truffle.TransactionDetails
+  ): Promise<{
+    0: {
+      target_address: string;
+      comment_address: string;
+      sub_comment_address: string;
+      content: string;
+      author: {
+        user_address: string;
+        avatar: string;
+        nickname: string;
+        experience: BN;
+      };
+      target_author: {
+        user_address: string;
+        avatar: string;
+        nickname: string;
+        experience: BN;
+      };
+      up_num: BN;
+      down_num: BN;
+      up_and_down: BN;
+      comment_timestamp: BN;
+    }[];
+    1: string;
+    2: boolean;
+  }>;
+
   getFileDetailInfo(
     file_address: string,
     txDetails?: Truffle.TransactionDetails
@@ -148,22 +180,7 @@ export interface ImplementationInterfaceInstance
     upload_timestamp: BN;
   }>;
 
-  getOtherSimpleInfo(
-    user_address: string,
-    txDetails?: Truffle.TransactionDetails
-  ): Promise<{
-    major: string;
-    avatar: string;
-    nickname: string;
-    signature: string;
-    heart: BN;
-    medal_num: BN;
-    experience: BN;
-    follower_num: BN;
-    uploaded_file_num: BN;
-  }>;
-
-  getRootComments(
+  getFileRootComments(
     file_address: string,
     cursor: string,
     order: number | BN | string,
@@ -210,6 +227,21 @@ export interface ImplementationInterfaceInstance
     }[];
     1: string;
     2: boolean;
+  }>;
+
+  getOtherSimpleInfo(
+    user_address: string,
+    txDetails?: Truffle.TransactionDetails
+  ): Promise<{
+    major: string;
+    avatar: string;
+    nickname: string;
+    signature: string;
+    heart: BN;
+    medal_num: BN;
+    experience: BN;
+    follower_num: BN;
+    uploaded_file_num: BN;
   }>;
 
   getSelfFileBriefInfos(
@@ -355,6 +387,37 @@ export interface ImplementationInterfaceInstance
     ): Promise<number>;
   };
 
+  upAndDownFileSubComment: {
+    (
+      file_address: string,
+      comment_address: string,
+      sub_comment_address: string,
+      is_up: boolean,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<Truffle.TransactionResponse<AllEvents>>;
+    call(
+      file_address: string,
+      comment_address: string,
+      sub_comment_address: string,
+      is_up: boolean,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<void>;
+    sendTransaction(
+      file_address: string,
+      comment_address: string,
+      sub_comment_address: string,
+      is_up: boolean,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<string>;
+    estimateGas(
+      file_address: string,
+      comment_address: string,
+      sub_comment_address: string,
+      is_up: boolean,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<number>;
+  };
+
   updateAvatar: {
     (avatar: string, txDetails?: Truffle.TransactionDetails): Promise<
       Truffle.TransactionResponse<AllEvents>
@@ -426,7 +489,7 @@ export interface ImplementationInterfaceInstance
       images: string[],
       price: number | BN | string,
       txDetails?: Truffle.TransactionDetails
-    ): Promise<string>;
+    ): Promise<void>;
     sendTransaction(
       ipfs_address: string,
       name: string,
@@ -474,7 +537,7 @@ export interface ImplementationInterfaceInstance
       ): Promise<number>;
     };
 
-    addComment: {
+    addFileComment: {
       (
         file_address: string,
         content: string,
@@ -501,7 +564,7 @@ export interface ImplementationInterfaceInstance
       ): Promise<number>;
     };
 
-    addSubComment: {
+    addFileSubComment: {
       (
         file_address: string,
         target_address: string,
@@ -569,6 +632,38 @@ export interface ImplementationInterfaceInstance
       2: boolean;
     }>;
 
+    getFileChildrenComments(
+      file_address: string,
+      comment_address: string,
+      cursor: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<{
+      0: {
+        target_address: string;
+        comment_address: string;
+        sub_comment_address: string;
+        content: string;
+        author: {
+          user_address: string;
+          avatar: string;
+          nickname: string;
+          experience: BN;
+        };
+        target_author: {
+          user_address: string;
+          avatar: string;
+          nickname: string;
+          experience: BN;
+        };
+        up_num: BN;
+        down_num: BN;
+        up_and_down: BN;
+        comment_timestamp: BN;
+      }[];
+      1: string;
+      2: boolean;
+    }>;
+
     getFileDetailInfo(
       file_address: string,
       txDetails?: Truffle.TransactionDetails
@@ -591,22 +686,7 @@ export interface ImplementationInterfaceInstance
       upload_timestamp: BN;
     }>;
 
-    getOtherSimpleInfo(
-      user_address: string,
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<{
-      major: string;
-      avatar: string;
-      nickname: string;
-      signature: string;
-      heart: BN;
-      medal_num: BN;
-      experience: BN;
-      follower_num: BN;
-      uploaded_file_num: BN;
-    }>;
-
-    getRootComments(
+    getFileRootComments(
       file_address: string,
       cursor: string,
       order: number | BN | string,
@@ -653,6 +733,21 @@ export interface ImplementationInterfaceInstance
       }[];
       1: string;
       2: boolean;
+    }>;
+
+    getOtherSimpleInfo(
+      user_address: string,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<{
+      major: string;
+      avatar: string;
+      nickname: string;
+      signature: string;
+      heart: BN;
+      medal_num: BN;
+      experience: BN;
+      follower_num: BN;
+      uploaded_file_num: BN;
     }>;
 
     getSelfFileBriefInfos(
@@ -798,6 +893,37 @@ export interface ImplementationInterfaceInstance
       ): Promise<number>;
     };
 
+    upAndDownFileSubComment: {
+      (
+        file_address: string,
+        comment_address: string,
+        sub_comment_address: string,
+        is_up: boolean,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<Truffle.TransactionResponse<AllEvents>>;
+      call(
+        file_address: string,
+        comment_address: string,
+        sub_comment_address: string,
+        is_up: boolean,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<void>;
+      sendTransaction(
+        file_address: string,
+        comment_address: string,
+        sub_comment_address: string,
+        is_up: boolean,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<string>;
+      estimateGas(
+        file_address: string,
+        comment_address: string,
+        sub_comment_address: string,
+        is_up: boolean,
+        txDetails?: Truffle.TransactionDetails
+      ): Promise<number>;
+    };
+
     updateAvatar: {
       (avatar: string, txDetails?: Truffle.TransactionDetails): Promise<
         Truffle.TransactionResponse<AllEvents>
@@ -872,7 +998,7 @@ export interface ImplementationInterfaceInstance
         images: string[],
         price: number | BN | string,
         txDetails?: Truffle.TransactionDetails
-      ): Promise<string>;
+      ): Promise<void>;
       sendTransaction(
         ipfs_address: string,
         name: string,

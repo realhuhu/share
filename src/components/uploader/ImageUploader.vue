@@ -14,7 +14,7 @@
 <script lang="ts" setup>
 
 import {Snackbar, VarFile} from "@varlet/ui";
-import {defineModel, ref} from "vue";
+import {ref} from "vue";
 import {UseStore} from "@/store";
 
 const images = defineModel<Images>("images", {required: true})

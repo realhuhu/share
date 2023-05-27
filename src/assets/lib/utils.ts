@@ -135,7 +135,7 @@ export const wait = async (func: Promise<ContractTransaction>) => {
   const res = await func
   Snackbar({
     content: "处理中...",
-    type: "warning"
+    type: "success"
   })
   await res.wait()
   Snackbar({

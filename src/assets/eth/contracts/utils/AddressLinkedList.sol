@@ -52,6 +52,7 @@ library AddressLinkedList {
         self.length = 0;
     }
 
+
     function getNext(T storage self, address data)
     _initialized_(self) _contain_(self, data) _notTailGuard_(data)
     public view returns (address next) {
@@ -62,6 +63,15 @@ library AddressLinkedList {
     _initialized_(self) _contain_(self, data) _notHeadGuard_(data)
     public view returns (address prev) {
         prev = self._prev[data];
+    }
+
+    function get(T storage self, address data, bool behind)
+    public view returns (address res) {
+        if (behind) {
+            res = getNext(self, data);
+        } else {
+            res = getPrev(self, data);
+        }
     }
 
     function isContain(T storage self, address data)

@@ -15,7 +15,7 @@
         <var-divider class="md:hidden w-full" margin="0"/>
 
         <transition enter-active-class="animate__animated animate__fadeIn" appear>
-          <review-card v-if="file_info" v-model:file_info="file_info"/>
+          <file-review-card v-if="file_info" v-model:file_info="file_info"/>
         </transition>
       </div>
     </div>
@@ -30,6 +30,7 @@ import {assertNotEmpty} from "@/assets/lib/utils";
 import {ref} from "vue";
 import {Types} from "@/assets/types/ethers/ImplementationContact";
 import FileInfoCard from "@/components/card/FileInfoCard.vue";
+import FileReviewCard from "@/components/card/FileReviewCard.vue";
 
 const route = useRoute()
 const store = UseStore()
