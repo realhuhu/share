@@ -8,6 +8,9 @@ import "../../utils/Uint.sol";
 import "../../utils/String.sol";
 import "../../utils/Bytes32.sol";
 
+import "../../utils/Common.sol";
+
+
 abstract contract Types {
     /* 用户相关模型 */
     //用户全部信息
@@ -190,18 +193,6 @@ abstract contract Types {
         uint comment_timestamp;//评论时间
     }
 
-    //文件表
-    struct FileStore {
-        mapping(address => File) file_info;//文件信息
-
-        AddressLinkedList.T file_index;//文件地址
-
-        AddressOrderedMap.T _file_by_price;//价格索引
-        AddressOrderedMap.T _file_by_up_num;//购买量索引
-        AddressOrderedMap.T _file_by_buyer_num;//购买量索引
-    }
-
-
     struct FileBriefInfo {
         address file_address;//地址
         address category_address;//分类
@@ -247,6 +238,16 @@ abstract contract Types {
         uint upload_timestamp;//上传时间
     }
 
+    //文件表
+    struct FileStore {
+        mapping(address => File) file_info;//文件信息
+
+        AddressLinkedList.T file_index;//文件地址
+
+        AddressOrderedMap.T _file_by_price;//价格索引
+        AddressOrderedMap.T _file_by_up_num;//点赞索引
+        AddressOrderedMap.T _file_by_buyer_num;//购买量索引
+    }
 
     struct Category {
         address category_address;
@@ -262,6 +263,110 @@ abstract contract Types {
         AddressLinkedList.T category_index;
     }
 
+    /* 悬赏相关模型 */
+    //悬赏全部信息
+    struct Reward {
+        address author;//作者
+        address reward_address;//悬赏地址
+        address approved_comment;//被采纳的评论
+
+        string title;//标题
+        string content;//内容
+        string description;//描述
+
+        string[3] images;//图片
+
+        uint up_num;//点赞次数
+        uint down_num;//点踩次数
+        uint comment_num;//点踩次数
+        uint remuneration;//酬金
+        uint update_timestamp;//更新时间
+        uint create_timestamp;//上传时间
+
+        mapping(address => uint) up_and_downs;//已点赞用户
+        mapping(address => RewardComment) comment_info;//评论信息
+    }
+
+    //评论
+    struct RewardComment {
+        address author;//作者
+        address file_address;//文件地址
+        address comment_address;//评论地址
+
+        string content;//内容
+        string[3] images;//图片
+
+        uint up_num;//点赞次数
+        uint down_num;//点踩次数
+        uint comment_timestamp;//评论时间
+
+        mapping(address => uint) up_and_downs;//已点赞用户
+        mapping(address => RewardSubComment) sub_comment_info;//子评论信息
+
+        AddressLinkedList.T sub_comment_index;//子评论
+    }
+
+    //子评论
+    struct RewardSubComment {
+        address author;//作者
+        address target_address;//被回复的子评论地址
+        address comment_address;//根评论地址
+        address sub_comment_address;//子评论地址
+
+        string content;//内容
+
+        uint up_num;//点赞次数
+        uint down_num;//点踩次数
+        uint comment_timestamp;//评论时间
+
+        mapping(address => uint) up_and_downs;//已点赞用户
+    }
+
+    struct RewardRootComment {
+        address comment_address;
+
+        FileBriefInfo file_info;
+
+        RewardChildrenComment[2] children_comments;
+
+        string content;//内容
+        string[3] images;//图片
+
+        UserBriefInfo author;
+
+        uint up_num;//点赞次数
+        uint down_num;//点踩次数
+        uint up_and_down;
+        uint comment_num;//评论数
+        uint comment_timestamp;//评论时间
+    }
+
+    struct RewardChildrenComment {
+        address target_address;//被回复的子评论地址
+        address comment_address;//根评论地址
+        address sub_comment_address;//子评论地址
+
+        string content;//内容
+
+        UserBriefInfo author;
+        UserBriefInfo target_author;
+
+        uint up_num;//点赞次数
+        uint down_num;//点踩次数
+        uint up_and_down;
+        uint comment_timestamp;//评论时间
+    }
+
+    //悬赏表
+    struct RewardStore {
+        mapping(address => Reward) reward_info;//悬赏信息
+
+        AddressLinkedList.T reward_index;//悬赏地址
+
+        AddressOrderedMap.T _reward_by_price;//价格排序
+        AddressOrderedMap.T _reward_by_up_num;//点赞数排序
+        AddressOrderedMap.T _reward_by_update_time;//更新时间排序
+    }
 }
 
 library UserLib {
@@ -418,9 +523,8 @@ library FileLib {
         address category_address,
         string[3] memory images,
         uint price
-    )
-    public returns (address file_address){
-        file_address = keccak256(abi.encodePacked(title)).toAddress();
+    ) public returns (address file_address){
+        file_address = keccak256(abi.encodePacked(ipfs_address, title, msg.sender, block.timestamp)).toAddress();
 
         require(!isContain(self, file_address), "FileLib>uploadFile");
 
@@ -553,33 +657,17 @@ library FileLib {
     public {
         Types.File storage file = self.file_info[file_address];
         uint up_and_down = file.up_and_downs[msg.sender];
-        if (up_and_down == 0) {//未操作
-            if (is_up) {
-                file.up_and_downs[msg.sender] = 1;
-                file.up_num++;
-            } else {
-                file.up_and_downs[msg.sender] = 2;
-                file.down_num++;
-            }
-        } else if (up_and_down == 1) {//已点赞
-            if (is_up) {
-                file.up_and_downs[msg.sender] = 0;
-                file.up_num--;
-            } else {
-                file.up_and_downs[msg.sender] = 2;
-                file.up_num--;
-                file.down_num++;
-            }
-        } else if (up_and_down == 2) {//已点踩
-            if (is_up) {
-                file.up_and_downs[msg.sender] = 1;
-                file.up_num++;
-                file.down_num--;
-            } else {
-                file.up_and_downs[msg.sender] = 0;
-                file.down_num--;
-            }
-        }
+
+        uint _up_and_down;
+        uint _up_num;
+        uint _down_num;
+
+        (_up_and_down, _up_num, _down_num) = Common.upAndDown(up_and_down, file.up_num, file.down_num, is_up);
+
+        file.up_and_downs[msg.sender] = _up_and_down;
+        file.up_num = _up_num;
+        file.down_num = _down_num;
+
 
         self._file_by_up_num.update(AddressOrderedMap.Item(file_address, file.up_num));
     }
@@ -619,33 +707,18 @@ library FileLib {
     ) public {
         Types.FileComment storage comment = self.file_info[file_address].comment_info[comment_address];
         uint up_and_down = comment.up_and_downs[msg.sender];
-        if (up_and_down == 0) {//未操作
-            if (is_up) {
-                comment.up_and_downs[msg.sender] = 1;
-                comment.up_num++;
-            } else {
-                comment.up_and_downs[msg.sender] = 2;
-                comment.down_num++;
-            }
-        } else if (up_and_down == 1) {//已点赞
-            if (is_up) {
-                comment.up_and_downs[msg.sender] = 0;
-                comment.up_num--;
-            } else {
-                comment.up_and_downs[msg.sender] = 2;
-                comment.up_num--;
-                comment.down_num++;
-            }
-        } else if (up_and_down == 2) {//已点踩
-            if (is_up) {
-                comment.up_and_downs[msg.sender] = 1;
-                comment.up_num++;
-                comment.down_num--;
-            } else {
-                comment.up_and_downs[msg.sender] = 0;
-                comment.down_num--;
-            }
-        }
+
+
+        uint _up_and_down;
+        uint _up_num;
+        uint _down_num;
+
+        (_up_and_down, _up_num, _down_num) = Common.upAndDown(up_and_down, comment.up_num, comment.down_num, is_up);
+
+        comment.up_and_downs[msg.sender] = _up_and_down;
+        comment.up_num = _up_num;
+        comment.down_num = _down_num;
+
 
         self.file_info[file_address]._comments_by_up_num.update(AddressOrderedMap.Item(comment_address, comment.up_num));
     }
@@ -687,33 +760,16 @@ library FileLib {
     ) public {
         Types.FileSubComment storage comment = self.file_info[file_address].comment_info[comment_address].sub_comment_info[sub_comment_address];
         uint up_and_down = comment.up_and_downs[msg.sender];
-        if (up_and_down == 0) {//未操作
-            if (is_up) {
-                comment.up_and_downs[msg.sender] = 1;
-                comment.up_num++;
-            } else {
-                comment.up_and_downs[msg.sender] = 2;
-                comment.down_num++;
-            }
-        } else if (up_and_down == 1) {//已点赞
-            if (is_up) {
-                comment.up_and_downs[msg.sender] = 0;
-                comment.up_num--;
-            } else {
-                comment.up_and_downs[msg.sender] = 2;
-                comment.up_num--;
-                comment.down_num++;
-            }
-        } else if (up_and_down == 2) {//已点踩
-            if (is_up) {
-                comment.up_and_downs[msg.sender] = 1;
-                comment.up_num++;
-                comment.down_num--;
-            } else {
-                comment.up_and_downs[msg.sender] = 0;
-                comment.down_num--;
-            }
-        }
+
+        uint _up_and_down;
+        uint _up_num;
+        uint _down_num;
+
+        (_up_and_down, _up_num, _down_num) = Common.upAndDown(up_and_down, comment.up_num, comment.down_num, is_up);
+
+        comment.up_and_downs[msg.sender] = _up_and_down;
+        comment.up_num = _up_num;
+        comment.down_num = _down_num;
     }
 
     function getRootComments(
@@ -871,47 +927,42 @@ library CategoryLib {
 
 }
 
+library RewardLib {
+    using AddressLinkedList for AddressLinkedList.T;
+    using AddressOrderedMap for AddressOrderedMap.T;
+
+    function init(Types.RewardStore storage self)
+    public {
+        self.reward_index.init();
+        self._reward_by_price.init();
+        self._reward_by_up_num.init();
+        self._reward_by_update_time.init();
+    }
+
+    function isContain(Types.RewardStore storage self, address reward_address)
+    public view returns (bool is_contain) {
+        is_contain = self.reward_index.isContain(reward_address);
+    }
+
+    function createReward(
+        Types.RewardStore storage self,
+        string memory title,
+        string memory content,
+        string memory description,
+        string[3] memory images,
+        uint remuneration
+    ) public returns (address reward_address) {
+        reward_address = keccak256(abi.encodePacked(title, msg.sender, block.timestamp)).toAddress();
+    }
+}
+
 abstract contract StoreContact {
     Types.UserStore users;//所有用户
     Types.FileStore files;//所有文件
     Types.CategoryStore categories;//分类
+    Types.RewardStore rewards;
 
-    //    /* 悬赏相关模型 */
-    //    //悬赏全部信息
-    //    struct Reward {
-    //        address author;//作者
-    //        address reward;
-    //        address approved_comment;//被采纳的评论
-    //
-    //        string title;//标题
-    //        string content;//内容
-    //        string description;//描述
-    //
-    //        string[3] images;//图片
-    //
-    //        uint up_num;//点赞次数
-    //        uint view_num;//浏览次数
-    //        uint down_num;//点踩次数
-    //        uint comment_num;//点踩次数
-    //        uint remuneration;//酬金
-    //        uint update_timestamp;//更新时间
-    //        uint create_timestamp;//上传时间
-    //
-    //        mapping(address => uint) up_and_downs;//已点赞用户
-    //    }
-    //
-    //    //悬赏表
-    //    struct RewardStore {
-    //        mapping(address => Reward) reward_info;//悬赏信息
-    //
-    //        AddressLinkedList.T reward_index;//悬赏地址
-    //
-    //        AddressOrderedMap.T _reward_by_update_timestamp;//悬赏按更新时间排序
-    //        AddressOrderedMap.T _reward_by_view_num;//悬赏按浏览人数排序
-    //        AddressOrderedMap.T _reward_by_up_num;//悬赏按点赞数排序
-    //        AddressOrderedMap.T _reward_by_comment_num;//悬赏按评论数排序
-    //    }
-    //
+
     //    RewardStore rewards;//所有悬赏
     //
     //    /* 消息模型 */

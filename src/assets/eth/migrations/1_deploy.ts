@@ -25,9 +25,14 @@ module.exports = async (
   const FileLib = artifacts.require("FileLib");
   // @ts-ignore
   const CategoryLib = artifacts.require("CategoryLib");
+  // @ts-ignore
+  const Common = artifacts.require("Common");
 
   const Implementation = artifacts.require("ImplementationContact");
   const OurShare = await artifacts.require("OurShare")
+
+
+  await deployer.deploy(Common);
 
   await deployer.deploy(AddressLinkedList);
 
@@ -46,6 +51,7 @@ module.exports = async (
   deployer.link(AddressOrderedMap, FileLib)
   deployer.link(Bytes32Lib, FileLib)
   deployer.link(UserLib, FileLib)
+  deployer.link(Common, FileLib)
   await deployer.deploy(FileLib);
 
   deployer.link(AddressLinkedList, CategoryLib)

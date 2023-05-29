@@ -3,42 +3,51 @@
     <home-header class="flex md:hidden"/>
 
     <div class="w-[1280px] max-w-full md:mt-24 md:px-6">
-      <var-tabs v-model:active="current_category" class="md:hidden" style="padding: 0">
-        <var-tab v-for="(category,k) of store.categories" :key="k" :name="category.category_address">
-          {{ category.name }} ({{ category.num }})
-        </var-tab>
-      </var-tabs>
 
-      <var-button text v-for="(category,k) of store.categories" :key="k" class="hidden md:inline"
-                  @click="current_category=category.category_address"
-                  :class="current_category===category.category_address?'text-[#4ebaee] underline':'text-gray-500'">
-        {{ category.name }} ({{ category.num }})
-      </var-button>
-      <var-divider margin="0"/>
+      <var-sticky>
+        <var-tabs v-model:active="current_category" class="md:hidden" style="padding: 0">
+          <var-tab v-for="(category,k) of store.categories" :key="k" :name="category.category_address">
+            {{ category.name }} ({{ category.num }})
+          </var-tab>
+        </var-tabs>
+      </var-sticky>
 
-      <div class="flex justify-end md:mr-6">
-        <var-menu placement="bottom-end" class="cursor-pointer md:hover:bg-gray-100 md:p-2 p-1 duration-75"
-                  v-model:show="show_menu">
-          <div class="flex justify-start items-center text-gray-500">
-            {{ orders[current_order].text }}
-            <var-icon name="menu-down"/>
-          </div>
+      <var-sticky>
+        <div class=" bg-white py-2">
+          <var-button text v-for="(category,k) of store.categories" :key="k" class="hidden md:inline"
+                      @click="current_category=category.category_address"
+                      :class="current_category===category.category_address?'text-[#4ebaee] underline':'text-gray-500'">
+            {{ category.name }} ({{ category.num }})
+          </var-button>
+        </div>
 
-          <template #menu>
-            <div v-for="(order,k) in orders" :key="k" :class="k===current_order?'text-[#4ebaee]':''"
-                 class="cursor-pointer hover:bg-blue-100 p-2 duration-200" @click="current_order=k">
-              {{ order.text }}
+        <var-divider margin="0"/>
+      </var-sticky>
+
+      <var-sticky>
+        <div class="flex justify-end  py-2">
+          <var-menu placement="bottom-end" class="cursor-pointer md:hover:bg-gray-100 md:p-2 p-1 duration-75"
+                    v-model:show="show_menu">
+            <div class="flex justify-start items-center text-gray-500">
+              {{ orders[current_order].text }}
+              <var-icon name="menu-down"/>
             </div>
-          </template>
-        </var-menu>
-      </div>
+
+            <template #menu>
+              <div v-for="(order,k) in orders" :key="k" :class="k===current_order?'text-[#4ebaee]':''"
+                   class="cursor-pointer hover:bg-blue-100 p-2 duration-200" @click="current_order=k">
+                {{ order.text }}
+              </div>
+            </template>
+          </var-menu>
+        </div>
+      </var-sticky>
 
       <var-list
-        class="w-[1280px] max-w-full pb-24"
+        class="w-[1280px] max-w-full pb-24 min-h-screen"
         :finished="finished"
         v-model:loading="loading"
         @load="load"
-        :immediate-check="false"
       >
         <div class="flex items-start justify-start flex-wrap">
           <div v-for="(file_info,k) in files" :key="k" class="lg:w-[50%] w-full p-2">
@@ -47,6 +56,8 @@
             </transition>
           </div>
         </div>
+
+        <div v-if="!finished&&!loading" class="text-center text-gray-500">下滑加载</div>
       </var-list>
     </div>
   </div>

@@ -1,11 +1,15 @@
 <template>
   <router-view v-slot="{ Component }" class="md:pl-[64px]">
-    <suspense>
+    <suspense v-if="show">
       <!--    <transition :name="page_animation">-->
-      <component v-if="show" :is="Component"/>
-      <access-help v-else/>
+      <component :is="Component"/>
       <!--    </transition>-->
+      <template #fallback>
+        加载中...
+      </template>
     </suspense>
+
+    <access-help v-else/>
   </router-view>
 
   <home-sidebar class="hidden md:flex"/>
