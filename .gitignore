@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 
 src/assets/eth/contracts/artifacts
+src/assets/eth/build
+src/assets/types/ethers
+src/assets/types/truffle

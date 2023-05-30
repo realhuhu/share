@@ -126,6 +126,51 @@ abstract contract Types {
         AddressOrderedMap.T _comments_by_up_num;//评论按点赞排序
     }
 
+    struct FileBriefInfo {
+        address file_address;//地址
+        address category_address;//分类
+
+        bool is_buy;//是否已购买
+
+        string name;//文件名
+        string title;//标题
+        string owner;//上传者用户名
+        string description;//描述
+
+        string cover;//图片
+
+        uint price;//价格
+        uint up_num;//点赞数
+        uint down_num;//点踩数
+        uint buyer_num;//购买量
+        uint comment_num;//评论数
+        uint up_and_down;//点赞点踩
+        uint upload_timestamp;//上传时间
+    }
+
+    struct FileDetailInfo {
+        address owner;//上传者地址
+        address file_address;//地址
+        address category_address;//分类
+
+        bool is_buy;//是否已购买
+
+        string name;//文件名
+        string title;//标题
+        string description;//描述
+        string ipfs_address;//ipfs地址
+
+        string[3] images;//图片
+
+        uint price;//价格
+        uint up_num;//点赞数
+        uint down_num;//点踩数
+        uint buyer_num;//购买量
+        uint comment_num;//评论数
+        uint up_and_down;//点赞点踩
+        uint upload_timestamp;//上传时间
+    }
+
     //评论
     struct FileComment {
         address author;//作者
@@ -193,51 +238,6 @@ abstract contract Types {
         uint comment_timestamp;//评论时间
     }
 
-    struct FileBriefInfo {
-        address file_address;//地址
-        address category_address;//分类
-
-        bool is_buy;//是否已购买
-
-        string name;//文件名
-        string title;//标题
-        string owner;//上传者用户名
-        string description;//描述
-
-        string cover;//图片
-
-        uint price;//价格
-        uint up_num;//点赞数
-        uint down_num;//点踩数
-        uint buyer_num;//购买量
-        uint comment_num;//评论数
-        uint up_and_down;//点赞点踩
-        uint upload_timestamp;//上传时间
-    }
-
-    struct FileDetailInfo {
-        address owner;//上传者地址
-        address file_address;//地址
-        address category_address;//分类
-
-        bool is_buy;//是否已购买
-
-        string name;//文件名
-        string title;//标题
-        string description;//描述
-        string ipfs_address;//ipfs地址
-
-        string[3] images;//图片
-
-        uint price;//价格
-        uint up_num;//点赞数
-        uint down_num;//点踩数
-        uint buyer_num;//购买量
-        uint comment_num;//评论数
-        uint up_and_down;//点赞点踩
-        uint upload_timestamp;//上传时间
-    }
-
     //文件表
     struct FileStore {
         mapping(address => File) file_info;//文件信息
@@ -271,7 +271,6 @@ abstract contract Types {
         address approved_comment;//被采纳的评论
 
         string title;//标题
-        string content;//内容
         string description;//描述
 
         string[3] images;//图片
@@ -285,7 +284,47 @@ abstract contract Types {
 
         mapping(address => uint) up_and_downs;//已点赞用户
         mapping(address => RewardComment) comment_info;//评论信息
+
+        AddressLinkedList.T comment_index;//评论地址
+        AddressOrderedMap.T _comments_by_up_num;//评论按点赞排序
     }
+
+    struct RewardBriefInfo {
+        address reward_address;//悬赏地址
+        address approved_comment;//被采纳的评论
+
+        string cover;//图片
+        string title;//标题
+        string author;//作者
+        string description;//描述
+
+        uint up_num;//点赞次数
+        uint down_num;//点踩次数
+        uint up_and_down;
+        uint comment_num;//点踩次数
+        uint remuneration;//酬金
+        uint update_timestamp;//更新时间
+    }
+
+    struct RewardDetailInfo {
+        address author;//作者
+        address reward_address;//悬赏地址
+        address approved_comment;//被采纳的评论
+
+        string title;//标题
+        string description;//描述
+
+        string[3] images;//图片
+
+        uint up_num;//点赞次数
+        uint down_num;//点踩次数
+        uint up_and_down;
+        uint comment_num;//点踩次数
+        uint remuneration;//酬金
+        uint create_timestamp;//上传时间
+        uint update_timestamp;//更新时间
+    }
+
 
     //评论
     struct RewardComment {
@@ -363,9 +402,9 @@ abstract contract Types {
 
         AddressLinkedList.T reward_index;//悬赏地址
 
-        AddressOrderedMap.T _reward_by_price;//价格排序
         AddressOrderedMap.T _reward_by_up_num;//点赞数排序
         AddressOrderedMap.T _reward_by_update_time;//更新时间排序
+        AddressOrderedMap.T _reward_by_remuneration;//价格排序
     }
 }
 
@@ -492,6 +531,12 @@ library UserLib {
     public {
         self.user_info[msg.sender].uploaded_files.append(file_address);
     }
+
+    //上传文件后
+    function afterCreateReward(Types.UserStore storage self, address reward_address)
+    public {
+        self.user_info[msg.sender].rewards.append(reward_address);
+    }
 }
 
 library FileLib {
@@ -594,7 +639,6 @@ library FileLib {
             }
             file_infos[i] = getFileBriefInfo(self, next, users);
         }
-
     }
 
     function getFileBriefInfos(
@@ -930,13 +974,15 @@ library CategoryLib {
 library RewardLib {
     using AddressLinkedList for AddressLinkedList.T;
     using AddressOrderedMap for AddressOrderedMap.T;
+    using Bytes32Lib for bytes32;
 
+    using UserLib for Types.UserStore;
     function init(Types.RewardStore storage self)
     public {
         self.reward_index.init();
-        self._reward_by_price.init();
         self._reward_by_up_num.init();
         self._reward_by_update_time.init();
+        self._reward_by_remuneration.init();
     }
 
     function isContain(Types.RewardStore storage self, address reward_address)
@@ -947,12 +993,132 @@ library RewardLib {
     function createReward(
         Types.RewardStore storage self,
         string memory title,
-        string memory content,
         string memory description,
         string[3] memory images,
         uint remuneration
     ) public returns (address reward_address) {
         reward_address = keccak256(abi.encodePacked(title, msg.sender, block.timestamp)).toAddress();
+
+        Types.Reward storage reward_info = self.reward_info[reward_address];
+
+        reward_info.author = msg.sender;
+        reward_info.reward_address = reward_address;
+
+        reward_info.title = title;
+        reward_info.description = description;
+
+        reward_info.images = images;
+
+        reward_info.remuneration = remuneration;
+
+        reward_info.create_timestamp = block.timestamp;
+        reward_info.update_timestamp = block.timestamp;
+
+        reward_info.comment_index.init();
+        reward_info._comments_by_up_num.init();
+
+        self.reward_index.append(reward_address);
+        self._reward_by_up_num.update(AddressOrderedMap.Item(reward_address, 0));
+        self._reward_by_update_time.update(AddressOrderedMap.Item(reward_address, 0));
+        self._reward_by_remuneration.update(AddressOrderedMap.Item(reward_address, remuneration));
+    }
+
+    function getRewardBriefInfo(
+        Types.RewardStore storage self,
+        address reward_address,
+        Types.UserStore storage users
+    ) public view returns (Types.RewardBriefInfo memory reward_info){
+        Types.Reward storage reward = self.reward_info[reward_address];
+
+        reward_info = Types.RewardBriefInfo({
+            reward_address: reward.reward_address,
+            approved_comment: reward.approved_comment,
+            cover: reward.images[0],
+            title: reward.title,
+            author: users.user_info[reward.author].nickname,
+            description: reward.description,
+            up_num: reward.up_num,
+            down_num: reward.down_num,
+            up_and_down: reward.up_and_downs[msg.sender],
+            comment_num: reward.comment_num,
+            remuneration: reward.remuneration,
+            update_timestamp: reward.update_timestamp
+        });
+    }
+
+    function getSelfRewardBriefInfos(
+        Types.RewardStore storage self,
+        address cursor,
+        bool reverse,
+        Types.UserStore storage users
+    ) public view returns (Types.RewardBriefInfo[10] memory reward_infos, address next, bool finished){
+        address[10] memory reward_index_slice = users.user_info[msg.sender].rewards.slice(cursor, reverse);
+
+        for (uint i = 0; i < 10; i++) {
+            next = reward_index_slice[i];
+            if (next == address(0x0)) {
+                finished = true;
+                break;
+            }
+            reward_infos[i] = getRewardBriefInfo(self, next, users);
+        }
+    }
+
+    function getRewardBriefInfos(
+        Types.RewardStore storage self,
+        address cursor,
+        uint solved,
+        uint order,
+        bool reverse,
+        Types.UserStore storage users
+    ) public view returns (Types.RewardBriefInfo[10] memory reward_infos, address next, bool finished){
+        uint index = 0;
+        while (index < 10) {
+            if (order == 1) {
+                cursor = self._reward_by_up_num.get(cursor, !reverse);
+            } else if (order == 2) {
+                cursor = self._reward_by_update_time.get(cursor, !reverse);
+            } else if (order == 3) {
+                cursor = self._reward_by_remuneration.get(cursor, !reverse);
+            } else {
+                cursor = self.reward_index.get(cursor, !reverse);
+            }
+
+            if (reverse && cursor == address(0x1) || !reverse && cursor == address(0x2)) {
+                finished = true;
+                break;
+            }
+
+            bool is_solved = self.reward_info[cursor].approved_comment != address(0x0);
+
+            if (is_solved && solved == 1 || !is_solved && solved == 2 || solved == 0) {
+                reward_infos[index] = getRewardBriefInfo(self, cursor, users);
+                index++;
+            }
+
+            next = cursor;
+        }
+    }
+
+    function getRewardDetailInfo(Types.RewardStore storage self, address reward_address)
+    public view returns (Types.RewardDetailInfo memory detail_info){
+        Types.Reward storage reward = self.reward_info[reward_address];
+
+        detail_info = Types.RewardDetailInfo({
+            author: reward.author,
+            reward_address: reward.reward_address,
+            approved_comment: reward.approved_comment,
+            title: reward.title,
+            description: reward.description,
+            images: reward.images,
+            up_num: reward.up_num,
+            down_num: reward.down_num,
+            up_and_down: reward.up_and_downs[msg.sender],
+            comment_num: reward.comment_num,
+            remuneration: reward.remuneration,
+            create_timestamp: reward.create_timestamp,
+            update_timestamp: reward.update_timestamp
+        });
     }
 }
 

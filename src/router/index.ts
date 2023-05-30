@@ -84,7 +84,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/upload-file",
     name: "upload-file",
-    component: () => import("@/views/UploadFile.vue"),
+    component: () => import("@/views/UploadFileOrReward.vue"),
     meta: {
       depth: 99,
       auth: true
@@ -100,9 +100,27 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
+    path: "/self-reward",
+    name: "self-reward",
+    component: () => import("@/views/SelfReward.vue"),
+    meta: {
+      depth: 2,
+      auth: true
+    }
+  },
+  {
     path: "/file-detail/:file_address",
     name: "file-detail",
     component: () => import("@/views/FileDetail.vue"),
+    meta: {
+      depth: 3,
+      auth: true
+    }
+  },
+  {
+    path: "/reward-detail/:reward_address",
+    name: "reward-detail",
+    component: () => import("@/views/RewardDetail.vue"),
     meta: {
       depth: 3,
       auth: true

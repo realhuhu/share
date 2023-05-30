@@ -7,7 +7,7 @@ interface MessageInterface {
 
 }
 
-contract MessageContact is BaseContact, MessageInterface {
+abstract contract MessageContact is BaseContact, MessageInterface {
     function MessageContract_init()
     internal {
     }

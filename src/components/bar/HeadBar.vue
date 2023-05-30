@@ -1,5 +1,5 @@
 <template>
-  <var-app-bar color="#f2f4f6" text-color="#666" elevation="0">
+  <var-app-bar color="#fff" text-color="#666" class="shadow">
     {{ title }}
     <template #left>
       <var-button round text color="transparent" text-color="#4ebaee" @click="safeBack(back)">

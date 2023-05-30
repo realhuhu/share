@@ -14,6 +14,21 @@
           未连接到钱包
         </div>
 
+        <var-divider margin="0" class="pt-6">我的</var-divider>
+        <div class="flex justify-start items-center flex-wrap">
+
+          <div class="w-[25%] md:px-10 md:pb-5 rounded">
+            <div
+              class="flex flex-col justify-center items-center py-2 cursor-pointer hover:shadow-around"
+              @click="router.push('/self-reward')"
+              ripple
+            >
+              <i-fxemoji-moneybag class="w-8 h-8 md:m-2"/>
+              <div class="font-thin text-xs md:text-sm">悬赏</div>
+            </div>
+
+          </div>
+        </div>
         <var-divider margin="0" class="pt-6">其它</var-divider>
         <div class="flex justify-start items-center flex-wrap">
 
@@ -23,7 +38,7 @@
               @click="router.push('/create-eth-account')"
               ripple
             >
-              <i-logos-ethereum-color class="h-8 md:h-12"/>
+              <i-logos-ethereum-color class="w-8 h-8 md:m-2"/>
               <div class="font-thin text-xs md:text-sm">以太坊账户</div>
             </div>
           </div>

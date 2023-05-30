@@ -26,6 +26,8 @@ module.exports = async (
   // @ts-ignore
   const CategoryLib = artifacts.require("CategoryLib");
   // @ts-ignore
+  const RewardLib = artifacts.require("RewardLib");
+  // @ts-ignore
   const Common = artifacts.require("Common");
 
   const Implementation = artifacts.require("ImplementationContact");
@@ -50,6 +52,7 @@ module.exports = async (
   deployer.link(AddressLinkedList, FileLib)
   deployer.link(AddressOrderedMap, FileLib)
   deployer.link(Bytes32Lib, FileLib)
+  deployer.link(StringLib, FileLib)
   deployer.link(UserLib, FileLib)
   deployer.link(Common, FileLib)
   await deployer.deploy(FileLib);
@@ -59,12 +62,20 @@ module.exports = async (
   deployer.link(Bytes32Lib, CategoryLib)
   await deployer.deploy(CategoryLib);
 
+  deployer.link(AddressLinkedList, RewardLib)
+  deployer.link(AddressOrderedMap, RewardLib)
+  deployer.link(StringLib, RewardLib)
+  deployer.link(Bytes32Lib, RewardLib)
+  deployer.link(UserLib, RewardLib)
+  await deployer.deploy(RewardLib);
+
   deployer.link(UintLib, Implementation)
   deployer.link(StringLib, Implementation)
   deployer.link(Bytes32Lib, Implementation)
   deployer.link(UserLib, Implementation)
   deployer.link(FileLib, Implementation)
   deployer.link(CategoryLib, Implementation)
+  deployer.link(RewardLib, Implementation)
 
   await deployer.deploy(Implementation);
 

@@ -43,7 +43,7 @@ import {Types} from "@/assets/types/ethers/ImplementationContact";
 import {datetime, stripAddress} from "@/assets/lib/utils";
 import {UseStore} from "@/store";
 import {computed} from "vue";
-import {cover, ipfs_url} from "@/assets/lib/settings";
+import {ipfs_url} from "@/assets/lib/settings";
 
 const props = withDefaults(defineProps<{
   file_info: Types.FileDetailInfoStructOutput

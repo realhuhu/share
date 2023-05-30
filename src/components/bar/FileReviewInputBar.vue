@@ -1,7 +1,7 @@
 <template>
   <transition enter-active-class="animate__animated animate__fadeInUp"
               leave-active-class="animate__animated animate__fadeOutDown">
-    <div class="fixed left-0 md:pl-[64px] bottom-0 w-full flex justify-center items-center"
+    <div class="fixed left-0 md:pl-[64px] bottom-0 w-full flex justify-center items-center z-10"
          v-if="!show_editor">
       <div class="w-[960px] max-w-full shadow-around flex justify-between items-center gap-6 pl-4 bg-white z-30">
         <div @click="show_editor=true"

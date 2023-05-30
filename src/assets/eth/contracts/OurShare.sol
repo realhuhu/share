@@ -18,7 +18,7 @@ contract ImplementationContact is UserContract, FileContact, RewardContact, Mess
         admin = msg.sender;
         UserContract_init();
         FileContract_init();
-//        RewardContract_init();
+        RewardContract_init();
         MessageContract_init();
     }
 }

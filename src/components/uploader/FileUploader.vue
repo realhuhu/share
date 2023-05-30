@@ -16,7 +16,7 @@
 
       <div v-else class="flex justify-start items-center gap-2">
         <var-icon name="upload"/>
-        上传文件
+        选择文件
       </div>
     </div>
 

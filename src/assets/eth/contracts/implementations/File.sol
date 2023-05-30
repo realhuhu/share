@@ -64,10 +64,15 @@ abstract contract FileContact is BaseContact, FileInterface {
     }
 
 
-    function uploadFile(string memory ipfs_address, string memory name, string memory title, string memory description, address category_address, string[3] memory images, uint price)
-    external {
-        require(categories.isContain(category_address), "FileContact>uploadFile");
-
+    function uploadFile(
+        string memory ipfs_address,
+        string memory name,
+        string memory title,
+        string memory description,
+        address category_address,
+        string[3] memory images,
+        uint price
+    ) external {
         title._range_(1, 64);
         price._range_(1, 20);
         description._range_(1, 512);

@@ -46,12 +46,8 @@ abstract contract UserContract is BaseContact, UserInterface {
     //注册账号
     function register(string memory nickname)
     external {
-        require(!users.isRegistered(msg.sender), "UserContract>register");
-
         users.register(nickname);
     }
-
-
 
     //获取个人信息
     function getSelfInfo()
@@ -67,24 +63,18 @@ abstract contract UserContract is BaseContact, UserInterface {
     //更新头像
     function updateAvatar(string memory avatar)
     external {
-        require(users.isRegistered(msg.sender), "UserContract>updateAvatar");
-
         users.updateAvatar(avatar);
     }
 
     //更新姓名
     function updateNickname(string memory nickname)
     external {
-        require(users.isRegistered(msg.sender), "UserContract>updateNickname");
-
         users.updateNickname(nickname);
     }
 
     //更新签名
     function updateSignature(string memory signature)
     external {
-        require(users.isRegistered(msg.sender), "UserContract>updateSignature");
-
         users.updateSignature(signature);
     }
 

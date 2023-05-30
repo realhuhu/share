@@ -1,6 +1,6 @@
 <template>
   <div>
-    <head-bar title="我上传的文件" back="/home/resource"/>
+    <head-bar title="我上传的文件" back="/home/profile"/>
 
     <div class=" flex flex-col items-center justify-center md:mt-16 gap-4 rounded-xl">
       <var-list

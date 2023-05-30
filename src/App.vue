@@ -1,9 +1,9 @@
 <template>
   <router-view v-slot="{ Component }" class="md:pl-[64px]">
     <suspense v-if="show">
-      <!--    <transition :name="page_animation">-->
-      <component :is="Component"/>
-      <!--    </transition>-->
+      <transition :name="page_animation">
+        <component :is="Component"/>
+      </transition>
       <template #fallback>
         加载中...
       </template>

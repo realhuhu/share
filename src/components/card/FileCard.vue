@@ -4,7 +4,7 @@
     elevation="0"
     layout="row"
     ripple
-    @click="toDetail"
+    @click="router.push(`/file-detail/${file_info.file_address}`)"
     class="cursor-pointer hover:shadow-2xl duration-200"
   >
     <template #title>
@@ -37,7 +37,7 @@
       <div class="flex justify-end items-center gap-4 text-sm">
         <div class="flex justify-center items-center gap-1  text-gray-500">
           <i-material-symbols-download/>
-          {{ file_info.down_num }}
+          {{ file_info.buyer_num }}
         </div>
 
         <div class="flex justify-center items-center gap-1"
@@ -87,10 +87,6 @@ const category = computed(() => {
 
 const time = computed(() => datetime(props.file_info.upload_timestamp.toNumber()))
 
-const toDetail = () => {
-  router.push(`/file-detail/${props.file_info.file_address}`)
-}
-
 defineOptions({
   name: "FileCard"
 })
@@ -98,21 +94,4 @@ defineOptions({
 
 
 <style lang="less" scoped>
-.line1 {
-  word-break: break-all;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1; /* 这里是超出几行省略 */
-  overflow: hidden;
-}
-
-.line2 {
-  word-break: break-all;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2; /* 这里是超出几行省略 */
-  overflow: hidden;
-}
 </style>
