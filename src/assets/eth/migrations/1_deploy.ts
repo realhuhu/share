@@ -28,13 +28,13 @@ module.exports = async (
   // @ts-ignore
   const RewardLib = artifacts.require("RewardLib");
   // @ts-ignore
-  const Common = artifacts.require("Common");
+  const CommonLib = artifacts.require("CommonLib");
 
   const Implementation = artifacts.require("ImplementationContact");
   const OurShare = await artifacts.require("OurShare")
 
 
-  await deployer.deploy(Common);
+  await deployer.deploy(CommonLib);
 
   await deployer.deploy(AddressLinkedList);
 
@@ -54,7 +54,7 @@ module.exports = async (
   deployer.link(Bytes32Lib, FileLib)
   deployer.link(StringLib, FileLib)
   deployer.link(UserLib, FileLib)
-  deployer.link(Common, FileLib)
+  deployer.link(CommonLib, FileLib)
   await deployer.deploy(FileLib);
 
   deployer.link(AddressLinkedList, CategoryLib)
@@ -67,6 +67,8 @@ module.exports = async (
   deployer.link(StringLib, RewardLib)
   deployer.link(Bytes32Lib, RewardLib)
   deployer.link(UserLib, RewardLib)
+  deployer.link(FileLib, RewardLib)
+  deployer.link(CommonLib, RewardLib)
   await deployer.deploy(RewardLib);
 
   deployer.link(UintLib, Implementation)

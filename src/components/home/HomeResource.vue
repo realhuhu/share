@@ -13,7 +13,7 @@
       </var-sticky>
 
       <var-sticky>
-        <div class=" bg-white py-2">
+        <div class=" bg-white md:py-2">
           <var-button text v-for="(category,k) of store.categories" :key="k" class="hidden md:inline"
                       @click="current_category=category.category_address"
                       :class="current_category===category.category_address?'text-[#4ebaee] underline':'text-gray-500'">

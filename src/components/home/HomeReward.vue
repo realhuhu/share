@@ -14,7 +14,7 @@
       </var-sticky>
 
       <var-sticky>
-        <div class="bg-white shadow-around py-2">
+        <div class="bg-white shadow-around md:py-2">
           <var-button class="hidden md:inline" @click="solved=0" text
                       :class="solved===0?'text-[#4ebaee] underline':'text-gray-500'">
             全部
@@ -33,7 +33,7 @@
       </var-sticky>
 
       <var-sticky>
-        <div class="flex justify-end  py-2">
+        <div class="flex justify-end  py-2 text-sm">
           <var-menu placement="bottom-end" class="cursor-pointer md:hover:bg-gray-100 md:p-2 p-1 duration-75"
                     v-model:show="show_menu">
             <div class="flex justify-start items-center text-gray-500">

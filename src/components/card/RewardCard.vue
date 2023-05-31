@@ -1,7 +1,7 @@
 <template>
-  <div class="cursor-pointer hover:bg-gray-100 hover:shadow-around duration-200"
+  <div class="cursor-pointer hover:bg-gray-100 hover:shadow-around duration-200 text-sm"
        @click="router.push(`/reward-detail/${reward_info.reward_address}`)">
-    <div class="flex justify-between items-center gap-1 text-sm md:mb-2">
+    <div class="flex justify-between items-center gap-1 md:mb-2">
       <div class="flex justify-start items-center gap-1">
         <var-chip v-if="reward_info.approved_comment===zero_address" type="info" size="small" class="min-w-[60px]">
           未解决
@@ -31,7 +31,7 @@
         <div>{{ reward_info.author }}</div>
       </div>
 
-      <div class="flex justify-end items-center gap-8 text-sm">
+      <div class="flex justify-end items-center gap-8">
         <div class="flex justify-center items-center gap-1"
              :class="reward_info.up_and_down.toNumber()===1? 'text-[#4ebaee]':'text-gray-500'">
           <i-mdi-like-outline/>

@@ -31,7 +31,6 @@ interface FileInterface {
     function getFileChildrenComments(address file_address, address comment_address, address cursor) external view returns (Types.FileChildrenComment[10] memory children_comments, address next, bool finished);
 }
 
-
 abstract contract FileContact is BaseContact, FileInterface {
     using UintLib for uint;
     using StringLib for string;
@@ -47,20 +46,15 @@ abstract contract FileContact is BaseContact, FileInterface {
         categories.init();
     }
 
-    function _getFileBriefInfo(address file_address)
-    internal view returns (Types.FileBriefInfo memory file_info){
-        file_info = files.getFileBriefInfo(file_address, users);
-    }
-
     function addCategory(string memory name)
     _onlyAdmin_
     external {
-        categories.addCategory(name);
+        categories.add(name);
     }
 
     function getCategorySlice(address cursor)
     external view returns (Types.Category[10] memory category_slice, address next, bool finished){
-        (category_slice, next, finished) = categories.getCategorySlice(cursor);
+        (category_slice, next, finished) = categories.getSlice(cursor);
     }
 
 
@@ -77,7 +71,7 @@ abstract contract FileContact is BaseContact, FileInterface {
         price._range_(1, 20);
         description._range_(1, 512);
 
-        address file_address = files.uploadFile(ipfs_address, name, title, description, category_address, images, price);
+        address file_address = files.upload(ipfs_address, name, title, description, category_address, images, price);
 
         categories.increase(category_address);
 
@@ -100,17 +94,17 @@ abstract contract FileContact is BaseContact, FileInterface {
 
     function getSelfFileBriefInfos(address cursor, bool reverse)
     external view returns (Types.FileBriefInfo[10] memory file_infos, address next, bool finished){
-        (file_infos, next, finished) = files.getSelfFileBriefInfos(cursor, reverse, users);
+        (file_infos, next, finished) = files.getSelfBriefInfos(cursor, reverse, users);
     }
 
     function getFileBriefInfos(address cursor, address category_address, uint order, bool reverse)
     external view returns (Types.FileBriefInfo[10] memory file_infos, address next, bool finished){
-        (file_infos, next, finished) = files.getFileBriefInfos(cursor, category_address, order, reverse, users);
+        (file_infos, next, finished) = files.getBriefInfos(cursor, category_address, order, reverse, users);
     }
 
     function getFileDetailInfo(address file_address)
     external view returns (Types.FileDetailInfo memory detail_info){
-        detail_info = files.getFileDetailInfo(file_address);
+        detail_info = files.getDetailInfo(file_address);
     }
 
     function upAndDownFile(address file_address, bool is_up)

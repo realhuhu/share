@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.17;
 
-library Common {
+library CommonLib {
 
     function upAndDown(uint up_and_down, uint up_num, uint down_num, bool is_up)
     external pure returns (uint _up_and_down, uint _up_num, uint _down_num){

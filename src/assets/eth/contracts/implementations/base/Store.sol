@@ -559,7 +559,7 @@ library FileLib {
         is_contain = self.file_index.isContain(file_address);
     }
 
-    function uploadFile(
+    function upload(
         Types.FileStore storage self,
         string memory ipfs_address,
         string memory name,
@@ -599,7 +599,7 @@ library FileLib {
         self._file_by_buyer_num.update(AddressOrderedMap.Item(file_address, 0));
     }
 
-    function getFileBriefInfo(Types.FileStore storage self, address file_address, Types.UserStore storage users)
+    function getBriefInfo(Types.FileStore storage self, address file_address, Types.UserStore storage users)
     public view returns (Types.FileBriefInfo memory file_info){
         Types.File storage file = self.file_info[file_address];
 
@@ -624,7 +624,7 @@ library FileLib {
         file_info.upload_timestamp = file.upload_timestamp;
     }
 
-    function getSelfFileBriefInfos(
+    function getSelfBriefInfos(
         Types.FileStore storage self,
         address cursor,
         bool reverse,
@@ -637,11 +637,11 @@ library FileLib {
                 finished = true;
                 break;
             }
-            file_infos[i] = getFileBriefInfo(self, next, users);
+            file_infos[i] = getBriefInfo(self, next, users);
         }
     }
 
-    function getFileBriefInfos(
+    function getBriefInfos(
         Types.FileStore storage self,
         address cursor,
         address category_address,
@@ -665,7 +665,7 @@ library FileLib {
             }
 
             if (self.file_info[cursor].category_address == category_address || category_address == address(0x0)) {
-                file_infos[index] = getFileBriefInfo(self, cursor, users);
+                file_infos[index] = getBriefInfo(self, cursor, users);
                 index++;
             }
 
@@ -673,7 +673,7 @@ library FileLib {
         }
     }
 
-    function getFileDetailInfo(Types.FileStore storage self, address file_address)
+    function getDetailInfo(Types.FileStore storage self, address file_address)
     public view returns (Types.FileDetailInfo memory detail_info){
         Types.File storage file = self.file_info[file_address];
 
@@ -706,7 +706,7 @@ library FileLib {
         uint _up_num;
         uint _down_num;
 
-        (_up_and_down, _up_num, _down_num) = Common.upAndDown(up_and_down, file.up_num, file.down_num, is_up);
+        (_up_and_down, _up_num, _down_num) = CommonLib.upAndDown(up_and_down, file.up_num, file.down_num, is_up);
 
         file.up_and_downs[msg.sender] = _up_and_down;
         file.up_num = _up_num;
@@ -757,7 +757,7 @@ library FileLib {
         uint _up_num;
         uint _down_num;
 
-        (_up_and_down, _up_num, _down_num) = Common.upAndDown(up_and_down, comment.up_num, comment.down_num, is_up);
+        (_up_and_down, _up_num, _down_num) = CommonLib.upAndDown(up_and_down, comment.up_num, comment.down_num, is_up);
 
         comment.up_and_downs[msg.sender] = _up_and_down;
         comment.up_num = _up_num;
@@ -809,7 +809,7 @@ library FileLib {
         uint _up_num;
         uint _down_num;
 
-        (_up_and_down, _up_num, _down_num) = Common.upAndDown(up_and_down, comment.up_num, comment.down_num, is_up);
+        (_up_and_down, _up_num, _down_num) = CommonLib.upAndDown(up_and_down, comment.up_num, comment.down_num, is_up);
 
         comment.up_and_downs[msg.sender] = _up_and_down;
         comment.up_num = _up_num;
@@ -938,7 +938,7 @@ library CategoryLib {
         is_contain = self.category_index.isContain(category_address);
     }
 
-    function addCategory(Types.CategoryStore storage self, string memory name)
+    function add(Types.CategoryStore storage self, string memory name)
     public {
         address category_address = keccak256(abi.encodePacked(name)).toAddress();
         require(!isContain(self, category_address), "CategoryLib>addCategory");
@@ -951,7 +951,7 @@ library CategoryLib {
         self.category_index.append(category_address);
     }
 
-    function getCategorySlice(Types.CategoryStore storage self, address cursor)
+    function getSlice(Types.CategoryStore storage self, address cursor)
     public view returns (Types.Category[10] memory category_slice, address next, bool finished){
         address[10] memory category_index_slice = self.category_index.slice(cursor, false);
         for (uint i = 0; i < 10; i++) {
@@ -992,7 +992,7 @@ library RewardLib {
         is_contain = self.reward_index.isContain(reward_address);
     }
 
-    function createReward(
+    function create(
         Types.RewardStore storage self,
         string memory title,
         string memory description,
@@ -1025,7 +1025,7 @@ library RewardLib {
         self._reward_by_remuneration.update(AddressOrderedMap.Item(reward_address, remuneration));
     }
 
-    function getRewardBriefInfo(
+    function getBriefInfo(
         Types.RewardStore storage self,
         address reward_address,
         Types.UserStore storage users
@@ -1048,7 +1048,7 @@ library RewardLib {
         });
     }
 
-    function getSelfRewardBriefInfos(
+    function getSelfBriefInfos(
         Types.RewardStore storage self,
         address cursor,
         bool reverse,
@@ -1062,11 +1062,11 @@ library RewardLib {
                 finished = true;
                 break;
             }
-            reward_infos[i] = getRewardBriefInfo(self, next, users);
+            reward_infos[i] = getBriefInfo(self, next, users);
         }
     }
 
-    function getRewardBriefInfos(
+    function getBriefInfos(
         Types.RewardStore storage self,
         address cursor,
         uint solved,
@@ -1094,7 +1094,7 @@ library RewardLib {
             bool is_solved = self.reward_info[cursor].approved_comment != address(0x0);
 
             if (is_solved && solved == 1 || !is_solved && solved == 2 || solved == 0) {
-                reward_infos[index] = getRewardBriefInfo(self, cursor, users);
+                reward_infos[index] = getBriefInfo(self, cursor, users);
                 index++;
             }
 
@@ -1102,7 +1102,7 @@ library RewardLib {
         }
     }
 
-    function getRewardDetailInfo(Types.RewardStore storage self, address reward_address)
+    function getDetailInfo(Types.RewardStore storage self, address reward_address)
     public view returns (Types.RewardDetailInfo memory detail_info){
         Types.Reward storage reward = self.reward_info[reward_address];
 
@@ -1122,7 +1122,7 @@ library RewardLib {
             update_timestamp: reward.update_timestamp
         });
     }
-        
+
     function upAndDown(Types.RewardStore storage self, address reward_address, bool is_up)
     public {
         Types.Reward storage reward = self.reward_info[reward_address];
@@ -1132,7 +1132,7 @@ library RewardLib {
         uint _up_num;
         uint _down_num;
 
-        (_up_and_down, _up_num, _down_num) = Common.upAndDown(up_and_down, reward.up_num, reward.down_num, is_up);
+        (_up_and_down, _up_num, _down_num) = CommonLib.upAndDown(up_and_down, reward.up_num, reward.down_num, is_up);
 
         reward.up_and_downs[msg.sender] = _up_and_down;
         reward.up_num = _up_num;
@@ -1185,7 +1185,7 @@ library RewardLib {
         uint _up_num;
         uint _down_num;
 
-        (_up_and_down, _up_num, _down_num) = Common.upAndDown(up_and_down, comment.up_num, comment.down_num, is_up);
+        (_up_and_down, _up_num, _down_num) = CommonLib.upAndDown(up_and_down, comment.up_num, comment.down_num, is_up);
 
         comment.up_and_downs[msg.sender] = _up_and_down;
         comment.up_num = _up_num;
@@ -1237,11 +1237,56 @@ library RewardLib {
         uint _up_num;
         uint _down_num;
 
-        (_up_and_down, _up_num, _down_num) = Common.upAndDown(up_and_down, comment.up_num, comment.down_num, is_up);
+        (_up_and_down, _up_num, _down_num) = CommonLib.upAndDown(up_and_down, comment.up_num, comment.down_num, is_up);
 
         comment.up_and_downs[msg.sender] = _up_and_down;
         comment.up_num = _up_num;
         comment.down_num = _down_num;
+    }
+
+    function _getRootComment(
+        Types.Reward storage reward,
+        address cursor,
+        Types.UserStore storage users,
+        Types.FileStore storage files
+    ) internal view returns (Types.RewardRootComment memory root_comment)  {
+        Types.RewardComment storage comment = reward.comment_info[cursor];
+        Types.RewardChildrenComment[2] memory children_comments;
+
+        address current = address(0x1);
+        Types.RewardSubComment storage sub_comment;
+
+        for (uint i = 0; i < 2; i++) {
+            current = comment.sub_comment_index.getNext(current);
+            if (current == address(0x2)) break;
+            sub_comment = comment.sub_comment_info[current];
+            children_comments[i] = Types.RewardChildrenComment({
+                target_address: sub_comment.target_address,
+                comment_address: sub_comment.comment_address,
+                sub_comment_address: sub_comment.sub_comment_address,
+                content: sub_comment.content,
+                author: users.getOtherBriefInfo(sub_comment.author),
+                target_author: users.getOtherBriefInfo(comment.sub_comment_info[sub_comment.target_address].author),
+                up_num: sub_comment.up_num,
+                down_num: sub_comment.down_num,
+                up_and_down: sub_comment.up_and_downs[msg.sender],
+                comment_timestamp: sub_comment.comment_timestamp
+            });
+        }
+
+        root_comment = Types.RewardRootComment({
+            comment_address: comment.comment_address,
+            file_info: files.getBriefInfo(comment.file_address, users),
+            children_comments: children_comments,
+            content: comment.content,
+            images: comment.images,
+            author: users.getOtherBriefInfo(comment.author),
+            up_num: comment.up_num,
+            down_num: comment.down_num,
+            up_and_down: comment.up_and_downs[msg.sender],
+            comment_num: comment.sub_comment_index.length,
+            comment_timestamp: comment.comment_timestamp
+        });
     }
 
     function getRootComments(
@@ -1268,44 +1313,7 @@ library RewardLib {
                 break;
             }
 
-            Types.RewardComment storage comment = reward.comment_info[cursor];
-            Types.RewardChildrenComment[2] memory children_comments;
-
-            address current = address(0x1);
-            Types.RewardSubComment storage sub_comment;
-
-            for (uint i = 0; i < 2; i++) {
-                current = comment.sub_comment_index.getNext(current);
-                if (current == address(0x2)) break;
-                sub_comment = comment.sub_comment_info[current];
-                children_comments[i] = Types.RewardChildrenComment({
-                    target_address: sub_comment.target_address,
-                    comment_address: sub_comment.comment_address,
-                    sub_comment_address: sub_comment.sub_comment_address,
-                    content: sub_comment.content,
-                    author: users.getOtherBriefInfo(sub_comment.author),
-                    target_author: users.getOtherBriefInfo(comment.sub_comment_info[sub_comment.target_address].author),
-                    up_num: sub_comment.up_num,
-                    down_num: sub_comment.down_num,
-                    up_and_down: sub_comment.up_and_downs[msg.sender],
-                    comment_timestamp: sub_comment.comment_timestamp
-                });
-            }
-
-            root_comments[index] = Types.RewardRootComment({
-                comment_address: comment.comment_address,
-                file_info:files.getFileBriefInfo(comment.file_address, users),
-                children_comments: children_comments,
-                content: comment.content,
-                images: comment.images,
-                author: users.getOtherBriefInfo(comment.author),
-                up_num: comment.up_num,
-                down_num: comment.down_num,
-                up_and_down: comment.up_and_downs[msg.sender],
-                comment_num: comment.sub_comment_index.length,
-                comment_timestamp: comment.comment_timestamp
-            });
-
+            root_comments[index] = _getRootComment(reward, cursor, users, files);
             index++;
             next = cursor;
         }
