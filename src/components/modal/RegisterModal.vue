@@ -24,10 +24,13 @@
 <script lang="ts" setup>
 import {UseStore} from "@/store";
 import {assertNotEmpty, stripAddress} from "@/assets/lib/utils";
-import {ref} from "vue";
+import {ref, watch} from "vue";
 import {via} from "@/assets/lib/settings";
+import {useRoute, useRouter} from "vue-router";
 
 const store = UseStore()
+const route = useRoute()
+const router = useRouter()
 const name = ref<string>()
 const uploading = ref(false)
 
@@ -41,11 +44,14 @@ const register = async () => {
     uploading.value = false
     const user = assertNotEmpty(store.user, "用户未初始化")
     await store.refreshUser(user.address)
+    const next = route.query.next && (typeof route.query.next === "string" ? route.query.next : route.query.next[0])
+    if (next) await router.push(next)
     store.show_register_modal = false
   } catch {
     uploading.value = false
   }
 }
+
 
 defineOptions({
   name: "RegisterModal"

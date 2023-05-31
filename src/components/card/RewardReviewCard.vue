@@ -45,16 +45,17 @@
     <reward-review-input-bar v-model:show_editor="show_editor" :reward_info="reward_info" @upAndDown="upAndDown"/>
     <reward-comment-editor v-model:show="show_editor" :reward_info="reward_info"
                            :meta="editor_meta as RewardReviewEditorMeta"/>
-    <reward-children-comment-modal
-      v-if="opened_comment_index!==undefined"
-      v-model:show="show_children"
-      :reward_info="reward_info"
-      :root_comment="root_comment.comments[opened_comment_index] as Types.RewardRootCommentStructOutput"
-      :root_comment_index="opened_comment_index"
-      @clickRootComment="openEditor"
-      @clickChildrenComment="openEditor"
-      @upAndDownRootComment="upAndDownRootComment"
-    />
+    <var-popup v-model:show="show_children" class="rounded">
+      <reward-children-comment-modal
+        v-model:show="show_children"
+        :reward_info="reward_info"
+        :root_comment="root_comment.comments[opened_comment_index] as Types.RewardRootCommentStructOutput"
+        :root_comment_index="opened_comment_index as number"
+        @clickRootComment="openEditor"
+        @clickChildrenComment="openEditor"
+        @upAndDownRootComment="upAndDownRootComment"
+      />
+    </var-popup>
   </div>
 </template>
 
@@ -156,6 +157,10 @@ watch(order, async (new_value: number) => {
 
 watch(show_editor, (new_value) => {
   if (!new_value) editor_meta.value = {}
+})
+
+watch(show_children, (new_value) => {
+  if (!new_value) opened_comment_index.value = undefined
 })
 
 loadRootComments()

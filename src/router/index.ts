@@ -1,4 +1,5 @@
 import {createRouter, createWebHistory, RouteRecordRaw} from "vue-router"
+import {UseStore} from "@/store";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -24,7 +25,6 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/components/home/HomeResource.vue"),
         meta: {
           depth: 0,
-          auth: true,
           navbar_active: 0
         }
       },
@@ -34,7 +34,6 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/components/home/HomeReward.vue"),
         meta: {
           depth: 0,
-          auth: true,
           navbar_active: 1
         }
       },
@@ -54,7 +53,6 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/components/home/HomeProfile.vue"),
         meta: {
           depth: 0,
-          auth: true,
           navbar_active: 3
         }
       }
@@ -120,7 +118,6 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import("@/views/FileDetail.vue"),
     meta: {
       depth: 4,
-      auth: true,
       keep_alive: true
     }
   },
@@ -130,7 +127,6 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import("@/views/RewardDetail.vue"),
     meta: {
       depth: 3,
-      auth: true,
       keep_alive: true
     }
   }
@@ -139,6 +135,31 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(),
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  const store = UseStore()
+
+  if (!store.contracts_connected) {
+    const inter = setInterval(async () => {
+      if (store.contracts_connected) {
+        if (to.meta.auth && !(<InstanceType<any>>store).user.is_registered) {
+          (<any>store).show_register_modal = true
+          next(`/?next=${to.path}`)
+        } else {
+          next()
+        }
+        clearInterval(inter)
+      }
+    }, 50)
+  } else {
+    if (to.meta.auth && !store.user.is_registered) {
+      store.show_register_modal = true
+      next(`${from.path}?next=${to.path}`)
+    } else {
+      next()
+    }
+  }
 })
 
 export const safeBack = function (path: string) {

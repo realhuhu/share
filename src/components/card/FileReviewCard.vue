@@ -43,16 +43,17 @@
 
     <file-review-input-bar v-model:show_editor="show_editor" :file_info="file_info" @upAndDown="upAndDown"/>
     <file-comment-editor v-model:show="show_editor" :file_info="file_info" :meta="editor_meta as FileReviewEditorMeta"/>
-    <file-children-comment-modal
-      v-if="opened_comment_index!==undefined"
-      v-model:show="show_children"
-      :file_info="file_info"
-      :root_comment="root_comment.comments[opened_comment_index] as Types.FileRootCommentStructOutput"
-      :root_comment_index="opened_comment_index"
-      @clickRootComment="openEditor"
-      @clickChildrenComment="openEditor"
-      @upAndDownRootComment="upAndDownRootComment"
-    />
+    <var-popup v-model:show="show_children" class="rounded">
+      <file-children-comment-modal
+        v-model:show="show_children"
+        :file_info="file_info"
+        :root_comment="root_comment.comments[opened_comment_index] as Types.FileRootCommentStructOutput"
+        :root_comment_index="opened_comment_index as number"
+        @clickRootComment="openEditor"
+        @clickChildrenComment="openEditor"
+        @upAndDownRootComment="upAndDownRootComment"
+      />
+    </var-popup>
   </div>
 </template>
 
@@ -149,6 +150,10 @@ watch(order, async (new_value: number) => {
 
 watch(show_editor, (new_value) => {
   if (!new_value) editor_meta.value = {}
+})
+
+watch(show_children, (new_value) => {
+  if (!new_value) opened_comment_index.value = undefined
 })
 
 loadRootComments()
