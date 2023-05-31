@@ -1,6 +1,6 @@
 <template>
-  <div class=" min-h-screen">
-    <div class="px-2 md:px-12 md:py-6 md:shadow pb-32">
+  <div class=" min-h-screen md:min-h-0 shadow-around md:mb-32">
+    <div class="px-2">
       <var-sticky>
         <div class="flex justify-between items-center bg-white">
           <var-tabs class="flex" style="padding: 0" v-model:active="order">

@@ -22,7 +22,7 @@
         @click="replace('/home/profile')"
       />
       <template #fab>
-        <var-icon name="plus" size="30" @click="router.push('/upload-file')"/>
+        <var-icon name="plus" size="30" @click="router.push('/upload')"/>
       </template>
     </var-bottom-navigation>
   </div>

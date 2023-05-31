@@ -14,12 +14,15 @@ declare global {
     message: string,
     stack: string
   }
-
   type FileReviewEditorMeta = {
     root_comment?: Types.FileRootCommentStructOutput
     target_comment?: Types.FileChildrenCommentStructOutput
   }
 
+  type RewardReviewEditorMeta = {
+    root_comment?: Types.RewardRootCommentStructOutput
+    target_comment?: Types.RewardChildrenCommentStructOutput
+  }
   type User = ({
     is_registered: true
     raw_data: Types.UserSelfInfoStructOutput

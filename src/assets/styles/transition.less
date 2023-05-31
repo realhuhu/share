@@ -1,117 +1,57 @@
-.animate__clear {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1;
-  width: 100vw;
-  height: 100vh;
-  overflow: visible;
-}
-
 .animate__animated {
-  animation-duration: 0.3s !important;
+  animation-duration: 0.2s !important;
 }
 
-// switch-left
-.switch-left-leave-active, .switch-left-enter-active {
-  transition: all 0.3s;
+/*steady-left*/
+.steady-left-enter-from {
+  opacity: .5;
+  transform: translateX(100vw);
 }
 
-.switch-left-leave-from {
-  opacity: 1;
+.steady-left-enter-active {
+  width: 100vw;
+  position: fixed;
+  transition: all 0.2s;
+  z-index: 10000;
+
 }
 
-.switch-left-leave-to {
-  opacity: 0.5;
-  transform: translateX(-100%);
-  .animate__clear();
-}
-
-.switch-left-enter-from {
-  transform: translateX(100%);
-  .animate__clear();
-}
-
-.switch-left-enter-to {
-  .animate__clear();
-}
-
-// switch-right
-.switch-right-leave-active, .switch-right-enter-active {
-  transition: all 0.3s;
-}
-
-.switch-right-leave-from {
-  opacity: 1;
-}
-
-.switch-right-leave-to {
-  opacity: 0.5;
-  transform: translateX(100%);
-  .animate__clear();
-}
-
-.switch-right-enter-from {
-  transform: translateX(-100%);
-  .animate__clear();
-}
-
-.switch-right-enter-to {
-  .animate__clear();
-}
-
-// scale-pop
-.scale-pop-leave-active {
-  transition: all 0.1s;
-}
-
-.scale-pop-enter-active {
+.steady-left-leave-active {
+  width: 100vw;
+  position: absolute;
   transition: all 0.2s;
 }
 
-.scale-pop-leave-from {
-  opacity: 1;
-}
-
-.scale-pop-leave-to {
+.steady-left-leave-to {
   opacity: 0;
-  transform: scale(1.05);
-  .animate__clear();
-}
-
-.scale-pop-enter-from {
-  opacity: 0.5;
   transform: scale(0.95);
 }
 
-.scale-pop-enter-to {
-  .animate__clear();
+
+/*right-steady*/
+.right-steady-enter-from {
+  opacity: 0.8;
+  transform: scale(0.95);
 }
 
-// scale-push
-.scale-push-leave-active {
-  transition: all 0.1s;
-}
-
-.scale-push-enter-active {
+.right-steady-enter-active {
+  width: 100vw;
+  position: absolute;
   transition: all 0.2s;
 }
 
-.scale-push-leave-from {
-  opacity: 1;
+.right-steady-leave-from {
+  opacity: 0.8;
 }
 
-.scale-push-leave-to {
-  opacity: 0;
-  transform: scale(0.95);
-  .animate__clear();
+.right-steady-leave-active {
+  width: 100vw;
+  position: fixed;
+  transition: all 0.2s;
+  z-index: 10000;
 }
 
-.scale-push-enter-from {
-  opacity: 0;
-  transform: scale(1.05);
-}
-
-.scale-push-enter-to {
-  .animate__clear();
+.right-steady-leave-to {
+  opacity: .5;
+  transform: translateX(100vw);
 }

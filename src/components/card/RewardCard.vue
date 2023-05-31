@@ -16,8 +16,8 @@
       <div class="min-w-[100px] text-end text-gray-500">{{ time }}</div>
     </div>
 
-    <div class="flex justify-between items-start min-h-[100px] max-h-[150px] overflow-hidden">
-      <img v-if="reward_info.cover!=zero_address" class="max-w-[30%] max-h-[150px] self-center"
+    <div class="flex justify-between items-start min-h-[50px] max-h-[150px] overflow-hidden">
+      <img v-if="reward_info.cover" class="max-w-[30%]  max-h-[150px] self-center py-2"
            :src="`${ipfs_url}ipfs/${reward_info.cover}`" alt=""/>
       <div class="flex-grow p-2 break-all">
         <var-chip size="mini" :round="false" type="warning">赏金:{{ reward_info.remuneration }}</var-chip>

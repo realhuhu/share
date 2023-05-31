@@ -1191,7 +1191,6 @@ library RewardLib {
         comment.up_num = _up_num;
         comment.down_num = _down_num;
 
-
         self.reward_info[reward_address]._comments_by_up_num.update(AddressOrderedMap.Item(comment_address, comment.up_num));
     }
 
@@ -1312,6 +1311,8 @@ library RewardLib {
                 finished = true;
                 break;
             }
+
+            if (order == 3 && reward.comment_info[cursor].file_address == address(0x0)) continue;
 
             root_comments[index] = _getRootComment(reward, cursor, users, files);
             index++;

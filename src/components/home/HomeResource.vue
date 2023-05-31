@@ -4,8 +4,8 @@
 
     <div class="w-[1280px] max-w-full md:mt-24 md:px-6">
 
-      <var-sticky>
-        <var-tabs v-model:active="current_category" class="md:hidden" style="padding: 0">
+      <var-sticky class="md:hidden">
+        <var-tabs v-model:active="current_category" style="padding: 0">
           <var-tab v-for="(category,k) of store.categories" :key="k" :name="category.category_address">
             {{ category.name }} ({{ category.num }})
           </var-tab>
@@ -24,24 +24,22 @@
         <var-divider margin="0"/>
       </var-sticky>
 
-      <var-sticky>
-        <div class="flex justify-end  py-2">
-          <var-menu placement="bottom-end" class="cursor-pointer md:hover:bg-gray-100 md:p-2 p-1 duration-75"
-                    v-model:show="show_menu">
-            <div class="flex justify-start items-center text-gray-500">
-              {{ orders[current_order].text }}
-              <var-icon name="menu-down"/>
-            </div>
+      <div class="flex justify-end  py-2">
+        <var-menu placement="bottom-end" class="cursor-pointer md:hover:bg-gray-100 md:p-2 p-1 duration-75"
+                  v-model:show="show_menu">
+          <div class="flex justify-start items-center text-gray-500">
+            {{ orders[current_order].text }}
+            <var-icon name="menu-down"/>
+          </div>
 
-            <template #menu>
-              <div v-for="(order,k) in orders" :key="k" :class="k===current_order?'text-[#4ebaee]':''"
-                   class="cursor-pointer hover:bg-blue-100 p-2 duration-200" @click="current_order=k">
-                {{ order.text }}
-              </div>
-            </template>
-          </var-menu>
-        </div>
-      </var-sticky>
+          <template #menu>
+            <div v-for="(order,k) in orders" :key="k" :class="k===current_order?'text-[#4ebaee]':''"
+                 class="cursor-pointer hover:bg-blue-100 p-2 duration-200" @click="current_order=k">
+              {{ order.text }}
+            </div>
+          </template>
+        </var-menu>
+      </div>
 
       <var-list
         class="w-[1280px] max-w-full pb-24 min-h-screen"

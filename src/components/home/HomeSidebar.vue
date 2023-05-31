@@ -49,7 +49,7 @@
 
     <div
       class="flex flex-col items-center justify-center w-12 h-12 rounded-xl hover:shadow-around cursor-pointer duration-75  active:bg-gray-100">
-      <i-material-symbols-add class="text-blue-600 w-10 h-8" @click="router.push('/upload-file')"/>
+      <i-material-symbols-add class="text-blue-600 w-10 h-8" @click="router.push('/upload')"/>
     </div>
   </div>
 </template>

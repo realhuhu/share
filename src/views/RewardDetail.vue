@@ -12,6 +12,10 @@
         <transition enter-active-class="animate__animated animate__fadeIn" appear>
           <user-simple-card v-if="user_info" :user_info="user_info" class="bg-white"/>
         </transition>
+
+        <transition enter-active-class="animate__animated animate__fadeIn" appear>
+          <reward-review-card v-if="reward_info" v-model:reward_info="reward_info"/>
+        </transition>
       </div>
     </div>
   </div>

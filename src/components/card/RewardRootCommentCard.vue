@@ -16,6 +16,14 @@
                    class="max-w-[360px]"/>
       </div>
 
+      <div class="flex justify-start items-center gap-1 bg-gray-100 p-2 rounded mb-2 cursor-pointer text-orange-400"
+           v-if="comment.file_info.file_address!=zero_address"
+           @click="router.push(`/file-detail/${comment.file_info.file_address}`)">
+        <i-bx-file class="w-7 h-7"/>
+        <div>{{ comment.file_info.title }}</div>
+        <span class="text-sm">({{ stripAddress(comment.file_info.file_address) }})</span>
+      </div>
+
       <div class="flex justify-between items-center text-gray-500 text-sm">
         <div>{{ datetime(comment.comment_timestamp.toNumber()) }}</div>
 
@@ -40,7 +48,6 @@
             <div>{{ comment.comment_num }}</div>
           </div>
         </div>
-
       </div>
 
       <div v-if="!hide_children">
@@ -53,7 +60,8 @@
 
             <div class="inline flex-grow">
               <span class="font-bold">{{ children_comment.author.nickname }}</span>
-              <level-chip class="inline-block mx-2" :level="calcLevel(children_comment.author.experience.toNumber()).level"/>
+              <level-chip class="inline-block mx-2"
+                          :level="calcLevel(children_comment.author.experience.toNumber()).level"/>
               <span v-if="children_comment.target_author.user_address!==zero_address" class="text-sm mr-1">
                 回复<span class="text-[#4ebaee] mx-1">{{ children_comment.target_author.nickname }}</span>:
               </span>
@@ -91,11 +99,12 @@
 <script lang="ts" setup>
 import {Types} from "@/assets/types/ethers/ImplementationInterface";
 
-import {avatar, calcLevel, datetime} from "@/assets/lib/utils";
+import {avatar, calcLevel, datetime, stripAddress} from "@/assets/lib/utils";
 import {ipfs_url, zero_address} from "@/assets/lib/settings";
+import router from "@/router";
 
 withDefaults(defineProps<{
-  comment: Types.FileRootCommentStructOutput
+  comment: Types.RewardRootCommentStructOutput
   index: number
   hide_children?: true
 }>(), {})
@@ -106,9 +115,8 @@ const emits = defineEmits([
   "openChildrenComment"
 ])
 
-
 defineOptions({
-  name: "FileRootCommendCard"
+  name: "RewardRootCommentCard"
 })
 </script>
 

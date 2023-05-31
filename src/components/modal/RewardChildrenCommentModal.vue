@@ -2,7 +2,7 @@
   <var-popup v-model:show="show" class="rounded">
     <div class="w-[96vw] max-w-[600px] max-h-[70vh] md:max-h-[60vh] p-4 overflow-scroll">
       <div class="text-center my-2 font-bold">评论详情</div>
-      <file-root-commend-card
+      <reward-root-comment-card
         :comment="root_comment" :index="root_comment_index" class="w-full"
         :hide_children="true"
         @clickRootComment="clickRootComment"
@@ -72,8 +72,8 @@ import {UseStore} from "@/store";
 import {ref, watch} from "vue";
 
 const props = withDefaults(defineProps<{
-  file_info: Types.FileDetailInfoStructOutput
-  root_comment: Types.FileRootCommentStructOutput
+  reward_info: Types.RewardDetailInfoStructOutput
+  root_comment: Types.RewardRootCommentStructOutput
   root_comment_index: number
 }>(), {})
 const show = defineModel<boolean>("show", {required: true})
@@ -88,7 +88,7 @@ const children_comment = ref<{
   cursor: string
   loading: boolean
   finished: boolean
-  comments: Types.FileChildrenCommentStructOutput[]
+  comments: Types.RewardChildrenCommentStructOutput[]
 }>({
   cursor: head_address,
   loading: false,
@@ -99,9 +99,9 @@ const children_comment = ref<{
 const contract = assertNotEmpty(store.contract, "合约未初始化")
 
 const loadChildrenComments = async () => {
-  const res = await contract.getFileChildrenComments(
-    via.FILE,
-    props.file_info.file_address,
+  const res = await contract.getRewardChildrenComments(
+    via.REWARD,
+    props.reward_info.reward_address,
     props.root_comment.comment_address,
     children_comment.value.cursor
   )
@@ -118,9 +118,9 @@ const loadChildrenComments = async () => {
 }
 
 const upAndDownChildrenComment = async (children_comment_index: number, is_up: boolean) => {
-  await wait(contract.upAndDownFileSubComment(
-    via.FILE,
-    props.file_info.file_address,
+  await wait(contract.upAndDownRewardSubComment(
+    via.REWARD,
+    props.reward_info.reward_address,
     props.root_comment.comment_address,
     children_comment.value.comments[children_comment_index].sub_comment_address,
     is_up
@@ -149,7 +149,7 @@ watch(show, async (new_value: boolean) => {
 })
 
 defineOptions({
-  name: "FileChildrenCommentModal"
+  name: "RewardChildrenCommentModal"
 })
 </script>
 

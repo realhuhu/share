@@ -22,6 +22,10 @@
     </div>
 
     <var-image v-for="(image,k) in reward_info.images.filter(x=>x.length)" :key="k" :src="`${ipfs_url}ipfs/${image}`"/>
+
+    <div class="flex justify-end items-center">
+      <var-chip size="small" type="warning" :round="false">悬赏：{{ reward_info.remuneration }}硬币</var-chip>
+    </div>
   </div>
 </template>
 

@@ -6,11 +6,9 @@
 
 
     <router-view v-slot="{ Component }">
-      <!--      <transition :name="page_animation || undefined" @after-enter="page_animation=undefined">-->
       <keep-alive>
         <component :is="Component"/>
       </keep-alive>
-      <!--      </transition>-->
     </router-view>
   </div>
 </template>

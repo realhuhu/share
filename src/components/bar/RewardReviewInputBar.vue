@@ -12,15 +12,15 @@
         <div class="flex justify-end items-center">
           <div class="flex justify-center items-center cursor-pointer hover:bg-gray-100 p-2 md:p-4"
                @click="emits('upAndDown',true)"
-               :class="file_info.up_and_down.toNumber()===1?'text-[#4ebaee]':'text-gray-500'">
+               :class="reward_info.up_and_down.toNumber()===1?'text-[#4ebaee]':'text-gray-500'">
             <i-mdi-like-outline class="w-5 h-5 md:w-7 md:h-7"/>
-            <div class="text-sm md:text-lg ml-1">{{ file_info.up_num }}</div>
+            <div class="text-sm md:text-lg ml-1">{{ reward_info.up_num }}</div>
           </div>
           <div class="flex justify-center items-center cursor-pointer hover:bg-gray-100 p-2 md:p-4"
                @click="emits('upAndDown',false)"
-               :class="file_info.up_and_down.toNumber()===2?'text-[#4ebaee]':'text-gray-500'">
+               :class="reward_info.up_and_down.toNumber()===2?'text-[#4ebaee]':'text-gray-500'">
             <i-mdi-dislike-outline class="w-5 h-5  md:w-7 md:h-7"/>
-            <div class="text-sm md:text-lg ml-1">{{ file_info.down_num }}</div>
+            <div class="text-sm md:text-lg ml-1">{{ reward_info.down_num }}</div>
           </div>
         </div>
       </div>
@@ -33,14 +33,15 @@
 import {Types} from "@/assets/types/ethers/ImplementationInterface";
 
 withDefaults(defineProps<{
-  file_info: Types.FileDetailInfoStructOutput
+  reward_info: Types.RewardDetailInfoStructOutput
 }>(), {})
 
 const show_editor = defineModel<boolean>("show_editor", {required: true})
 const emits = defineEmits(["upAndDown"])
 
+
 defineOptions({
-  name: "FileReviewInputBar"
+  name: "RewardReviewInputBar"
 })
 </script>
 

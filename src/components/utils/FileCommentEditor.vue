@@ -30,7 +30,7 @@
 
 
 <script lang="ts" setup>
-import {computed, ref} from "vue";
+import {computed, ref, watch} from "vue";
 import {UseStore} from "@/store";
 import {assertNotEmpty, wait} from "@/assets/lib/utils";
 import {Types} from "@/assets/types/ethers/ImplementationInterface";
@@ -51,6 +51,14 @@ const contract = assertNotEmpty(store.contract, "合约未初始化")
 const uploading = ref(false)
 
 const valid = () => content.value.length || images.value.filter(x => x.length).length
+
+const clear = () => {
+  uploading.value = false
+  upload_image.value = false
+  images.value = ["", "", ""]
+  content.value = ""
+}
+
 const comment = async () => {
   if (!valid()) return
   uploading.value = true
@@ -67,10 +75,7 @@ const comment = async () => {
         content.value
       ))
     }
-    uploading.value = false
-    upload_image.value = false
-    images.value = ["", "", ""]
-    content.value = ""
+    clear()
     show.value = false
   } catch (e) {
     uploading.value = false
@@ -87,6 +92,9 @@ const tip = computed(() => {
   }
 
   return ""
+})
+watch(show, (new_value: boolean) => {
+  if (!new_value) clear()
 })
 
 defineOptions({
