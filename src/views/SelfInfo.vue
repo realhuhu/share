@@ -103,6 +103,7 @@ import {UseStore} from "@/store";
 import {DateParser, TODO, assertNotEmpty} from "@/assets/lib/utils";
 import {computed, ref, watch} from "vue";
 import {Snackbar} from "@varlet/ui";
+import {via} from "@/assets/lib/settings";
 
 const popup_config_raw = {
   avatar: {
@@ -142,13 +143,13 @@ const update = async () => {
   let handler
   switch (popup_type.value) {
     case "avatar":
-      handler = contract.updateAvatar(popup_input.value)
+      handler = contract.updateAvatar(via.USER, popup_input.value)
       break
     case "nickname":
-      handler = contract.updateNickname(popup_input.value)
+      handler = contract.updateNickname(via.USER,popup_input.value)
       break
     case "signature":
-      handler = contract.updateSignature(popup_input.value)
+      handler = contract.updateSignature(via.USER,popup_input.value)
       break
   }
   if (handler) {

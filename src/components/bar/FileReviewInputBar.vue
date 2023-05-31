@@ -30,7 +30,7 @@
 
 
 <script lang="ts" setup>
-import {Types} from "@/assets/types/ethers/ImplementationContact";
+import {Types} from "@/assets/types/ethers/ImplementationInterface";
 
 withDefaults(defineProps<{
   file_info: Types.FileDetailInfoStructOutput

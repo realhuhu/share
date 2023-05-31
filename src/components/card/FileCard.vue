@@ -63,7 +63,8 @@
 
 
 <script lang="ts" setup>
-import {Types} from "@/assets/types/ethers/ImplementationContact";
+import {Types} from "@/assets/types/ethers/ImplementationInterface";
+
 import {cover, ipfs_url} from "@/assets/lib/settings";
 import {UseStore} from "@/store";
 import {computed} from "vue";

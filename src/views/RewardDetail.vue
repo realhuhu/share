@@ -23,7 +23,9 @@ import {useRoute} from "vue-router";
 import {UseStore} from "@/store";
 import {assertNotEmpty} from "@/assets/lib/utils";
 import {ref} from "vue";
-import {Types} from "@/assets/types/ethers/ImplementationContact";
+import {Types} from "@/assets/types/ethers/ImplementationInterface";
+import {via} from "@/assets/lib/settings";
+
 
 const route = useRoute()
 const store = UseStore()
@@ -33,8 +35,8 @@ const contract = assertNotEmpty(store.contract, "合约未初始化")
 const reward_address = typeof route.params.reward_address === "string" ? route.params.reward_address : route.params.reward_address[0]
 
 const init = async () => {
-  reward_info.value = await contract.getRewardDetailInfo(reward_address)
-  user_info.value = await contract.getOtherSimpleInfo(reward_info.value?.author)
+  reward_info.value = await contract.getRewardDetailInfo(via.REWARD, reward_address)
+  user_info.value = await contract.getOtherSimpleInfo(via.USER, reward_info.value?.author)
 }
 
 init()

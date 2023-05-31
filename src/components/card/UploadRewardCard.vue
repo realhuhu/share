@@ -25,6 +25,7 @@
 import {ref} from "vue";
 import {UseStore} from "@/store";
 import {assertNotEmpty, wait} from "@/assets/lib/utils";
+import {via} from "@/assets/lib/settings";
 
 const store = UseStore()
 const title = ref<string>()
@@ -41,7 +42,7 @@ const upload = async () => {
     uploading.value = true
 
     try {
-      await wait(contract.createReward(title.value, description.value, images.value, remuneration.value))
+      await wait(contract.createReward(via.REWARD, title.value, description.value, images.value, remuneration.value))
       uploading.value = false
     } catch (e) {
       uploading.value = false

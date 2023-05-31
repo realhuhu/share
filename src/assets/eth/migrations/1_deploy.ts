@@ -1,14 +1,23 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+
 const fs = require("fs")
 const path = require("path")
+
 
 module.exports = async (
   deployer: Truffle.Deployer,
   network: "development" | "update"
   // accounts: string[]
 ) => {
+  const via = {
+    USER: 0,
+    FILE: 1,
+    REWARD: 2,
+    MESSAGE: 3
+  }
+
   // @ts-ignore
   const AddressLinkedList = artifacts.require("AddressLinkedList");
   // @ts-ignore
@@ -30,20 +39,20 @@ module.exports = async (
   // @ts-ignore
   const CommonLib = artifacts.require("CommonLib");
 
-  const Implementation = artifacts.require("ImplementationContact");
+  const UserContract = await artifacts.require("UserContract")
+  const FileContact = await artifacts.require("FileContact")
+  const RewardContact = await artifacts.require("RewardContact")
+  const MessageContact = await artifacts.require("MessageContact")
   const OurShare = await artifacts.require("OurShare")
 
-
-  await deployer.deploy(CommonLib);
-
-  await deployer.deploy(AddressLinkedList);
-
-  deployer.link(AddressLinkedList, AddressOrderedMap)
-  await deployer.deploy(AddressOrderedMap);
 
   await deployer.deploy(UintLib);
   await deployer.deploy(StringLib);
   await deployer.deploy(Bytes32Lib);
+  await deployer.deploy(CommonLib);
+  await deployer.deploy(AddressLinkedList);
+  deployer.link(AddressLinkedList, AddressOrderedMap)
+  await deployer.deploy(AddressOrderedMap);
 
   deployer.link(AddressLinkedList, UserLib)
   deployer.link(AddressOrderedMap, UserLib)
@@ -52,7 +61,6 @@ module.exports = async (
   deployer.link(AddressLinkedList, FileLib)
   deployer.link(AddressOrderedMap, FileLib)
   deployer.link(Bytes32Lib, FileLib)
-  deployer.link(StringLib, FileLib)
   deployer.link(UserLib, FileLib)
   deployer.link(CommonLib, FileLib)
   await deployer.deploy(FileLib);
@@ -64,42 +72,62 @@ module.exports = async (
 
   deployer.link(AddressLinkedList, RewardLib)
   deployer.link(AddressOrderedMap, RewardLib)
-  deployer.link(StringLib, RewardLib)
   deployer.link(Bytes32Lib, RewardLib)
   deployer.link(UserLib, RewardLib)
   deployer.link(FileLib, RewardLib)
   deployer.link(CommonLib, RewardLib)
   await deployer.deploy(RewardLib);
 
-  deployer.link(UintLib, Implementation)
-  deployer.link(StringLib, Implementation)
-  deployer.link(Bytes32Lib, Implementation)
-  deployer.link(UserLib, Implementation)
-  deployer.link(FileLib, Implementation)
-  deployer.link(CategoryLib, Implementation)
-  deployer.link(RewardLib, Implementation)
+  deployer.link(UserLib, UserContract)
+  await deployer.deploy(UserContract);
+  const UserImplementation = await UserContract.deployed()
 
-  await deployer.deploy(Implementation);
+  deployer.link(Bytes32Lib, FileContact)
+  deployer.link(UserLib, FileContact)
+  deployer.link(FileLib, FileContact)
+  deployer.link(CategoryLib, FileContact)
+  await deployer.deploy(FileContact);
+  const FileImplementation = await FileContact.deployed()
 
-  const implementation = await Implementation.deployed();
+  deployer.link(UserLib, RewardContact)
+  deployer.link(RewardLib, RewardContact)
+  await deployer.deploy(RewardContact);
+  const RewardImplementation = await RewardContact.deployed()
+
+  await deployer.deploy(MessageContact);
+  const MessageImplementation = await MessageContact.deployed()
+
 
   if (network === "development") {
     await deployer.deploy(OurShare);
-    const our_share = await OurShare.deployed();
-    await our_share.setImplementation(implementation.address)
-    const ImplementationInterface = await artifacts.require("ImplementationInterface").at(our_share.address)
-    await ImplementationInterface.init()
-    await ImplementationInterface.addCategory("电子书")
-    await ImplementationInterface.addCategory("24考研")
-    await ImplementationInterface.addCategory("mooc答案")
-    await ImplementationInterface.addCategory("其它")
+    const OurShareContact = await OurShare.deployed();
+    await OurShareContact.setImplementation(
+      UserImplementation.address,
+      FileImplementation.address,
+      RewardImplementation.address,
+      MessageImplementation.address
+    )
+    const ImplementationInterface = await artifacts.require("ImplementationInterface").at(OurShareContact.address)
+    await ImplementationInterface.UserContract_init(via.USER)
+    await ImplementationInterface.FileContract_init(via.FILE)
+    await ImplementationInterface.RewardContact_init(via.REWARD)
+    await ImplementationInterface.MessageContact_init(via.MESSAGE)
+    await ImplementationInterface.addCategory(via.FILE, "电子书")
+    await ImplementationInterface.addCategory(via.FILE, "24考研")
+    await ImplementationInterface.addCategory(via.FILE, "mooc答案")
+    await ImplementationInterface.addCategory(via.FILE, "其它")
 
     fs.writeFileSync(path.join(__dirname, "output.json"), JSON.stringify({
-      "address": our_share.address
+      "address": OurShareContact.address
     }))
   } else {
     const json = JSON.parse(fs.readFileSync(path.join(__dirname, "output.json")).toString())
-    const our_share = await OurShare.at(json.address)
-    await our_share.setImplementation(implementation.address)
+    const OurShareContact = await OurShare.at(json.address)
+    await OurShareContact.setImplementation(
+      UserImplementation.address,
+      FileImplementation.address,
+      RewardImplementation.address,
+      MessageImplementation.address
+    )
   }
 };

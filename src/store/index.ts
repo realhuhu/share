@@ -10,7 +10,7 @@ import Identicon from "identicon.js"
 import {ImplementationInterface, ImplementationInterface__factory} from "@/assets/types/ethers";
 import OutputAddress from "@/assets/eth/migrations/output.json";
 import {assertNotEmpty} from "@/assets/lib/utils";
-import {head_address, ipfs_url, zero_address} from "@/assets/lib/settings";
+import {head_address, ipfs_url, via, zero_address} from "@/assets/lib/settings";
 import {create, IPFSHTTPClient} from "ipfs-http-client"
 
 type StoreType = ({
@@ -168,7 +168,7 @@ export const UseStore = defineStore("main", {
       const categories: { category_address: string, name: string; num: number; }[] = []
       let cursor = head_address
       while (cursor !== zero_address) {
-        const {category_slice, next} = await contract.getCategorySlice(cursor)
+        const {category_slice, next} = await contract.getCategorySlice(via.FILE,cursor)
         cursor = next
         for (const category of category_slice) {
           cursor = category.category_address
@@ -192,9 +192,9 @@ export const UseStore = defineStore("main", {
     },
     async refreshUser(address: Address) {
       const contract = assertNotEmpty(this.contract, "用户合约未初始化")
-      const is_registered = await contract.isRegistered(address)
+      const is_registered = await contract.isRegistered(via.USER, address)
       if (is_registered) {
-        const raw_data = await contract.getSelfInfo()
+        const raw_data = await contract.getSelfInfo(via.USER)
 
         this.user = {
           is_registered: true,

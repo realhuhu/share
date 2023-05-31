@@ -39,7 +39,8 @@
 
 
 <script lang="ts" setup>
-import {Types} from "@/assets/types/ethers/ImplementationContact";
+import {Types} from "@/assets/types/ethers/ImplementationInterface";
+
 import {datetime, stripAddress} from "@/assets/lib/utils";
 import {UseStore} from "@/store";
 import {computed} from "vue";

@@ -4,11 +4,12 @@ pragma solidity ^0.8.17;
 import "./base/Base.sol";
 
 interface MessageInterface {
-
+    function MessageContact_init(uint) external;
 }
 
-abstract contract MessageContact is BaseContact, MessageInterface {
-    function MessageContract_init()
-    internal {
+contract MessageContact is BaseContact, MessageInterface {
+    function MessageContact_init(uint)
+    _onlyAdmin_
+    external {
     }
 }

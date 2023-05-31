@@ -33,8 +33,9 @@
 import {computed, ref} from "vue";
 import {UseStore} from "@/store";
 import {assertNotEmpty, wait} from "@/assets/lib/utils";
-import {Types} from "@/assets/types/ethers/ImplementationContact";
-import {zero_address} from "@/assets/lib/settings";
+import {Types} from "@/assets/types/ethers/ImplementationInterface";
+
+import {via, zero_address} from "@/assets/lib/settings";
 
 const props = withDefaults(defineProps<{
   file_info: Types.FileDetailInfoStructOutput
@@ -56,9 +57,10 @@ const comment = async () => {
   try {
     const {root_comment, target_comment} = props.meta
     if (!root_comment) {
-      await wait(contract.addFileComment(props.file_info.file_address, content.value, images.value))
+      await wait(contract.addFileComment(via.FILE, props.file_info.file_address, content.value, images.value))
     } else {
       await wait(contract.addFileSubComment(
+        via.FILE,
         props.file_info.file_address,
         target_comment ? target_comment.sub_comment_address : zero_address,
         root_comment.comment_address,

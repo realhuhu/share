@@ -68,9 +68,9 @@
 import HomeHeader from "@/components/home/HomeHeader.vue";
 import {UseStore} from "@/store";
 import {ref, watch} from "vue";
-import {head_address, tail_address, zero_address} from "@/assets/lib/settings";
+import {head_address, tail_address, via, zero_address} from "@/assets/lib/settings";
 import {assertNotEmpty} from "@/assets/lib/utils";
-import {Types} from "@/assets/types/ethers/ImplementationContact";
+import {Types} from "@/assets/types/ethers/ImplementationInterface";
 
 
 const store = UseStore()
@@ -120,7 +120,7 @@ const clear = () => {
 const load = async () => {
   const contract = assertNotEmpty(store.contract, "合约未初始化")
   const {type, reverse} = orders.value[current_order.value]
-  const res = await contract.getFileBriefInfos(cursor.value, current_category.value, type, reverse)
+  const res = await contract.getFileBriefInfos(via.FILE, cursor.value, current_category.value, type, reverse)
   finished.value = res.finished
   cursor.value = res.next
   for (let file_info of res.file_infos) {

@@ -25,6 +25,7 @@
 import {UseStore} from "@/store";
 import {assertNotEmpty, stripAddress} from "@/assets/lib/utils";
 import {ref} from "vue";
+import {via} from "@/assets/lib/settings";
 
 const store = UseStore()
 const name = ref<string>()
@@ -35,7 +36,7 @@ const register = async () => {
   const contract = assertNotEmpty(store.contract, "用户合约未初始化")
   uploading.value = true
   try {
-    const res = await contract.register(nickname)
+    const res = await contract.register(via.USER, nickname)
     await res.wait()
     uploading.value = false
     const user = assertNotEmpty(store.user, "用户未初始化")

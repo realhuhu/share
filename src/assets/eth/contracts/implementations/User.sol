@@ -4,19 +4,21 @@ pragma solidity ^0.8.17;
 import "./base/Base.sol";
 
 interface UserInterface {
-    function register(string memory nickname) external;
+    function UserContract_init(uint) external;
 
-    function isRegistered(address user_address) external view returns (bool is_registered);
+    function register(uint, string memory nickname) external;
 
-    function getSelfInfo() external view returns (Types.UserSelfInfo memory self_info);
+    function isRegistered(uint, address user_address) external view returns (bool is_registered);
 
-    function getOtherSimpleInfo(address user_address) external view returns (Types.UserSimpleInfo memory simple_info);
+    function getSelfInfo(uint) external view returns (Types.UserSelfInfo memory self_info);
 
-    function updateAvatar(string memory avatar) external;
+    function getOtherSimpleInfo(uint, address user_address) external view returns (Types.UserSimpleInfo memory simple_info);
 
-    function updateNickname(string memory nickname) external;
+    function updateAvatar(uint, string memory avatar) external;
 
-    function updateSignature(string memory signature) external;
+    function updateNickname(uint, string memory nickname) external;
+
+    function updateSignature(uint, string memory signature) external;
 
     //    function getUserInfo(address user_address) external view returns (StoreContact.UserBriefInfo memory user_info);
     //
@@ -29,51 +31,52 @@ interface UserInterface {
     //    function setFollow(address target_user, bool is_follow) external;
 }
 
-abstract contract UserContract is BaseContact, UserInterface {
+contract UserContract is BaseContact, UserInterface {
     using UserLib for Types.UserStore;
 
-    function UserContract_init()
-    internal {
+    function UserContract_init(uint)
+    _onlyAdmin_
+    external {
         users.init();
     }
 
     //判断账号是否已注册
-    function isRegistered(address user_address)
+    function isRegistered(uint, address user_address)
     external view returns (bool is_registered){
         is_registered = users.isRegistered(user_address);
     }
 
     //注册账号
-    function register(string memory nickname)
+    function register(uint, string memory nickname)
     external {
         users.register(nickname);
     }
 
     //获取个人信息
-    function getSelfInfo()
+    function getSelfInfo(uint)
     external view returns (Types.UserSelfInfo memory self_info){
         self_info = users.getSelfInfo();
     }
 
-    function getOtherSimpleInfo(address user_address)
+    function getOtherSimpleInfo(uint, address user_address)
     external view returns (Types.UserSimpleInfo memory simple_info){
         simple_info = users.getOtherSimpleInfo(user_address);
     }
 
     //更新头像
-    function updateAvatar(string memory avatar)
+    function updateAvatar(uint, string memory avatar)
     external {
         users.updateAvatar(avatar);
     }
 
     //更新姓名
-    function updateNickname(string memory nickname)
+    function updateNickname(uint, string memory nickname)
     external {
         users.updateNickname(nickname);
     }
 
     //更新签名
-    function updateSignature(string memory signature)
+    function updateSignature(uint, string memory signature)
     external {
         users.updateSignature(signature);
     }

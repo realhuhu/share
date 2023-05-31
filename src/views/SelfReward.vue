@@ -25,9 +25,10 @@
 <script lang="ts" setup>
 import {UseStore} from "@/store";
 import {ref} from "vue";
-import {Types} from "@/assets/types/ethers/ImplementationContact";
+import {Types} from "@/assets/types/ethers/ImplementationInterface";
+
 import {assertNotEmpty} from "@/assets/lib/utils";
-import {head_address, tail_address, zero_address} from "@/assets/lib/settings";
+import {head_address, tail_address, via, zero_address} from "@/assets/lib/settings";
 import RewardCard from "@/components/card/RewardCard.vue";
 
 const store = UseStore()
@@ -40,7 +41,7 @@ const rewards = ref<Types.RewardBriefInfoStructOutput[]>([])
 const load = async () => {
   const contract = assertNotEmpty(store.contract, "合约未初始化")
   if (!cursor.value) cursor.value = reverse.value ? tail_address : head_address
-  const res = await contract.getSelfRewardBriefInfos(cursor.value, reverse.value)
+  const res = await contract.getSelfRewardBriefInfos(via.REWARD, cursor.value, reverse.value)
   for (const reward_info of res.reward_infos) {
     if (reward_info.reward_address === zero_address) break
     rewards.value.push(reward_info)

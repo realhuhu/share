@@ -28,8 +28,8 @@
 import {UseStore} from "@/store";
 import {ref} from "vue";
 import {assertNotEmpty, DateParser} from "@/assets/lib/utils";
-import {head_address, tail_address, zero_address} from "@/assets/lib/settings";
-import {Types} from "@/assets/types/ethers/ImplementationContact";
+import {head_address, tail_address, via, zero_address} from "@/assets/lib/settings";
+import {Types} from "@/assets/types/ethers/ImplementationInterface";
 
 const store = UseStore()
 const cursor = ref<string>()
@@ -40,7 +40,7 @@ const files = ref<Types.FileBriefInfoStructOutput[]>([])
 const load = async () => {
   const contract = assertNotEmpty(store.contract, "合约未初始化")
   if (!cursor.value) cursor.value = reverse.value ? tail_address : head_address
-  const res = await contract.getSelfFileBriefInfos(cursor.value, reverse.value)
+  const res = await contract.getSelfFileBriefInfos(via.FILE, cursor.value, reverse.value)
   for (const file_info of res.file_infos) {
     if (file_info.file_address === zero_address) break
     files.value.push(file_info)

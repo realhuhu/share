@@ -89,7 +89,8 @@
 
 
 <script lang="ts" setup>
-import {Types} from "@/assets/types/ethers/ImplementationContact";
+import {Types} from "@/assets/types/ethers/ImplementationInterface";
+
 import {avatar, calcLevel, datetime} from "@/assets/lib/utils";
 import {ipfs_url, zero_address} from "@/assets/lib/settings";
 

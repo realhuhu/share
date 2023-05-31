@@ -27,7 +27,8 @@
 
 
 <script lang="ts" setup>
-import {Types} from "@/assets/types/ethers/ImplementationContact";
+import {Types} from "@/assets/types/ethers/ImplementationInterface";
+
 import {ipfs_url} from "@/assets/lib/settings";
 import {datetime, stripAddress} from "@/assets/lib/utils";
 import {computed} from "vue";

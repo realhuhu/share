@@ -27,7 +27,8 @@
 
 
 <script lang="ts" setup>
-import {Types} from "@/assets/types/ethers/ImplementationContact";
+import {Types} from "@/assets/types/ethers/ImplementationInterface";
+
 import {avatar, calcLevel} from "@/assets/lib/utils";
 
 withDefaults(defineProps<{

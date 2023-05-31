@@ -58,11 +58,12 @@
 
 
 <script lang="ts" setup>
-import {Types} from "@/assets/types/ethers/ImplementationContact";
+import {Types} from "@/assets/types/ethers/ImplementationInterface";
+
 import {UseStore} from "@/store";
 import {assertNotEmpty, upAndDownCallback, wait} from "@/assets/lib/utils";
 import {ref, watch} from "vue";
-import {head_address, tail_address, zero_address} from "@/assets/lib/settings";
+import {head_address, tail_address, via, zero_address} from "@/assets/lib/settings";
 
 const file_info = defineModel<Types.FileDetailInfoStructOutput>("file_info", {required: true})
 
@@ -91,17 +92,17 @@ const opened_comment_index = ref<number>()
 const contract = assertNotEmpty(store.contract, "合约未初始化")
 
 const upAndDown = async (is_up: boolean) => {
-  await wait(contract.upAndDownFile(file_info.value.file_address, is_up))
+  await wait(contract.upAndDownFile(via.FILE, file_info.value.file_address, is_up))
   file_info.value = upAndDownCallback(file_info.value, is_up)
 }
 
 const upAndDownRootComment = async (comment_index: number, is_up: boolean) => {
-  await wait(contract.upAndDownFileComment(file_info.value.file_address, root_comment.value.comments[comment_index].comment_address, is_up))
+  await wait(contract.upAndDownFileComment(via.FILE, file_info.value.file_address, root_comment.value.comments[comment_index].comment_address, is_up))
   root_comment.value.comments[comment_index] = upAndDownCallback(root_comment.value.comments[comment_index], is_up)
 }
 
 const loadRootComments = async () => {
-  const res = await contract.getFileRootComments(file_info.value.file_address, root_comment.value.cursor, order_by.value.order, order_by.value.reverse)
+  const res = await contract.getFileRootComments(via.FILE, file_info.value.file_address, root_comment.value.cursor, order_by.value.order, order_by.value.reverse)
   for (const comment of res.root_comments) {
     if (comment.comment_address === zero_address) break
     if (root_comment.value.comments.map(x => x.comment_address).indexOf(comment.comment_address) !== -1) break

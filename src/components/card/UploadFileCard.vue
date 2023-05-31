@@ -28,6 +28,7 @@
 import {ref} from "vue";
 import {UseStore} from "@/store";
 import {assertNotEmpty, wait} from "@/assets/lib/utils";
+import {via} from "@/assets/lib/settings";
 
 const store = UseStore()
 const ipfs_address = ref<string>()
@@ -52,6 +53,7 @@ const upload = async () => {
   uploading.value = true
   try {
     await wait(contract.uploadFile(
+      via.FILE,
       ipfs_address.value,
       name.value,
       title.value,

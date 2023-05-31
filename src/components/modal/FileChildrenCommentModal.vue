@@ -64,8 +64,9 @@
 
 
 <script lang="ts" setup>
-import {Types} from "@/assets/types/ethers/ImplementationContact";
-import {head_address, zero_address} from "@/assets/lib/settings";
+import {Types} from "@/assets/types/ethers/ImplementationInterface";
+
+import {head_address, via, zero_address} from "@/assets/lib/settings";
 import {assertNotEmpty, avatar, calcLevel, datetime, upAndDownCallback, wait} from "@/assets/lib/utils";
 import {UseStore} from "@/store";
 import {ref, watch} from "vue";
@@ -99,6 +100,7 @@ const contract = assertNotEmpty(store.contract, "合约未初始化")
 
 const loadChildrenComments = async () => {
   const res = await contract.getFileChildrenComments(
+    via.FILE,
     props.file_info.file_address,
     props.root_comment.comment_address,
     children_comment.value.cursor
@@ -117,6 +119,7 @@ const loadChildrenComments = async () => {
 
 const upAndDownChildrenComment = async (children_comment_index: number, is_up: boolean) => {
   await wait(contract.upAndDownFileSubComment(
+    via.FILE,
     props.file_info.file_address,
     props.root_comment.comment_address,
     children_comment.value.comments[children_comment_index].sub_comment_address,

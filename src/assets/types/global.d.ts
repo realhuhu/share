@@ -1,7 +1,6 @@
 export {}
 import {ExternalProvider} from "ethers"
-import {Types} from "@/assets/types/ethers/ImplementationContact";
-
+import {Types} from "@/assets/types/ethers/ImplementationInterface";
 
 declare global {
   type Nullable<T> = T | null
