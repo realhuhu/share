@@ -977,6 +977,8 @@ library RewardLib {
     using Bytes32Lib for bytes32;
 
     using UserLib for Types.UserStore;
+    using FileLib for Types.FileStore;
+
     function init(Types.RewardStore storage self)
     public {
         self.reward_index.init();
@@ -1119,6 +1121,234 @@ library RewardLib {
             create_timestamp: reward.create_timestamp,
             update_timestamp: reward.update_timestamp
         });
+    }
+        
+    function upAndDown(Types.RewardStore storage self, address reward_address, bool is_up)
+    public {
+        Types.Reward storage reward = self.reward_info[reward_address];
+        uint up_and_down = reward.up_and_downs[msg.sender];
+
+        uint _up_and_down;
+        uint _up_num;
+        uint _down_num;
+
+        (_up_and_down, _up_num, _down_num) = Common.upAndDown(up_and_down, reward.up_num, reward.down_num, is_up);
+
+        reward.up_and_downs[msg.sender] = _up_and_down;
+        reward.up_num = _up_num;
+        reward.down_num = _down_num;
+
+
+        self._reward_by_up_num.update(AddressOrderedMap.Item(reward_address, reward.up_num));
+    }
+
+    function addComment(
+        Types.RewardStore storage self,
+        address reward_address,
+        address file_address,
+        string memory content,
+        string[3] memory images
+    ) public {
+        Types.Reward storage reward = self.reward_info[reward_address];
+
+        address comment_address = keccak256(abi.encodePacked(reward_address, content, msg.sender, block.timestamp)).toAddress();
+
+        Types.RewardComment storage comment = reward.comment_info[comment_address];
+
+        comment.author = msg.sender;
+        comment.file_address = file_address;
+        comment.comment_address = comment_address;
+
+        comment.content = content;
+        comment.images = images;
+
+        comment.comment_timestamp = block.timestamp;
+
+        comment.sub_comment_index.init();
+
+        reward.comment_num++;
+        reward.comment_index.append(comment_address);
+        reward._comments_by_up_num.update(AddressOrderedMap.Item(comment_address, reward.comment_num));
+    }
+
+    function upAndDownComment(
+        Types.RewardStore storage self,
+        address reward_address,
+        address comment_address,
+        bool is_up
+    ) public {
+        Types.RewardComment storage comment = self.reward_info[reward_address].comment_info[comment_address];
+        uint up_and_down = comment.up_and_downs[msg.sender];
+
+
+        uint _up_and_down;
+        uint _up_num;
+        uint _down_num;
+
+        (_up_and_down, _up_num, _down_num) = Common.upAndDown(up_and_down, comment.up_num, comment.down_num, is_up);
+
+        comment.up_and_downs[msg.sender] = _up_and_down;
+        comment.up_num = _up_num;
+        comment.down_num = _down_num;
+
+
+        self.reward_info[reward_address]._comments_by_up_num.update(AddressOrderedMap.Item(comment_address, comment.up_num));
+    }
+
+    function addSubComment(
+        Types.RewardStore storage self,
+        address reward_address,
+        address target_address,
+        address comment_address,
+        string memory content
+    ) public {
+        Types.Reward storage reward = self.reward_info[reward_address];
+        Types.RewardComment storage comment = reward.comment_info[comment_address];
+
+        address sub_comment_address = keccak256(abi.encodePacked(reward_address, comment_address, content, msg.sender, block.timestamp)).toAddress();
+
+        Types.RewardSubComment storage sub_comment = comment.sub_comment_info[sub_comment_address];
+
+        sub_comment.author = msg.sender;
+        sub_comment.target_address = target_address;
+        sub_comment.comment_address = comment_address;
+        sub_comment.sub_comment_address = sub_comment_address;
+
+        sub_comment.content = content;
+
+        sub_comment.comment_timestamp = block.timestamp;
+
+        comment.sub_comment_index.append(sub_comment_address);
+
+        reward.comment_num++;
+    }
+
+    function upAndDownSubComment(
+        Types.RewardStore storage self,
+        address reward_address,
+        address comment_address,
+        address sub_comment_address,
+        bool is_up
+    ) public {
+        Types.RewardSubComment storage comment = self.reward_info[reward_address].comment_info[comment_address].sub_comment_info[sub_comment_address];
+        uint up_and_down = comment.up_and_downs[msg.sender];
+
+        uint _up_and_down;
+        uint _up_num;
+        uint _down_num;
+
+        (_up_and_down, _up_num, _down_num) = Common.upAndDown(up_and_down, comment.up_num, comment.down_num, is_up);
+
+        comment.up_and_downs[msg.sender] = _up_and_down;
+        comment.up_num = _up_num;
+        comment.down_num = _down_num;
+    }
+
+    function getRootComments(
+        Types.RewardStore storage self,
+        address reward_address,
+        address cursor,
+        uint order,
+        bool reverse,
+        Types.UserStore storage users,
+        Types.FileStore storage files
+    ) public view returns (Types.RewardRootComment[10] memory root_comments, address next, bool finished){
+        Types.Reward storage reward = self.reward_info[reward_address];
+
+        uint index = 0;
+        while (index < 10) {
+            if (order == 1) {
+                cursor = reward._comments_by_up_num.get(cursor, !reverse);
+            } else {
+                cursor = reward.comment_index.get(cursor, !reverse);
+            }
+
+            if (reverse && cursor == address(0x1) || !reverse && cursor == address(0x2)) {
+                finished = true;
+                break;
+            }
+
+            Types.RewardComment storage comment = reward.comment_info[cursor];
+            Types.RewardChildrenComment[2] memory children_comments;
+
+            address current = address(0x1);
+            Types.RewardSubComment storage sub_comment;
+
+            for (uint i = 0; i < 2; i++) {
+                current = comment.sub_comment_index.getNext(current);
+                if (current == address(0x2)) break;
+                sub_comment = comment.sub_comment_info[current];
+                children_comments[i] = Types.RewardChildrenComment({
+                    target_address: sub_comment.target_address,
+                    comment_address: sub_comment.comment_address,
+                    sub_comment_address: sub_comment.sub_comment_address,
+                    content: sub_comment.content,
+                    author: users.getOtherBriefInfo(sub_comment.author),
+                    target_author: users.getOtherBriefInfo(comment.sub_comment_info[sub_comment.target_address].author),
+                    up_num: sub_comment.up_num,
+                    down_num: sub_comment.down_num,
+                    up_and_down: sub_comment.up_and_downs[msg.sender],
+                    comment_timestamp: sub_comment.comment_timestamp
+                });
+            }
+
+            root_comments[index] = Types.RewardRootComment({
+                comment_address: comment.comment_address,
+                file_info:files.getFileBriefInfo(comment.file_address, users),
+                children_comments: children_comments,
+                content: comment.content,
+                images: comment.images,
+                author: users.getOtherBriefInfo(comment.author),
+                up_num: comment.up_num,
+                down_num: comment.down_num,
+                up_and_down: comment.up_and_downs[msg.sender],
+                comment_num: comment.sub_comment_index.length,
+                comment_timestamp: comment.comment_timestamp
+            });
+
+            index++;
+            next = cursor;
+        }
+    }
+
+    function getChildrenComments(
+        Types.RewardStore storage self,
+        address reward_address,
+        address comment_address,
+        address cursor,
+        Types.UserStore storage users
+    ) public view returns (Types.RewardChildrenComment[10] memory children_comments, address next, bool finished) {
+        Types.RewardComment storage comment = self.reward_info[reward_address].comment_info[comment_address];
+
+        uint index = 0;
+        Types.RewardSubComment storage sub_comment;
+
+        while (index < 10) {
+            cursor = comment.sub_comment_index.getNext(cursor);
+
+            if (cursor == address(0x2)) {
+                finished = true;
+                break;
+            }
+
+            sub_comment = comment.sub_comment_info[cursor];
+
+            children_comments[index] = Types.RewardChildrenComment({
+                target_address: sub_comment.target_address,
+                comment_address: sub_comment.comment_address,
+                sub_comment_address: sub_comment.sub_comment_address,
+                content: sub_comment.content,
+                author: users.getOtherBriefInfo(sub_comment.author),
+                target_author: users.getOtherBriefInfo(comment.sub_comment_info[sub_comment.target_address].author),
+                up_num: sub_comment.up_num,
+                down_num: sub_comment.down_num,
+                up_and_down: sub_comment.up_and_downs[msg.sender],
+                comment_timestamp: sub_comment.comment_timestamp
+            });
+
+            index++;
+            next = cursor;
+        }
     }
 }
 
