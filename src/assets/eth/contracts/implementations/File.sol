@@ -85,26 +85,31 @@ contract FileContact is BaseContact, FileInterface {
 
     function upAndDownFile(uint, address file_address, bool is_up)
     external {
+        _uploaded_(file_address);
         files.upAndDown(file_address, is_up);
     }
 
     function addFileComment(uint, address file_address, string memory content, string[3] memory images)
     external {
+        _uploaded_(file_address);
         files.addComment(file_address, content, images);
     }
 
     function upAndDownFileComment(uint, address file_address, address comment_address, bool is_up)
     external {
+        _file_commented_(file_address, comment_address);
         files.upAndDownComment(file_address, comment_address, is_up);
     }
 
     function addFileSubComment(uint, address file_address, address target_address, address comment_address, string memory content)
     external {
+        _file_commented_(file_address, comment_address);
         files.addSubComment(file_address, target_address, comment_address, content);
     }
 
     function upAndDownFileSubComment(uint, address file_address, address comment_address, address sub_comment_address, bool is_up)
     external {
+        _file_sub_commented_(file_address, comment_address, sub_comment_address);
         files.upAndDownSubComment(file_address, comment_address, sub_comment_address, is_up);
     }
 

@@ -31,10 +31,10 @@ abstract contract Types {
 
         AddressLinkedList.T medals;//获得的勋章
         AddressLinkedList.T rewards;//我的悬赏
-        AddressLinkedList.T comments;//我的评论
         AddressLinkedList.T followers;//我的粉丝
         AddressLinkedList.T followings;//我的关注
         AddressOrderedMap.T up_messages;//我的悬赏或评论被点赞消息
+        AddressLinkedList.T marked_files;//我关注的文件
         AddressLinkedList.T marked_rewards;//我关注的悬赏
         AddressLinkedList.T uploaded_files;//已上传的文件
         AddressOrderedMap.T reply_messages;//我的悬赏或评论被回复消息
@@ -42,18 +42,6 @@ abstract contract Types {
         AddressOrderedMap.T following_upload_messages;//我的关注上传文件消息
         AddressOrderedMap.T marked_reward_solved_messages;//关注的悬赏被解决消息
     }
-
-    //用户表
-    struct UserStore {
-        mapping(address => UserInfo) user_info;//用户信息
-
-        AddressLinkedList.T user_index;//用户地址
-
-        AddressOrderedMap.T _user_by_heart;//热心值索引
-        AddressOrderedMap.T _user_by_medal_num;//奖牌数索引
-        AddressOrderedMap.T _user_by_follower_num;//粉丝数索引
-    }
-
 
     //个人信息摘要
     struct UserSelfInfo {
@@ -74,6 +62,9 @@ abstract contract Types {
 
     //卡片用户信息
     struct UserSimpleInfo {
+        bool is_follower;
+        bool is_following;
+
         string major;//专业
         string avatar;//头像
         string nickname;//用户名
@@ -96,6 +87,16 @@ abstract contract Types {
         uint experience;//经验值
     }
 
+    //用户表
+    struct UserStore {
+        mapping(address => UserInfo) user_info;//用户信息
+
+        AddressLinkedList.T user_index;//用户地址
+
+        AddressOrderedMap.T _user_by_heart;//热心值索引
+        AddressOrderedMap.T _user_by_medal_num;//奖牌数索引
+        AddressOrderedMap.T _user_by_follower_num;//粉丝数索引
+    }
 
     /* 文件相关模型 */
     //文件全部信息
@@ -114,6 +115,7 @@ abstract contract Types {
         uint price;//价格
         uint up_num;//点赞数
         uint down_num;//点踩数
+        uint mark_num;//关注数
         uint buyer_num;//购买量
         uint comment_num;//评论数
         uint upload_timestamp;//上传时间
@@ -165,6 +167,7 @@ abstract contract Types {
         uint price;//价格
         uint up_num;//点赞数
         uint down_num;//点踩数
+        uint mark_num;//关注数
         uint buyer_num;//购买量
         uint comment_num;//评论数
         uint up_and_down;//点赞点踩
@@ -277,6 +280,7 @@ abstract contract Types {
 
         uint up_num;//点赞次数
         uint down_num;//点踩次数
+        uint mark_num;//点踩次数
         uint comment_num;//点踩次数
         uint remuneration;//酬金
         uint update_timestamp;//更新时间
@@ -318,6 +322,7 @@ abstract contract Types {
 
         uint up_num;//点赞次数
         uint down_num;//点踩次数
+        uint mark_num;
         uint up_and_down;
         uint comment_num;//点踩次数
         uint remuneration;//酬金
@@ -440,7 +445,6 @@ library UserLib {
 
         user_info.medals.init();
         user_info.rewards.init();
-        user_info.comments.init();
         user_info.followers.init();
         user_info.followings.init();
         user_info.up_messages.init();
@@ -472,7 +476,6 @@ library UserLib {
             following_num: user_info.followings.length,
             login_timestamp: user_info.login_timestamp,
             uploaded_file_num: user_info.uploaded_files.length,
-
             major: user_info.major,
             avatar: user_info.avatar,
             nickname: user_info.nickname,
@@ -484,16 +487,20 @@ library UserLib {
     public view returns (Types.UserSimpleInfo memory simple_info){
         Types.UserInfo storage user_info = self.user_info[user_address];
 
-        simple_info.major = user_info.major;
-        simple_info.avatar = user_info.avatar;
-        simple_info.nickname = user_info.nickname;
-        simple_info.signature = user_info.signature;
+        simple_info=Types.UserSimpleInfo({
+            is_follower:self.user_info[msg.sender].followers.isContain(user_address),
+            is_following:self.user_info[msg.sender].followings.isContain(user_address),
+            major : user_info.major,
+            avatar : user_info.avatar,
+            nickname : user_info.nickname,
+            signature :user_info.signature,
+            heart : user_info.heart,
+            medal_num : user_info.medals.length,
+            experience : user_info.experience,
+            follower_num : user_info.followers.length,
+            uploaded_file_num : user_info.uploaded_files.length
+        });
 
-        simple_info.heart = user_info.heart;
-        simple_info.medal_num = user_info.medals.length;
-        simple_info.experience = user_info.experience;
-        simple_info.follower_num = user_info.followers.length;
-        simple_info.uploaded_file_num = user_info.uploaded_files.length;
     }
 
     function getOtherBriefInfo(Types.UserStore storage self, address user_address)
@@ -524,6 +531,16 @@ library UserLib {
     function updateSignature(Types.UserStore storage self, string memory signature)
     public {
         self.user_info[msg.sender].signature = signature;
+    }
+
+    function follow(Types.UserStore storage self,address user_address) 
+    public{
+        AddressLinkedList.T storage followings=self.user_info[msg.sender].followings;
+        if(followings.isContain(user_address)){
+            followings.remove(user_address);
+        }else{
+            followings.append(user_address);    
+        }
     }
 
     //上传文件后
@@ -690,6 +707,7 @@ library FileLib {
             price: file.price,
             up_num: file.up_num,
             down_num: file.down_num,
+            mark_num:file.mark_num,
             buyer_num: file.buyer_num,
             comment_num: file.comment_num,
             up_and_down: file.up_and_downs[msg.sender],
@@ -921,6 +939,22 @@ library FileLib {
             next = cursor;
         }
     }
+
+    function mark(
+        Types.FileStore storage self,
+        address file_address,
+        Types.UserStore storage users
+    )public {
+        AddressLinkedList.T storage marked_files=users.user_info[msg.sender].marked_files;
+
+        if(marked_files.isContain(file_address)){
+            self.file_info[file_address].mark_num--;
+            marked_files.remove(file_address);
+        }else{
+            self.file_info[file_address].mark_num++;
+            marked_files.append(file_address);
+        }
+    }
 }
 
 library CategoryLib {
@@ -1115,6 +1149,7 @@ library RewardLib {
             images: reward.images,
             up_num: reward.up_num,
             down_num: reward.down_num,
+            mark_num:reward.mark_num,
             up_and_down: reward.up_and_downs[msg.sender],
             comment_num: reward.comment_num,
             remuneration: reward.remuneration,
@@ -1357,6 +1392,22 @@ library RewardLib {
 
             index++;
             next = cursor;
+        }
+    }
+
+    function mark(
+        Types.RewardStore storage self,
+        address reawrd_address,
+        Types.UserStore storage users
+    )public {
+        AddressLinkedList.T storage marked_rewards=users.user_info[msg.sender].marked_rewards;
+
+        if(marked_rewards.isContain(reawrd_address)){
+            self.reward_info[reawrd_address].mark_num--;
+            marked_rewards.remove(reawrd_address);
+        }else{
+            self.reward_info[reawrd_address].mark_num++;
+            marked_rewards.append(reawrd_address);
         }
     }
 }

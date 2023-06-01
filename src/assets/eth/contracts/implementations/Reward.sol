@@ -63,26 +63,31 @@ contract RewardContact is BaseContact, RewardInterface {
 
     function upAndDownReward(uint, address reward_address, bool is_up)
     external {
+        _published_(reward_address);
         rewards.upAndDown(reward_address, is_up);
     }
 
     function addRewardComment(uint, address reward_address, address file_address, string memory content, string[3] memory images)
     external {
+        _published_(reward_address);
         rewards.addComment(reward_address, file_address, content, images);
     }
 
     function upAndDownRewardComment(uint, address reward_address, address comment_address, bool is_up)
     external {
+        _reward_commented_(reward_address, comment_address);
         rewards.upAndDownComment(reward_address, comment_address, is_up);
     }
 
     function addRewardSubComment(uint, address reward_address, address target_address, address comment_address, string memory content)
     external {
+        _reward_commented_(reward_address, comment_address);
         rewards.addSubComment(reward_address, target_address, comment_address, content);
     }
 
     function upAndDownRewardSubComment(uint, address reward_address, address comment_address, address sub_comment_address, bool is_up)
     external {
+        _reward_sub_commented_(reward_address, comment_address, sub_comment_address);
         rewards.upAndDownSubComment(reward_address, comment_address, sub_comment_address, is_up);
     }
 

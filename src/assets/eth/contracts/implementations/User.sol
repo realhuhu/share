@@ -49,6 +49,7 @@ contract UserContract is BaseContact, UserInterface {
     //注册账号
     function register(uint, string memory nickname)
     external {
+        require(users.user_info[msg.sender].login_timestamp==0);
         users.register(nickname);
     }
 
@@ -58,6 +59,7 @@ contract UserContract is BaseContact, UserInterface {
         self_info = users.getSelfInfo();
     }
 
+    //获取其它用户的信息
     function getOtherSimpleInfo(uint, address user_address)
     external view returns (Types.UserSimpleInfo memory simple_info){
         simple_info = users.getOtherSimpleInfo(user_address);
@@ -66,36 +68,30 @@ contract UserContract is BaseContact, UserInterface {
     //更新头像
     function updateAvatar(uint, string memory avatar)
     external {
+        _registered_(msg.sender);
         users.updateAvatar(avatar);
     }
 
     //更新姓名
     function updateNickname(uint, string memory nickname)
     external {
+        _registered_(msg.sender);
         users.updateNickname(nickname);
     }
 
     //更新签名
     function updateSignature(uint, string memory signature)
     external {
+        _registered_(msg.sender);
         users.updateSignature(signature);
     }
 
-    //    //获取其它用户的详细信息
-    //    function getUserInfo(address user_address)
-    //    _registered_(user_address)
-    //    external view returns (UserBriefInfo memory user_info){
-    //        UserInfo storage user = users.user_info[user_address];
-    //        user_info = UserBriefInfo({
-    //            avatar: user.avatar,
-    //            nickname: user.nickname,
-    //            signature: user.signature,
-    //            login_timestamp: user_info.login_timestamp,
-    //            following_num: user.followings.length,
-    //            follower_num: user.followers.length,
-    //            heart: user.heart
-    //        });
-    //    }
+    function follow(uint,address user_address)
+    external {
+        _registered_(msg.sender);
+        _registered_(user_address);
+        users.follow(user_address);
+    }
     //
     //    //获取我关注的用户的摘要信息
     //    function getFollowings(address cursor)

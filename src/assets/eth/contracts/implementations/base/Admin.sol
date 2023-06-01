@@ -13,7 +13,7 @@ abstract contract AdminContract {
     event AdminTransferred(address indexed old_admin, address indexed new_admin);
 
     modifier _onlyAdmin_() {
-        require(admin == msg.sender, "AdminContract>_onlyAdmin_");
+        require(admin == msg.sender, "_onlyAdmin_");
         _;
     }
 
@@ -22,7 +22,7 @@ abstract contract AdminContract {
     }
 
     function transferAdmin(address new_admin) public _onlyAdmin_ {
-        require(new_admin != address(0), "AdminContract>transferAdmin");
+        require(new_admin != address(0), "transferAdmin");
         _transferAdmin(new_admin);
     }
 
