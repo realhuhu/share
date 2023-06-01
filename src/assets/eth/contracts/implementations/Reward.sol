@@ -8,9 +8,11 @@ interface RewardInterface {
 
     function createReward(uint, string memory title, string memory description, string[3] memory images, uint remuneration) external;
 
-    function getSelfRewardBriefInfos(uint, address cursor, bool reverse) external view returns (Types.RewardBriefInfo[10] memory reward_infos, address next, bool finished);
-
     function getRewardBriefInfos(uint, address cursor, uint solved, uint order, bool reverse) external view returns (Types.RewardBriefInfo[10] memory reward_infos, address next, bool finished);
+
+    function getUserRewardBriefInfos(uint, address user_address, address cursor, bool reverse) external view returns (Types.RewardBriefInfo[10] memory reward_infos, address next, bool finished);
+
+    function getSelfRewardBriefInfos(uint, address cursor, bool reverse) external view returns (Types.RewardBriefInfo[10] memory reward_infos, address next, bool finished);
 
     function getRewardDetailInfo(uint, address reward_address) external view returns (Types.RewardDetailInfo memory detail_info);
 
@@ -29,6 +31,8 @@ interface RewardInterface {
     function getRewardChildrenComments(uint, address reward_address, address comment_address, address cursor) external view returns (Types.RewardChildrenComment[10] memory children_comments, address next, bool finished);
 
     function markReward(uint, address reward_address) external;
+
+    function getMarkedRewards(uint, address cursor) external view returns (Types.RewardBriefInfo[10] memory reward_infos, address next, bool finished);
 }
 
 contract RewardContact is BaseContact, RewardInterface {
@@ -56,6 +60,12 @@ contract RewardContact is BaseContact, RewardInterface {
     external view returns (Types.RewardBriefInfo[10] memory reward_infos, address next, bool finished){
         (reward_infos, next, finished) = rewards.getBriefInfos(cursor, solved, order, reverse, users);
     }
+
+    function getUserRewardBriefInfos(uint, address user_address, address cursor, bool reverse)
+    external view returns (Types.RewardBriefInfo[10] memory reward_infos, address next, bool finished){
+        (reward_infos, next, finished) = rewards.getUserBriefInfos(user_address, cursor, reverse, users);
+    }
+
 
     function getRewardDetailInfo(uint, address reward_address)
     external view returns (Types.RewardDetailInfo memory detail_info){
@@ -108,4 +118,10 @@ contract RewardContact is BaseContact, RewardInterface {
         bool is_mark = rewards.mark(reward_address);
         users.afterMarkReward(reward_address, is_mark);
     }
+
+    function getMarkedRewards(uint, address cursor)
+    external view returns (Types.RewardBriefInfo[10] memory reward_infos, address next, bool finished){
+        (reward_infos, next, finished) = rewards.getMarked(cursor, users);
+    }
+
 }

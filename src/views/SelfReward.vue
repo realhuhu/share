@@ -1,10 +1,9 @@
 <template>
   <div>
-    <div class="fixed left-0 top-0 w-screen h-screen bg-[#f0f1f5] z-[-100]"/>
     <head-bar title="我的悬赏" back="/home/profile"/>
     <div class="flex flex-col items-center justify-center md:mt-16 gap-4 rounded-xl">
       <var-list
-        class="w-[960px] max-w-full p-6 bg-white"
+        class="w-[960px] max-w-full p-6 bg-white md:shadow-x"
         :finished="finished"
         v-model:loading="loading"
         @load="load"

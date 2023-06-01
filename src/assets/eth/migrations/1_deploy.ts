@@ -19,25 +19,31 @@ module.exports = async (
   }
 
   // @ts-ignore
-  const AddressLinkedList = artifacts.require("AddressLinkedList");
+  const AddressLinkedList = artifacts.require("AddressLinkedList")
   // @ts-ignore
-  const AddressOrderedMap = artifacts.require("AddressOrderedMap");
+  const AddressOrderedMap = artifacts.require("AddressOrderedMap")
   // @ts-ignore
-  const UintLib = artifacts.require("UintLib");
+  const UintLib = artifacts.require("UintLib")
   // @ts-ignore
-  const StringLib = artifacts.require("StringLib");
+  const StringLib = artifacts.require("StringLib")
   // @ts-ignore
-  const Bytes32Lib = artifacts.require("Bytes32Lib");
+  const Bytes32Lib = artifacts.require("Bytes32Lib")
   // @ts-ignore
-  const UserLib = artifacts.require("UserLib");
+  const UserUtils = artifacts.require("UserUtils")
   // @ts-ignore
-  const FileLib = artifacts.require("FileLib");
+  const UserLib = artifacts.require("UserLib")
   // @ts-ignore
-  const CategoryLib = artifacts.require("CategoryLib");
+  const FileUtils = artifacts.require("FileUtils")
   // @ts-ignore
-  const RewardLib = artifacts.require("RewardLib");
+  const FileLib = artifacts.require("FileLib")
   // @ts-ignore
-  const CommonLib = artifacts.require("CommonLib");
+  const CategoryLib = artifacts.require("CategoryLib")
+  // @ts-ignore
+  const RewardUtils = artifacts.require("RewardUtils")
+  // @ts-ignore
+  const RewardLib = artifacts.require("RewardLib")
+  // @ts-ignore
+  const CommonLib = artifacts.require("CommonLib")
 
   const UserContract = await artifacts.require("UserContract")
   const FileContact = await artifacts.require("FileContact")
@@ -45,30 +51,46 @@ module.exports = async (
   const MessageContact = await artifacts.require("MessageContact")
   const OurShare = await artifacts.require("OurShare")
 
-
-  await deployer.deploy(UintLib);
-  await deployer.deploy(StringLib);
-  await deployer.deploy(Bytes32Lib);
-  await deployer.deploy(CommonLib);
-  await deployer.deploy(AddressLinkedList);
+  await deployer.deploy(UintLib)
+  await deployer.deploy(StringLib)
+  await deployer.deploy(Bytes32Lib)
+  await deployer.deploy(CommonLib)
+  await deployer.deploy(AddressLinkedList)
   deployer.link(AddressLinkedList, AddressOrderedMap)
-  await deployer.deploy(AddressOrderedMap);
+  await deployer.deploy(AddressOrderedMap)
+
+  deployer.link(AddressLinkedList, UserUtils)
+  deployer.link(AddressOrderedMap, UserUtils)
+  await deployer.deploy(UserUtils)
 
   deployer.link(AddressLinkedList, UserLib)
   deployer.link(AddressOrderedMap, UserLib)
-  await deployer.deploy(UserLib);
+  deployer.link(UserUtils, UserLib)
+  await deployer.deploy(UserLib)
+
+  deployer.link(AddressLinkedList, FileUtils)
+  deployer.link(AddressOrderedMap, FileUtils)
+  deployer.link(UserLib, FileUtils)
+  await deployer.deploy(FileUtils)
 
   deployer.link(AddressLinkedList, FileLib)
   deployer.link(AddressOrderedMap, FileLib)
   deployer.link(Bytes32Lib, FileLib)
   deployer.link(UserLib, FileLib)
   deployer.link(CommonLib, FileLib)
-  await deployer.deploy(FileLib);
+  deployer.link(FileUtils, FileLib)
+  await deployer.deploy(FileLib)
 
   deployer.link(AddressLinkedList, CategoryLib)
   deployer.link(AddressOrderedMap, CategoryLib)
   deployer.link(Bytes32Lib, CategoryLib)
-  await deployer.deploy(CategoryLib);
+  await deployer.deploy(CategoryLib)
+
+  deployer.link(AddressLinkedList, RewardUtils)
+  deployer.link(AddressOrderedMap, RewardUtils)
+  deployer.link(UserLib, RewardUtils)
+  deployer.link(FileLib, RewardUtils)
+  await deployer.deploy(RewardUtils)
 
   deployer.link(AddressLinkedList, RewardLib)
   deployer.link(AddressOrderedMap, RewardLib)
@@ -76,31 +98,32 @@ module.exports = async (
   deployer.link(UserLib, RewardLib)
   deployer.link(FileLib, RewardLib)
   deployer.link(CommonLib, RewardLib)
-  await deployer.deploy(RewardLib);
+  deployer.link(RewardUtils, RewardLib)
+  await deployer.deploy(RewardLib)
 
   deployer.link(UserLib, UserContract)
-  await deployer.deploy(UserContract);
+  await deployer.deploy(UserContract)
   const UserImplementation = await UserContract.deployed()
 
   deployer.link(Bytes32Lib, FileContact)
   deployer.link(UserLib, FileContact)
   deployer.link(FileLib, FileContact)
   deployer.link(CategoryLib, FileContact)
-  await deployer.deploy(FileContact);
+  await deployer.deploy(FileContact)
   const FileImplementation = await FileContact.deployed()
 
   deployer.link(UserLib, RewardContact)
   deployer.link(RewardLib, RewardContact)
-  await deployer.deploy(RewardContact);
+  await deployer.deploy(RewardContact)
   const RewardImplementation = await RewardContact.deployed()
 
-  await deployer.deploy(MessageContact);
+  await deployer.deploy(MessageContact)
   const MessageImplementation = await MessageContact.deployed()
 
 
   if (network === "development") {
-    await deployer.deploy(OurShare);
-    const OurShareContact = await OurShare.deployed();
+    await deployer.deploy(OurShare)
+    const OurShareContact = await OurShare.deployed()
     await OurShareContact.setImplementation(
       UserImplementation.address,
       FileImplementation.address,
@@ -130,4 +153,4 @@ module.exports = async (
       MessageImplementation.address
     )
   }
-};
+}

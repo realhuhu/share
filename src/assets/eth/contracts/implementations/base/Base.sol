@@ -1,11 +1,20 @@
-//SPDX-License-Identifier: GPL-3.0
+// SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.17;
 
 import "./Admin.sol";
-import "./Store.sol";
+import "./segment/UserLib.sol";
+import "./segment/FileLib.sol";
+import "./segment/RewardLib.sol";
+import "./segment/MessageLib.sol";
 
 
-contract BaseContact is AdminContract, StoreContact {
+contract BaseContact is AdminContract {
+    Types.UserStore internal users;//所有用户
+    Types.FileStore internal files;//所有文件
+    Types.CategoryStore internal categories;//分类
+    Types.RewardStore internal rewards;
+    Types.MessageStore internal messages;
+
     function _registered_(address user_address)
     internal view {
         require(users.user_info[user_address].login_timestamp != 0);

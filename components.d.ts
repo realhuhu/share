@@ -69,6 +69,8 @@ declare module '@vue/runtime-core' {
     TextClipboard: typeof import('./src/components/utils/TextClipboard.vue')['default']
     UploadFileCard: typeof import('./src/components/card/UploadFileCard.vue')['default']
     UploadRewardCard: typeof import('./src/components/card/UploadRewardCard.vue')['default']
+    UserDetailCard: typeof import('./src/components/card/UserDetailCard.vue')['default']
+    UserFileRewardCard: typeof import('./src/components/card/UserFileRewardCard.vue')['default']
     UserSelfCard: typeof import('./src/components/card/UserSelfCard.vue')['default']
     UserSimpleCard: typeof import('./src/components/card/UserSimpleCard.vue')['default']
     VarAppBar: typeof import('@varlet/ui')['_AppBarComponent']

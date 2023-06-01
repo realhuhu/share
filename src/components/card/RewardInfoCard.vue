@@ -1,7 +1,7 @@
 <template>
   <div class="rounded-xl md:shadow-around p-6 md:px-16 flex flex-col gap-3">
     <div>
-      <div class="text-[24px] font-bold">{{ reward_info.title }}</div>
+      <div class="text-[20px] font-bold">{{ reward_info.title }}</div>
       <div class="text-gray-500 text-sm">{{ stripAddress(reward_info.reward_address) }}</div>
     </div>
 
@@ -11,11 +11,11 @@
       <div>{{ reward_info.comment_num }}评论</div>
     </div>
 
-    <div class="flex justify-center items-center text-sm text-gray-500">
+    <var-divider class="flex justify-center items-center text-sm text-gray-500">
       <div>发布于：{{ create_time }}</div>
       <var-divider v-if="create_time!==update_time" vertical/>
       <div v-if="create_time!==update_time">最后更新于：{{ update_time }}</div>
-    </div>
+    </var-divider>
 
     <div>
       {{ reward_info.description }}

@@ -139,6 +139,16 @@ const routes: Array<RouteRecordRaw> = [
       auth: true,
       keep_alive: true
     }
+  },
+  {
+    path: "/user/:user_address",
+    name: "UserInfo",
+    component: () => import("@/views/UserInfo.vue"),
+    meta: {
+      depth: 5,
+      auth: true,
+      keep_alive: true
+    }
   }
 ]
 

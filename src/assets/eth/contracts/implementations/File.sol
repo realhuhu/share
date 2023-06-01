@@ -12,9 +12,11 @@ interface FileInterface {
 
     function uploadFile(uint, string memory ipfs_address, string memory name, string memory title, string memory description, address category_address, string[3] memory images, uint price) external;
 
-    function getSelfFileBriefInfos(uint, address cursor, bool reverse) external view returns (Types.FileBriefInfo[10] memory file_infos, address next, bool finished);
-
     function getFileBriefInfos(uint, address cursor, address category_address, uint order, bool reverse) external view returns (Types.FileBriefInfo[10] memory file_infos, address next, bool finished);
+
+    function getUserFileBriefInfos(uint, address user_address, address cursor, bool reverse) external view returns (Types.FileBriefInfo[10] memory file_infos, address next, bool finished);
+
+    function getSelfFileBriefInfos(uint, address cursor, bool reverse) external view returns (Types.FileBriefInfo[10] memory file_infos, address next, bool finished);
 
     function getFileDetailInfo(uint, address file_address) external view returns (Types.FileDetailInfo memory detail_info);
 
@@ -33,6 +35,8 @@ interface FileInterface {
     function getFileChildrenComments(uint, address file_address, address comment_address, address cursor) external view returns (Types.FileChildrenComment[10] memory children_comments, address next, bool finished);
 
     function markFile(uint, address file_address) external;
+
+    function getMarkedFiles(uint, address cursor) external view returns (Types.FileBriefInfo[10] memory file_infos, address next, bool finished);
 }
 
 contract FileContact is BaseContact, FileInterface {
@@ -60,24 +64,27 @@ contract FileContact is BaseContact, FileInterface {
         (category_slice, next, finished) = categories.getSlice(cursor);
     }
 
-
     function uploadFile(uint, string memory ipfs_address, string memory name, string memory title, string memory description, address category_address, string[3] memory images, uint price)
     external {
         address file_address = files.upload(ipfs_address, name, title, description, category_address, images, price);
-
         categories.increase(category_address);
-
         users.afterUploadFile(file_address);
-    }
-
-    function getSelfFileBriefInfos(uint, address cursor, bool reverse)
-    external view returns (Types.FileBriefInfo[10] memory file_infos, address next, bool finished){
-        (file_infos, next, finished) = files.getSelfBriefInfos(cursor, reverse, users);
     }
 
     function getFileBriefInfos(uint, address cursor, address category_address, uint order, bool reverse)
     external view returns (Types.FileBriefInfo[10] memory file_infos, address next, bool finished){
         (file_infos, next, finished) = files.getBriefInfos(cursor, category_address, order, reverse, users);
+    }
+
+    function getUserFileBriefInfos(uint, address user_address, address cursor, bool reverse)
+    external view returns (Types.FileBriefInfo[10] memory file_infos, address next, bool finished){
+        (file_infos, next, finished) = files.getUserBriefInfos(user_address, cursor, reverse, users);
+    }
+
+
+    function getSelfFileBriefInfos(uint, address cursor, bool reverse)
+    external view returns (Types.FileBriefInfo[10] memory file_infos, address next, bool finished){
+        (file_infos, next, finished) = files.getSelfBriefInfos(cursor, reverse, users);
     }
 
     function getFileDetailInfo(uint, address file_address)
@@ -132,4 +139,8 @@ contract FileContact is BaseContact, FileInterface {
         users.afterMarkFile(file_address, is_mark);
     }
 
+    function getMarkedFiles(uint, address cursor)
+    external view returns (Types.FileBriefInfo[10] memory file_infos, address next, bool finished){
+        (file_infos, next, finished) = files.getMarked(cursor, users);
+    }
 }

@@ -7,22 +7,35 @@
         <var-tab>我的关注</var-tab>
         <var-tab>我的粉丝</var-tab>
       </var-tabs>
-    </div>
 
-    <var-list
-      class="w-[960px] max-w-full p-6 bg-white"
-      :finished="finished"
-      v-model:loading="loading"
-      @load="load"
-      :immediate-check="false"
-    >
-      <div v-for="(user,k) in users" :key="k">
-        <transition enter-active-class="animate__animated animate__fadeIn" appear>
-          {{ user }}
-        </transition>
-        <var-divider/>
-      </div>
-    </var-list>
+      <var-list
+        class="p-6 bg-white"
+        :finished="finished"
+        v-model:loading="loading"
+        @load="load"
+        :immediate-check="false"
+      >
+        <div v-for="(user_info,k) in users" :key="k">
+          <transition enter-active-class="animate__animated animate__fadeIn" appear>
+            <div class="flex justify-between items-center">
+              <div class="flex justify-start items-center gap-2">
+                <var-avatar :src="avatar(user_info.avatar)" size="48"/>
+                <div class="flex flex-col justify-center items-start">
+                  <div class="font-bold">{{ user_info.nickname }}</div>
+                  <div class="text-sm text-gray-500">{{ stripAddress(user_info.user_address) }}</div>
+                </div>
+              </div>
+
+              <var-button v-if="user_info.is_following" class="mr-2" text outline type="danger"
+                          @click="follow(k,false)">取消关注
+              </var-button>
+              <var-button v-else class="mr-2" text outline type="info" @click="follow(k,true)">关注</var-button>
+            </div>
+          </transition>
+          <var-divider/>
+        </div>
+      </var-list>
+    </div>
   </div>
 </template>
 
@@ -31,9 +44,10 @@
 import {ref} from "vue";
 import {useRoute} from "vue-router";
 import {UseStore} from "@/store";
-import {assertNotEmpty} from "@/assets/lib/utils";
+import {assertNotEmpty, avatar, followCallback, stripAddress, wait} from "@/assets/lib/utils";
 import {head_address, via, zero_address} from "@/assets/lib/settings";
 import {Types} from "@/assets/types/ethers/ImplementationInterface";
+import {Dialog} from "@varlet/ui";
 
 const store = UseStore()
 const route = useRoute()
@@ -66,7 +80,12 @@ const load = async () => {
   }
 }
 
-load()
+const follow = async (index: number, is_follow: boolean) => {
+  if (is_follow || await Dialog({title: "是否取消关注?"}) === "confirm") {
+    await wait(contract.follow(via.USER, users.value[index].user_address))
+    users.value[index] = followCallback(users.value[index])
+  }
+}
 
 const reload = async () => {
   cursor.value = head_address
@@ -75,6 +94,9 @@ const reload = async () => {
   finished.value = false
   await load()
 }
+
+load()
+
 
 defineExpose({active})
 </script>

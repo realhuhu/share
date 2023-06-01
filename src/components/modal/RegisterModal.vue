@@ -24,7 +24,7 @@
 <script lang="ts" setup>
 import {UseStore} from "@/store";
 import {assertNotEmpty, stripAddress} from "@/assets/lib/utils";
-import {ref, watch} from "vue";
+import {ref} from "vue";
 import {via} from "@/assets/lib/settings";
 import {useRoute, useRouter} from "vue-router";
 

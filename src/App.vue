@@ -32,7 +32,7 @@ const router = useRouter()
 const route = useRoute()
 const store = UseStore()
 const page_animation = ref()
-const include = ref<string[]>([])
+const include = ref<string[]>(["HomePage"])
 const init = ref()
 
 store.connectEthereum()

@@ -14,7 +14,7 @@
           <div>{{ user.raw_data.nickname }}</div>
           <div class="text-gray-400 text-sm">({{ stripAddress(user.address) }})</div>
         </div>
-        <experience-bar :experience="0"/>
+        <experience-bar :experience="user.raw_data.experience.toNumber()"/>
 
         <div class="flex gap-2 py-2">
           <var-tooltip content="硬币数" placement="bottom">

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-center pt-12 md:pt-0">
+  <div class="flex flex-col items-center justify-center md:pt-0">
     <div class="fixed left-0 top-0 w-screen h-screen bg-[#f0f1f5] z-[-100]"/>
     <home-header class="flex md:hidden"/>
 
@@ -11,6 +11,7 @@
           <var-tab>已解决</var-tab>
           <var-tab>未解决</var-tab>
         </var-tabs>
+        <var-divider margin="0"/>
       </var-sticky>
 
       <var-sticky>
@@ -28,8 +29,6 @@
             未解决
           </var-button>
         </div>
-
-        <var-divider margin="0"/>
       </var-sticky>
 
       <div class="flex justify-end  py-2 text-sm">

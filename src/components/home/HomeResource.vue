@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-center pt-12 md:pt-0">
+  <div class="flex flex-col items-center justify-center md:pt-0">
     <home-header class="flex md:hidden"/>
 
     <div class="w-[1280px] max-w-full md:mt-24 md:px-6">
@@ -10,18 +10,17 @@
             {{ category.name }} ({{ category.num }})
           </var-tab>
         </var-tabs>
+        <var-divider margin="0"/>
       </var-sticky>
 
       <var-sticky>
-        <div class=" bg-white md:py-2">
+        <div class=" bg-white md:py-2 border-gray-100 border">
           <var-button text v-for="(category,k) of store.categories" :key="k" class="hidden md:inline"
                       @click="current_category=category.category_address"
                       :class="current_category===category.category_address?'text-[#4ebaee] underline':'text-gray-500'">
             {{ category.name }} ({{ category.num }})
           </var-button>
         </div>
-
-        <var-divider margin="0"/>
       </var-sticky>
 
       <div class="flex justify-end  py-2">
