@@ -14,7 +14,7 @@ import "../../utils/Common.sol";
 abstract contract Types {
     /* 用户相关模型 */
     //用户全部信息
-    struct UserInfo {
+    struct User {
         address user_address;
 
         string major;//专业
@@ -62,6 +62,8 @@ abstract contract Types {
 
     //卡片用户信息
     struct UserSimpleInfo {
+        address user_address;
+
         bool is_follower;
         bool is_following;
 
@@ -89,7 +91,7 @@ abstract contract Types {
 
     //用户表
     struct UserStore {
-        mapping(address => UserInfo) user_info;//用户信息
+        mapping(address => User) user_info;//用户信息
 
         AddressLinkedList.T user_index;//用户地址
 
@@ -121,6 +123,7 @@ abstract contract Types {
         uint upload_timestamp;//上传时间
 
         mapping(address => bool) buyers;//已购买的用户
+        mapping(address => bool) markers;//已购买的用户
         mapping(address => uint) up_and_downs;//已点赞用户
         mapping(address => FileComment) comment_info;//评论信息
 
@@ -156,6 +159,7 @@ abstract contract Types {
         address category_address;//分类
 
         bool is_buy;//是否已购买
+        bool is_mark;
 
         string name;//文件名
         string title;//标题
@@ -286,6 +290,7 @@ abstract contract Types {
         uint update_timestamp;//更新时间
         uint create_timestamp;//上传时间
 
+        mapping(address => bool) markers;
         mapping(address => uint) up_and_downs;//已点赞用户
         mapping(address => RewardComment) comment_info;//评论信息
 
@@ -314,6 +319,8 @@ abstract contract Types {
         address author;//作者
         address reward_address;//悬赏地址
         address approved_comment;//被采纳的评论
+
+        bool is_mark;
 
         string title;//标题
         string description;//描述
@@ -434,26 +441,27 @@ library UserLib {
     //注册账号
     function register(Types.UserStore storage self, string memory nickname)
     public {
-        Types.UserInfo storage user_info = self.user_info[msg.sender];
+        Types.User storage user = self.user_info[msg.sender];
 
-        user_info.user_address = msg.sender;
+        user.user_address = msg.sender;
 
-        user_info.nickname = nickname;
+        user.nickname = nickname;
 
-        user_info.pits = 2;
-        user_info.login_timestamp = block.timestamp;
+        user.pits = 2;
+        user.login_timestamp = block.timestamp;
 
-        user_info.medals.init();
-        user_info.rewards.init();
-        user_info.followers.init();
-        user_info.followings.init();
-        user_info.up_messages.init();
-        user_info.marked_rewards.init();
-        user_info.uploaded_files.init();
-        user_info.reply_messages.init();
-        user_info.purchased_files.init();
-        user_info.following_upload_messages.init();
-        user_info.marked_reward_solved_messages.init();
+        user.medals.init();
+        user.rewards.init();
+        user.followers.init();
+        user.followings.init();
+        user.up_messages.init();
+        user.marked_files.init();
+        user.marked_rewards.init();
+        user.uploaded_files.init();
+        user.reply_messages.init();
+        user.purchased_files.init();
+        user.following_upload_messages.init();
+        user.marked_reward_solved_messages.init();
 
         self.user_index.append(msg.sender);
         self._user_by_heart.update(AddressOrderedMap.Item(msg.sender, 0));
@@ -465,54 +473,55 @@ library UserLib {
     //获取个人信息
     function getSelfInfo(Types.UserStore storage self)
     public view returns (Types.UserSelfInfo memory self_info){
-        Types.UserInfo storage user_info = self.user_info[msg.sender];
+        Types.User storage user = self.user_info[msg.sender];
 
         self_info = Types.UserSelfInfo({
-            ID: user_info.ID,
-            coins: user_info.coins,
-            heart: user_info.heart,
-            experience: user_info.experience,
-            follower_num: user_info.followers.length,
-            following_num: user_info.followings.length,
-            login_timestamp: user_info.login_timestamp,
-            uploaded_file_num: user_info.uploaded_files.length,
-            major: user_info.major,
-            avatar: user_info.avatar,
-            nickname: user_info.nickname,
-            signature: user_info.signature
+            ID: user.ID,
+            coins: user.coins,
+            heart: user.heart,
+            experience: user.experience,
+            follower_num: user.followers.length,
+            following_num: user.followings.length,
+            login_timestamp: user.login_timestamp,
+            uploaded_file_num: user.uploaded_files.length,
+            major: user.major,
+            avatar: user.avatar,
+            nickname: user.nickname,
+            signature: user.signature
         });
     }
 
     function getOtherSimpleInfo(Types.UserStore storage self, address user_address)
     public view returns (Types.UserSimpleInfo memory simple_info){
-        Types.UserInfo storage user_info = self.user_info[user_address];
+        Types.User storage user = self.user_info[user_address];
 
-        simple_info=Types.UserSimpleInfo({
-            is_follower:self.user_info[msg.sender].followers.isContain(user_address),
-            is_following:self.user_info[msg.sender].followings.isContain(user_address),
-            major : user_info.major,
-            avatar : user_info.avatar,
-            nickname : user_info.nickname,
-            signature :user_info.signature,
-            heart : user_info.heart,
-            medal_num : user_info.medals.length,
-            experience : user_info.experience,
-            follower_num : user_info.followers.length,
-            uploaded_file_num : user_info.uploaded_files.length
+        simple_info = Types.UserSimpleInfo({
+            user_address: user_address,
+            is_follower: self.user_info[msg.sender].followers.isContain(user_address),
+            is_following: self.user_info[msg.sender].followings.isContain(user_address),
+            major: user.major,
+            avatar: user.avatar,
+            nickname: user.nickname,
+            signature: user.signature,
+            heart: user.heart,
+            medal_num: user.medals.length,
+            experience: user.experience,
+            follower_num: user.followers.length,
+            uploaded_file_num: user.uploaded_files.length
         });
 
     }
 
     function getOtherBriefInfo(Types.UserStore storage self, address user_address)
     public view returns (Types.UserBriefInfo memory brief_info){
-        Types.UserInfo storage user_info = self.user_info[user_address];
+        Types.User storage user = self.user_info[user_address];
 
-        brief_info.user_address = user_info.user_address;
-
-        brief_info.avatar = user_info.avatar;
-        brief_info.nickname = user_info.nickname;
-
-        brief_info.experience = user_info.experience;
+        brief_info = Types.UserBriefInfo({
+            user_address: user.user_address,
+            avatar: user.avatar,
+            nickname: user.nickname,
+            experience: user.experience
+        });
     }
 
     //更新头像
@@ -533,13 +542,42 @@ library UserLib {
         self.user_info[msg.sender].signature = signature;
     }
 
-    function follow(Types.UserStore storage self,address user_address) 
-    public{
-        AddressLinkedList.T storage followings=self.user_info[msg.sender].followings;
-        if(followings.isContain(user_address)){
+    function follow(Types.UserStore storage self, address user_address)
+    public {
+        AddressLinkedList.T storage followings = self.user_info[msg.sender].followings;
+        AddressLinkedList.T storage followers = self.user_info[user_address].followers;
+        if (followings.isContain(user_address)) {
             followings.remove(user_address);
-        }else{
-            followings.append(user_address);    
+            followers.remove(msg.sender);
+        } else {
+            followings.append(user_address);
+            followers.append(msg.sender);
+        }
+    }
+
+    function getFollowers(Types.UserStore storage self, address cursor)
+    public view returns (Types.UserBriefInfo[10] memory follower_infos, address next, bool finished){
+        address[10] memory follower_index_slice = self.user_info[msg.sender].followers.slice(cursor, false);
+        for (uint i = 0; i < 10; i++) {
+            next = follower_index_slice[i];
+            if (next == address(0x0)) {
+                finished = true;
+                break;
+            }
+            follower_infos[i] = getOtherBriefInfo(self, next);
+        }
+    }
+
+    function getFollowings(Types.UserStore storage self, address cursor)
+    public view returns (Types.UserBriefInfo[10] memory following_infos, address next, bool finished){
+        address[10] memory following_index_slice = self.user_info[msg.sender].followings.slice(cursor, false);
+        for (uint i = 0; i < 10; i++) {
+            next = following_index_slice[i];
+            if (next == address(0x0)) {
+                finished = true;
+                break;
+            }
+            following_infos[i] = getOtherBriefInfo(self, next);
         }
     }
 
@@ -553,6 +591,24 @@ library UserLib {
     function afterCreateReward(Types.UserStore storage self, address reward_address)
     public {
         self.user_info[msg.sender].rewards.append(reward_address);
+    }
+
+    function afterMarkFile(Types.UserStore storage self, address file_address, bool is_mark)
+    public {
+        if (is_mark) {
+            self.user_info[msg.sender].marked_files.append(file_address);
+        } else {
+            self.user_info[msg.sender].marked_files.remove(file_address);
+        }
+    }
+
+    function afterMarkReward(Types.UserStore storage self, address reward_address, bool is_mark)
+    public {
+        if (is_mark) {
+            self.user_info[msg.sender].marked_rewards.append(reward_address);
+        } else {
+            self.user_info[msg.sender].marked_rewards.remove(reward_address);
+        }
     }
 }
 
@@ -620,25 +676,23 @@ library FileLib {
     public view returns (Types.FileBriefInfo memory file_info){
         Types.File storage file = self.file_info[file_address];
 
-        file_info.file_address = file.file_address;
-        file_info.category_address = file.category_address;
-
-        file_info.is_buy = file.buyers[msg.sender];
-
-        file_info.name = file.name;
-        file_info.title = file.title;
-        file_info.owner = users.user_info[file.owner].nickname;
-        file_info.description = file.description;
-
-        file_info.cover = file.images[0];
-
-        file_info.price = file.price;
-        file_info.up_num = file.up_num;
-        file_info.down_num = file.down_num;
-        file_info.buyer_num = file.buyer_num;
-        file_info.comment_num = file.comment_num;
-        file_info.up_and_down = file.up_and_downs[msg.sender];
-        file_info.upload_timestamp = file.upload_timestamp;
+        file_info = Types.FileBriefInfo({
+            file_address: file.file_address,
+            category_address: file.category_address,
+            is_buy: file.buyers[msg.sender],
+            name: file.name,
+            title: file.title,
+            owner: users.user_info[file.owner].nickname,
+            description: file.description,
+            cover: file.images[0],
+            price: file.price,
+            up_num: file.up_num,
+            down_num: file.down_num,
+            buyer_num: file.buyer_num,
+            comment_num: file.comment_num,
+            up_and_down: file.up_and_downs[msg.sender],
+            upload_timestamp: file.upload_timestamp
+        });
     }
 
     function getSelfBriefInfos(
@@ -699,6 +753,7 @@ library FileLib {
             file_address: file.file_address,
             category_address: file.category_address,
             is_buy: file.buyers[msg.sender],
+            is_mark: file.markers[msg.sender],
             name: file.name,
             title: file.title,
             description: file.description,
@@ -707,7 +762,7 @@ library FileLib {
             price: file.price,
             up_num: file.up_num,
             down_num: file.down_num,
-            mark_num:file.mark_num,
+            mark_num: file.mark_num,
             buyer_num: file.buyer_num,
             comment_num: file.comment_num,
             up_and_down: file.up_and_downs[msg.sender],
@@ -942,17 +997,18 @@ library FileLib {
 
     function mark(
         Types.FileStore storage self,
-        address file_address,
-        Types.UserStore storage users
-    )public {
-        AddressLinkedList.T storage marked_files=users.user_info[msg.sender].marked_files;
+        address file_address
+    ) public returns (bool is_mark){
+        Types.File storage file = self.file_info[file_address];
 
-        if(marked_files.isContain(file_address)){
-            self.file_info[file_address].mark_num--;
-            marked_files.remove(file_address);
-        }else{
-            self.file_info[file_address].mark_num++;
-            marked_files.append(file_address);
+        if (file.markers[msg.sender]) {
+            is_mark = false;
+            file.mark_num--;
+            delete file.markers[msg.sender];
+        } else {
+            is_mark = true;
+            file.mark_num++;
+            is_mark = file.markers[msg.sender] = true;
         }
     }
 }
@@ -1144,12 +1200,13 @@ library RewardLib {
             author: reward.author,
             reward_address: reward.reward_address,
             approved_comment: reward.approved_comment,
+            is_mark: reward.markers[msg.sender],
             title: reward.title,
             description: reward.description,
             images: reward.images,
             up_num: reward.up_num,
             down_num: reward.down_num,
-            mark_num:reward.mark_num,
+            mark_num: reward.mark_num,
             up_and_down: reward.up_and_downs[msg.sender],
             comment_num: reward.comment_num,
             remuneration: reward.remuneration,
@@ -1397,26 +1454,27 @@ library RewardLib {
 
     function mark(
         Types.RewardStore storage self,
-        address reawrd_address,
-        Types.UserStore storage users
-    )public {
-        AddressLinkedList.T storage marked_rewards=users.user_info[msg.sender].marked_rewards;
+        address reward_address
+    ) public returns (bool is_mark){
+        Types.Reward storage reward = self.reward_info[reward_address];
 
-        if(marked_rewards.isContain(reawrd_address)){
-            self.reward_info[reawrd_address].mark_num--;
-            marked_rewards.remove(reawrd_address);
-        }else{
-            self.reward_info[reawrd_address].mark_num++;
-            marked_rewards.append(reawrd_address);
+        if (reward.markers[msg.sender]) {
+            is_mark = false;
+            reward.mark_num--;
+            delete reward.markers[msg.sender];
+        } else {
+            is_mark = true;
+            reward.mark_num++;
+            reward.markers[msg.sender] = true;
         }
     }
 }
 
 abstract contract StoreContact {
-    Types.UserStore users;//所有用户
-    Types.FileStore files;//所有文件
-    Types.CategoryStore categories;//分类
-    Types.RewardStore rewards;
+    Types.UserStore internal users;//所有用户
+    Types.FileStore internal files;//所有文件
+    Types.CategoryStore internal categories;//分类
+    Types.RewardStore internal rewards;
 
 
     //    RewardStore rewards;//所有悬赏

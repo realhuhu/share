@@ -20,15 +20,11 @@ interface UserInterface {
 
     function updateSignature(uint, string memory signature) external;
 
-    //    function getUserInfo(address user_address) external view returns (StoreContact.UserBriefInfo memory user_info);
-    //
-    //    function getFollowings(address cursor) external view returns (StoreContact.UserSimpleInfo[10] memory followings_info, uint length);
-    //
-    //    function getFollowers(address cursor) external view returns (StoreContact.UserSimpleInfo[10] memory followers_info, uint length);
-    //
-    //    function getMedals(address cursor) external view returns (address[10] memory followers_info, uint length);
-    //
-    //    function setFollow(address target_user, bool is_follow) external;
+    function follow(uint, address user_address) external;
+
+    function getFollowers(uint, address cursor) external view returns (Types.UserBriefInfo[10] memory follower_infos, address next, bool finished);
+
+    function getFollowings(uint, address cursor) external view returns (Types.UserBriefInfo[10] memory following_infos, address next, bool finished);
 }
 
 contract UserContract is BaseContact, UserInterface {
@@ -49,7 +45,7 @@ contract UserContract is BaseContact, UserInterface {
     //注册账号
     function register(uint, string memory nickname)
     external {
-        require(users.user_info[msg.sender].login_timestamp==0);
+        require(users.user_info[msg.sender].login_timestamp == 0);
         users.register(nickname);
     }
 
@@ -86,67 +82,22 @@ contract UserContract is BaseContact, UserInterface {
         users.updateSignature(signature);
     }
 
-    function follow(uint,address user_address)
+    function follow(uint, address user_address)
     external {
+        require(user_address != msg.sender);
         _registered_(msg.sender);
         _registered_(user_address);
         users.follow(user_address);
     }
-    //
-    //    //获取我关注的用户的摘要信息
-    //    function getFollowings(address cursor)
-    //    _registered_(msg.sender)
-    //    external view returns (UserSimpleInfo[10] memory followings_info, uint length){
-    //        AddressLinkedList.T storage followings = users.user_info[msg.sender].followings;
-    //        length = followings.length;
-    //        address[10] memory followings_address = followings.slice(cursor, false);
-    //        for (uint i = 0; i < 10; i++) {
-    //            UserInfo storage following = users.user_info[followings_address[i]];
-    //            followings_info[i] = UserSimpleInfo({
-    //                avatar: following.avatar,
-    //                nickname: following.nickname
-    //            });
-    //        }
-    //    }
-    //
-    //    //获取我的粉丝的摘要信息
-    //    function getFollowers(address cursor)
-    //    _registered_(msg.sender)
-    //    external view returns (UserSimpleInfo[10] memory followers_info, uint length){
-    //        AddressLinkedList.T storage followers = users.user_info[msg.sender].followers;
-    //        length = followers.length;
-    //        address[10] memory followers_address = users.user_info[msg.sender].followers.slice(cursor, false);
-    //        for (uint i = 0; i < 10; i++) {
-    //            UserInfo storage follower = users.user_info[followers_address[i]];
-    //            followers_info[i] = UserSimpleInfo({
-    //                avatar: follower.avatar,
-    //                nickname: follower.nickname
-    //            });
-    //        }
-    //    }
-    //
-    //    //获取我的勋章
-    //    function getMedals(address cursor)
-    //    _registered_(msg.sender)
-    //    external view returns (address[10] memory medals, uint length){
-    //        medals = users.user_info[msg.sender].medals.slice(cursor, false);
-    //        length = users.user_info[msg.sender].medals.length;
-    //    }
-    //
-    //    //关注或取关用户
-    //    function setFollow(address target_user, bool is_follow)
-    //    _registered_(msg.sender)
-    //    _registered_(target_user)
-    //    external {
-    //        AddressLinkedList.T storage followings = users.user_info[msg.sender].followings;
-    //        AddressLinkedList.T storage followers = users.user_info[target_user].followers;
-    //        if (is_follow && !followings.isContain(target_user)) {
-    //            followings.append(target_user);
-    //            followers.append(msg.sender);
-    //        } else if (!is_follow && followings.isContain(target_user)) {
-    //            followings.remove(target_user);
-    //            followers.remove(msg.sender);
-    //        }
-    //    }
+
+    function getFollowers(uint, address cursor)
+    external view returns (Types.UserBriefInfo[10] memory follower_infos, address next, bool finished){
+        (follower_infos, next, finished) = users.getFollowers(cursor);
+    }
+
+    function getFollowings(uint, address cursor)
+    external view returns (Types.UserBriefInfo[10] memory following_infos, address next, bool finished){
+        (following_infos, next, finished) = users.getFollowings(cursor);
+    }
 }
 

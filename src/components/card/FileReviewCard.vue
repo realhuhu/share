@@ -41,14 +41,15 @@
       </div>
     </div>
 
-    <file-review-input-bar v-model:show_editor="show_editor" :file_info="file_info" @upAndDown="upAndDown"/>
+    <file-review-input-bar v-model:show_editor="show_editor" :file_info="file_info" @upAndDown="upAndDown"
+                           @mark="mark"/>
     <file-comment-editor v-model:show="show_editor" :file_info="file_info" :meta="editor_meta as FileReviewEditorMeta"/>
     <var-popup v-model:show="show_children" class="rounded">
       <file-children-comment-modal
         v-model:show="show_children"
         :file_info="file_info"
-        :root_comment="root_comment.comments[opened_comment_index] as Types.FileRootCommentStructOutput"
-        :root_comment_index="opened_comment_index as number"
+        :root_comment="root_comment.comments[opened_comment_index||0] as Types.FileRootCommentStructOutput"
+        :root_comment_index="opened_comment_index||0"
         @clickRootComment="openEditor"
         @clickChildrenComment="openEditor"
         @upAndDownRootComment="upAndDownRootComment"
@@ -62,7 +63,7 @@
 import {Types} from "@/assets/types/ethers/ImplementationInterface";
 
 import {UseStore} from "@/store";
-import {assertNotEmpty, upAndDownCallback, wait} from "@/assets/lib/utils";
+import {assertNotEmpty, markCallback, upAndDownCallback, wait} from "@/assets/lib/utils";
 import {ref, watch} from "vue";
 import {head_address, tail_address, via, zero_address} from "@/assets/lib/settings";
 
@@ -100,6 +101,11 @@ const upAndDown = async (is_up: boolean) => {
 const upAndDownRootComment = async (comment_index: number, is_up: boolean) => {
   await wait(contract.upAndDownFileComment(via.FILE, file_info.value.file_address, root_comment.value.comments[comment_index].comment_address, is_up))
   root_comment.value.comments[comment_index] = upAndDownCallback(root_comment.value.comments[comment_index], is_up)
+}
+
+const mark = async () => {
+  await wait(contract.markFile(via.FILE, file_info.value.file_address))
+  file_info.value = markCallback(file_info.value)
 }
 
 const loadRootComments = async () => {

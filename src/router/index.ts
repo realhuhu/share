@@ -129,6 +129,16 @@ const routes: Array<RouteRecordRaw> = [
       depth: 3,
       keep_alive: true
     }
+  },
+  {
+    path: "/follow/:type",
+    name: "FollowerAndFollowing",
+    component: () => import("@/views/FollowerAndFollowing.vue"),
+    meta: {
+      depth: 1,
+      auth: true,
+      keep_alive: true
+    }
   }
 ]
 
@@ -143,7 +153,7 @@ router.beforeEach((to, from, next) => {
   if (!store.contracts_connected) {
     const inter = setInterval(async () => {
       if (store.contracts_connected) {
-        if (to.meta.auth && !(<InstanceType<any>>store).user.is_registered) {
+        if (to.meta.auth && !(<any>store).user.is_registered) {
           (<any>store).show_register_modal = true
           next(`/?next=${to.path}`)
         } else {

@@ -43,7 +43,7 @@ import {ref} from "vue";
 const store = UseStore()
 
 const active = ref<0 | 1>(0)
-const private_key = ref<Address>()
+const private_key = ref<string>()
 const password = ref<string>()
 const encrypt_key = ref<string>()
 

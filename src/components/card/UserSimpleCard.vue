@@ -20,20 +20,33 @@
         <var-chip size="mini" type="success">已上传:{{ user_info.uploaded_file_num }}</var-chip>
       </div>
     </div>
-
-    <var-button class="mr-2" text outline type="info">关注</var-button>
+    <div v-if="user_info.user_address.toUpperCase()!==store.user?.address?.toUpperCase()">
+      <var-button v-if="user_info.is_following" class="mr-2" text outline type="warning" @click="follow(false)">取消关注
+      </var-button>
+      <var-button v-else class="mr-2" text outline type="info" @click="follow(true)">关注</var-button>
+    </div>
   </div>
 </template>
 
 
 <script lang="ts" setup>
 import {Types} from "@/assets/types/ethers/ImplementationInterface";
+import {assertNotEmpty, avatar, calcLevel, followCallback, wait} from "@/assets/lib/utils";
+import {UseStore} from "@/store";
+import {via} from "@/assets/lib/settings";
+import {Dialog} from "@varlet/ui";
 
-import {avatar, calcLevel} from "@/assets/lib/utils";
 
-withDefaults(defineProps<{
-  user_info: Types.UserSimpleInfoStructOutput
-}>(), {})
+const user_info = defineModel<Types.UserSimpleInfoStructOutput>("user_info", {required: true})
+
+const store = UseStore()
+const contract = assertNotEmpty(store.contract, "合约未初始化")
+const follow = async (is_follow: boolean) => {
+  if (is_follow || await Dialog({title: "是否取消关注?"}) === "confirm") {
+    await wait(contract.follow(via.USER, user_info.value.user_address))
+    user_info.value = followCallback(user_info.value)
+  }
+}
 
 
 defineOptions({

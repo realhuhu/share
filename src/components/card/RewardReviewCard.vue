@@ -42,15 +42,16 @@
       </div>
     </div>
 
-    <reward-review-input-bar v-model:show_editor="show_editor" :reward_info="reward_info" @upAndDown="upAndDown"/>
+    <reward-review-input-bar v-model:show_editor="show_editor" :reward_info="reward_info" @upAndDown="upAndDown"
+                             @mark="mark"/>
     <reward-comment-editor v-model:show="show_editor" :reward_info="reward_info"
                            :meta="editor_meta as RewardReviewEditorMeta"/>
     <var-popup v-model:show="show_children" class="rounded">
       <reward-children-comment-modal
         v-model:show="show_children"
         :reward_info="reward_info"
-        :root_comment="root_comment.comments[opened_comment_index] as Types.RewardRootCommentStructOutput"
-        :root_comment_index="opened_comment_index as number"
+        :root_comment="root_comment.comments[opened_comment_index||0] as Types.RewardRootCommentStructOutput"
+        :root_comment_index="opened_comment_index||0"
         @clickRootComment="openEditor"
         @clickChildrenComment="openEditor"
         @upAndDownRootComment="upAndDownRootComment"
@@ -66,7 +67,7 @@ import {Types} from "@/assets/types/ethers/ImplementationInterface";
 import {UseStore} from "@/store";
 import {ref, watch} from "vue";
 import {head_address, tail_address, via, zero_address} from "@/assets/lib/settings";
-import {assertNotEmpty, upAndDownCallback, wait} from "@/assets/lib/utils";
+import {assertNotEmpty, markCallback, upAndDownCallback, wait} from "@/assets/lib/utils";
 import RewardReviewInputBar from "@/components/bar/RewardReviewInputBar.vue";
 
 const reward_info = defineModel<Types.RewardDetailInfoStructOutput>("reward_info", {required: true})
@@ -103,6 +104,11 @@ const upAndDown = async (is_up: boolean) => {
 const upAndDownRootComment = async (comment_index: number, is_up: boolean) => {
   await wait(contract.upAndDownRewardComment(via.REWARD, reward_info.value.reward_address, root_comment.value.comments[comment_index].comment_address, is_up))
   root_comment.value.comments[comment_index] = upAndDownCallback(root_comment.value.comments[comment_index], is_up)
+}
+
+const mark = async () => {
+  await wait(contract.markReward(via.REWARD, reward_info.value.reward_address))
+  reward_info.value = markCallback(reward_info.value)
 }
 
 

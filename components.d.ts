@@ -30,6 +30,7 @@ declare module '@vue/runtime-core' {
     HomeReward: typeof import('./src/components/home/HomeReward.vue')['default']
     HomeSidebar: typeof import('./src/components/home/HomeSidebar.vue')['default']
     IBxFile: typeof import('~icons/bx/file')['default']
+    IClarityStarLine: typeof import('~icons/clarity/star-line')['default']
     IFxemojiMoneybag: typeof import('~icons/fxemoji/moneybag')['default']
     IHumbleiconsText: typeof import('~icons/humbleicons/text')['default']
     IIcOutlineBook: typeof import('~icons/ic/outline-book')['default']

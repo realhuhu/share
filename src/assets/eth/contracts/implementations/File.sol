@@ -31,6 +31,8 @@ interface FileInterface {
     function getFileRootComments(uint, address file_address, address cursor, uint order, bool reverse) external view returns (Types.FileRootComment[10] memory root_comments, address next, bool finished);
 
     function getFileChildrenComments(uint, address file_address, address comment_address, address cursor) external view returns (Types.FileChildrenComment[10] memory children_comments, address next, bool finished);
+
+    function markFile(uint, address file_address) external;
 }
 
 contract FileContact is BaseContact, FileInterface {
@@ -122,4 +124,12 @@ contract FileContact is BaseContact, FileInterface {
     external view returns (Types.FileChildrenComment[10] memory children_comments, address next, bool finished){
         (children_comments, next, finished) = files.getChildrenComments(file_address, comment_address, cursor, users);
     }
+
+    function markFile(uint, address file_address)
+    external {
+        _uploaded_(file_address);
+        bool is_mark = files.mark(file_address);
+        users.afterMarkFile(file_address, is_mark);
+    }
+
 }

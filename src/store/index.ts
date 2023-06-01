@@ -111,7 +111,7 @@ export const UseStore = defineStore("main", {
             }
           })
 
-          window.ethereum.on("accountsChanged", async (address_list: Address[]) => {
+          window.ethereum.on("accountsChanged", async (address_list: string[]) => {
             if (this.ethereum_connected && !this.isCorrectChain()) {
               this.contract = null
               this.contracts_connected = false
@@ -127,7 +127,7 @@ export const UseStore = defineStore("main", {
           break
       }
     },
-    async connectMetaMask(): Promise<Nullable<Address[]>> {
+    async connectMetaMask(): Promise<Nullable<string[]>> {
       try {
         this.provider = new ethers.providers.Web3Provider(window.ethereum)
         return await toRaw(this.provider).send("eth_requestAccounts", [])
@@ -152,7 +152,7 @@ export const UseStore = defineStore("main", {
         return null
       }
     },
-    async afterMetaMaskLogin(address: Address) {
+    async afterMetaMaskLogin(address: string) {
       //标记已连接MetaMask
       this.ethereum_connected = true
 
@@ -168,7 +168,7 @@ export const UseStore = defineStore("main", {
       const categories: { category_address: string, name: string; num: number; }[] = []
       let cursor = head_address
       while (cursor !== zero_address) {
-        const {category_slice, next} = await contract.getCategorySlice(via.FILE,cursor)
+        const {category_slice, next} = await contract.getCategorySlice(via.FILE, cursor)
         cursor = next
         for (const category of category_slice) {
           cursor = category.category_address
@@ -190,7 +190,7 @@ export const UseStore = defineStore("main", {
       this.contract = ImplementationInterface__factory.connect(OutputAddress.address, provider.getSigner())
       await this.getCategories()
     },
-    async refreshUser(address: Address) {
+    async refreshUser(address: string) {
       const contract = assertNotEmpty(this.contract, "用户合约未初始化")
       const is_registered = await contract.isRegistered(via.USER, address)
       if (is_registered) {

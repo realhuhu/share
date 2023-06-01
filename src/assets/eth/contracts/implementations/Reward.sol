@@ -28,6 +28,7 @@ interface RewardInterface {
 
     function getRewardChildrenComments(uint, address reward_address, address comment_address, address cursor) external view returns (Types.RewardChildrenComment[10] memory children_comments, address next, bool finished);
 
+    function markReward(uint, address reward_address) external;
 }
 
 contract RewardContact is BaseContact, RewardInterface {
@@ -99,5 +100,12 @@ contract RewardContact is BaseContact, RewardInterface {
     function getRewardChildrenComments(uint, address reward_address, address comment_address, address cursor)
     external view returns (Types.RewardChildrenComment[10] memory children_comments, address next, bool finished){
         (children_comments, next, finished) = rewards.getChildrenComments(reward_address, comment_address, cursor, users);
+    }
+
+    function markReward(uint, address reward_address)
+    external {
+        _published_(reward_address);
+        bool is_mark = rewards.mark(reward_address);
+        users.afterMarkReward(reward_address, is_mark);
     }
 }

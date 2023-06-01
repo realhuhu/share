@@ -10,7 +10,7 @@
         </transition>
 
         <transition enter-active-class="animate__animated animate__fadeIn" appear>
-          <user-simple-card v-if="user_info" :user_info="user_info" class="bg-white"/>
+          <user-simple-card v-if="user_info" v-model:user_info="user_info" class="bg-white"/>
         </transition>
 
         <transition enter-active-class="animate__animated animate__fadeIn" appear>

@@ -178,3 +178,20 @@ export const upAndDownCallback = <T extends {
   }
   return meta
 }
+
+export const markCallback = <T extends { mark_num: BigNumber, is_mark: boolean }>(meta: T) => {
+  meta = {...meta}
+  if (meta.is_mark) {
+    meta.mark_num = BigNumber.from(meta.mark_num.toNumber() - 1)
+  } else {
+    meta.mark_num = BigNumber.from(meta.mark_num.toNumber() + 1)
+  }
+  meta.is_mark = !meta.is_mark
+  return meta
+}
+
+export const followCallback = <T extends { is_following: boolean }>(meta: T) => {
+  meta = {...meta}
+  meta.is_following = !meta.is_following
+  return meta
+}

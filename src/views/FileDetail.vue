@@ -9,7 +9,7 @@
         </transition>
 
         <transition enter-active-class="animate__animated animate__fadeIn" appear>
-          <user-simple-card v-if="user_info" :user_info="user_info"/>
+          <user-simple-card v-if="user_info" v-model:user_info="user_info"/>
         </transition>
 
         <var-divider class="md:hidden w-full" margin="0"/>
@@ -28,11 +28,8 @@ import {useRoute} from "vue-router";
 import {UseStore} from "@/store";
 import {assertNotEmpty} from "@/assets/lib/utils";
 import {ref} from "vue";
-import {Types} from "@/assets/types/ethers/ImplementationInterface";
-
-import FileInfoCard from "@/components/card/FileInfoCard.vue";
-import FileReviewCard from "@/components/card/FileReviewCard.vue";
 import {via} from "@/assets/lib/settings";
+import {Types} from "@/assets/types/ethers/ImplementationInterface";
 
 const route = useRoute()
 const store = UseStore()
