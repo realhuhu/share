@@ -33,14 +33,14 @@ abstract contract Types {
         AddressLinkedList.T rewards;//我的悬赏
         AddressLinkedList.T followers;//我的粉丝
         AddressLinkedList.T followings;//我的关注
-        AddressOrderedMap.T up_messages;//我的悬赏或评论被点赞消息
+        AddressLinkedList.T up_messages;//我的悬赏或评论被点赞消息
         AddressLinkedList.T marked_files;//我关注的文件
         AddressLinkedList.T marked_rewards;//我关注的悬赏
         AddressLinkedList.T uploaded_files;//已上传的文件
-        AddressOrderedMap.T reply_messages;//我的悬赏或评论被回复消息
+        AddressLinkedList.T reply_messages;//我的悬赏或评论被回复消息
         AddressLinkedList.T purchased_files;//已购买的文件
-        AddressOrderedMap.T following_upload_messages;//我的关注上传文件消息
-        AddressOrderedMap.T marked_reward_solved_messages;//关注的悬赏被解决消息
+        AddressLinkedList.T following_upload_messages;//我的关注上传文件消息
+        AddressLinkedList.T marked_reward_solved_messages;//关注的悬赏被解决消息
     }
 
     //个人信息摘要
@@ -284,16 +284,15 @@ abstract contract Types {
 
         uint up_num;//点赞次数
         uint down_num;//点踩次数
-        uint mark_num;//点踩次数
         uint comment_num;//点踩次数
         uint remuneration;//酬金
         uint update_timestamp;//更新时间
         uint create_timestamp;//上传时间
 
-        mapping(address => bool) markers;
         mapping(address => uint) up_and_downs;//已点赞用户
         mapping(address => RewardComment) comment_info;//评论信息
 
+        AddressLinkedList.T markers;
         AddressLinkedList.T comment_index;//评论地址
         AddressOrderedMap.T _comments_by_up_num;//评论按点赞排序
     }
@@ -418,6 +417,47 @@ abstract contract Types {
         AddressOrderedMap.T _reward_by_update_time;//更新时间排序
         AddressOrderedMap.T _reward_by_remuneration;//价格排序
     }
+
+       /* 消息模型 */
+       //关注用户上传文件
+       struct FollowingUploadMessage {
+           address user_address;//上传者
+           address file_address;//文件地址
+       }
+    
+       //关注的悬赏被解决
+       struct MarkedRewardSolvedMessage {
+            address reward_address;//所属悬赏
+            address comment_address;
+       }
+    
+       //悬赏或评论被回复
+       struct ReplyMessage {
+           address user_address;//评论者
+           address target;//所属悬赏|文件
+           address comment;//所属评论
+           address sub_comment;//所属子评论
+    
+           uint target_type;//评论类型 0:文件 1:文件评论 2:悬赏 3:悬赏评论
+       }
+    
+       //悬赏或评论被点赞
+       struct UpMessage {
+           address user;//点赞者
+           address target;//所属悬赏|文件
+           address comment;//所属评论
+           address sub_comment;//所属子评论
+    
+           uint target_type;//点赞类型 0:文件 1:文件评论 2:悬赏 3:悬赏评论
+       }
+    
+       //消息表
+       struct MessageStore {
+           mapping(address => UpMessage) up;//悬赏或评论被点赞消息
+           mapping(address => ReplyMessage) reply;//悬赏或评论被回复消息
+           mapping(address => FollowingUploadMessage) following_upload;//上传文件消息
+           mapping(address => MarkedRewardSolvedMessage) marked_reward_solved;//悬赏被解决消息
+       }
 }
 
 library UserLib {
@@ -1200,13 +1240,13 @@ library RewardLib {
             author: reward.author,
             reward_address: reward.reward_address,
             approved_comment: reward.approved_comment,
-            is_mark: reward.markers[msg.sender],
+            is_mark: reward.markers.isContian(msg.sender),
             title: reward.title,
             description: reward.description,
             images: reward.images,
             up_num: reward.up_num,
             down_num: reward.down_num,
-            mark_num: reward.mark_num,
+            mark_num: reward.markers.length,
             up_and_down: reward.up_and_downs[msg.sender],
             comment_num: reward.comment_num,
             remuneration: reward.remuneration,
@@ -1458,15 +1498,58 @@ library RewardLib {
     ) public returns (bool is_mark){
         Types.Reward storage reward = self.reward_info[reward_address];
 
-        if (reward.markers[msg.sender]) {
+        if (reward.markers.isCotian(msg.sender)) {
             is_mark = false;
-            reward.mark_num--;
-            delete reward.markers[msg.sender];
+            reward.markers.remove(msg.sender);
         } else {
             is_mark = true;
-            reward.mark_num++;
-            reward.markers[msg.sender] = true;
+            reward.markers.append(msg.sender);
         }
+    }
+}
+
+library MessageLib{
+    using AddressLinkedList for AddressLinkedList.T;
+    using AddressOrderedMap for AddressOrderedMap.T;
+    using Bytes32Lib for bytes32;
+
+    using UserLib for Types.UserStore;
+    using RewardLib for Types.RewardLib;
+
+    function afterUploadFile(Types.MessageStore storage self,address file_address,Types.UserStore storage users)
+    public {
+        address message_address = keccak256(abi.encodePacked(file_address, msg.sender, block.timestamp)).toAddress();
+        
+        self.following_upload[message_address]=Types.FollowingUploadMessage({
+            user_address:msg.sender,
+            file_address:file_address
+        });
+
+        address cursor=address(0x1);
+
+        while(true){
+            cursor=users.user_info[msg.sender].followers.getNext(cursor);
+            if(cursor=address(0x2)) break;
+            users.user_info[cursor].following_upload_messages.append(message_address);
+        }
+    }
+
+    function afterRewardResolved(Types.MessageStore storage self,address reward_address,address comment_address,Types.UserStore storage users,Types.RewardStore storage rewards)
+    public {
+        address message_address = keccak256(abi.encodePacked(reward_address,comment_address, msg.sender, block.timestamp)).toAddress();
+        
+        self.marked_reward_solved[message_addres]=Types.MarkedRewardSolvedMessage({
+            reward_address:reward_address,
+            comment_address:comment_address
+        });
+
+        address cursor=address(0x1);
+
+        while(true){
+            cursor=rewards.reward_info[reward_address].markers.getNext(cursor);
+            if(cursor=address(0x2)) break;
+            users.user_info[cursor].marked_reward_solved_messages.append(message_address);
+        }        
     }
 }
 
@@ -1476,50 +1559,6 @@ abstract contract StoreContact {
     Types.CategoryStore internal categories;//分类
     Types.RewardStore internal rewards;
 
-
-    //    RewardStore rewards;//所有悬赏
-    //
-    //    /* 消息模型 */
-    //    //关注用户上传文件
-    //    struct FollowingUploadMessage {
-    //        address user;//上传者
-    //        address file;//文件地址
-    //    }
-    //
-    //    //关注的悬赏被解决
-    //    struct MarkedRewardSolvedMessage {
-    //        address user;//评论者
-    //        address reward;//所属悬赏
-    //        address comment;//所属评论
-    //    }
-    //
-    //    //悬赏或评论被回复
-    //    struct ReplyMessage {
-    //        address user;//评论者
-    //        address target;//所属悬赏|文件
-    //        address comment;//所属评论
-    //        address sub_comment;//所属子评论
-    //
-    //        uint target_type;//评论类型 0:文件 1:文件评论 2:悬赏 3:悬赏评论
-    //    }
-    //
-    //    //悬赏或评论被点赞
-    //    struct UpMessage {
-    //        address user;//点赞者
-    //        address target;//所属悬赏|文件
-    //        address comment;//所属评论
-    //        address sub_comment;//所属子评论
-    //
-    //        uint target_type;//点赞类型 0:文件 1:文件评论 2:悬赏 3:悬赏评论
-    //    }
-    //
-    //    //消息表
-    //    struct MessageStore {
-    //        mapping(address => UpMessage) up;//悬赏或评论被点赞消息
-    //        mapping(address => ReplyMessage) reply;//悬赏或评论被回复消息
-    //        mapping(address => FollowingUploadMessage) following_upload;//上传文件消息
-    //        mapping(address => MarkedRewardSolvedMessage) marked_reward_solved;//悬赏被解决消息
-    //    }
     //
     //    MessageStore messages;//所有消息
 }
