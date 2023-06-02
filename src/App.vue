@@ -46,7 +46,7 @@ const show = computed(() => {
   if (store.ethereum_type === "metamask") {
     if (store.ethereum_chain_id !== store.correct_chain_id) return false
     if (route.meta.auth && !store.contracts_connected) return false
-  } else if (store.ethereum_type === "local") {
+  } else if (store.ethereum_type === "local" && !store.user) {
     return false
   }
   return true

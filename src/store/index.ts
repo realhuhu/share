@@ -1,6 +1,5 @@
-import {toRaw} from "vue";
 import {defineStore} from "pinia"
-import {ethers} from "ethers";
+import {ethers, Signer} from "ethers";
 import {Web3Provider} from "@ethersproject/providers";
 import {Snackbar, Dialog} from "@varlet/ui"
 import "@varlet/ui/es/snackbar/style/index"
@@ -15,7 +14,6 @@ import {create, IPFSHTTPClient} from "ipfs-http-client"
 
 type StoreType = ({
   ethereum_connected: false
-  provider: null
   contracts_connected: false
   contract: null
   user: null
@@ -32,7 +30,6 @@ type StoreType = ({
   categories: { category_address: string, name: string; num: number; }[]
 }) & ({
   ethereum_connected: true
-  provider: Web3Provider
 })) & {
   correct_chain_id: string
   ethereum_type: "local" | "metamask" | "other"
@@ -48,7 +45,6 @@ export const UseStore = defineStore("main", {
     correct_chain_id: "0x539",//seu测试链ID
     ethereum_type: "local",//区块链钱包连接类型
     ethereum_chain_id: null,//当前链ID
-    provider: null,//Web3Provider
     ethereum_connected: false,//是否已连接钱包
     contract: null,//用户合约
     contracts_connected: false,//是否已连接全部合约
@@ -91,7 +87,10 @@ export const UseStore = defineStore("main", {
               if (address_list) {
                 this.ethereum_chain_id = window.ethereum.chainId
                 //若正常登录MetaMask，尝试连接合约并初始化User
-                if (address_list) await this.afterMetaMaskLogin(address_list[0])
+                if (address_list) await this.afterMetaMaskLogin(
+                  new ethers.providers.Web3Provider(window.ethereum),
+                  address_list[0]
+                )
               }
               clearInterval(inter)
             }
@@ -99,11 +98,13 @@ export const UseStore = defineStore("main", {
 
           window.ethereum.on("chainChanged", async (chain_id: string) => {
             //切换链时，修改provider
-            this.provider = new ethers.providers.Web3Provider(window.ethereum)
             this.ethereum_chain_id = chain_id
             if (chain_id === this.correct_chain_id) {
               //切换到seu测试链时，连接合约并初始化User
-              await this.afterMetaMaskLogin(window.ethereum.selectedAddress)
+              await this.afterMetaMaskLogin(
+                new ethers.providers.Web3Provider(window.ethereum),
+                window.ethereum.selectedAddress
+              )
             } else {
               //切换到其它链时，清空合约相关数据
               this.contract = null
@@ -118,7 +119,10 @@ export const UseStore = defineStore("main", {
               this.contracts_connected = false
               this.user = null
             } else {
-              await this.afterMetaMaskLogin(address_list[0])
+              await this.afterMetaMaskLogin(
+                new ethers.providers.Web3Provider(window.ethereum),
+                address_list[0]
+              )
             }
           })
           break
@@ -130,8 +134,7 @@ export const UseStore = defineStore("main", {
     },
     async connectMetaMask(): Promise<Nullable<string[]>> {
       try {
-        this.provider = new ethers.providers.Web3Provider(window.ethereum)
-        return await toRaw(this.provider).send("eth_requestAccounts", [])
+        return await new ethers.providers.Web3Provider(window.ethereum).send("eth_requestAccounts", [])
       } catch (e) {
         // eslint-disable-next-line no-extra-parens
         const code = (<MetaMaskError>e).code
@@ -153,13 +156,13 @@ export const UseStore = defineStore("main", {
         return null
       }
     },
-    async afterMetaMaskLogin(address: string) {
+    async afterMetaMaskLogin(provider: Web3Provider, address: string) {
       //标记已连接MetaMask
       this.ethereum_connected = true
 
       //如果链ID正确，连接合约并初始化User
       if (this.ethereum_chain_id === this.correct_chain_id) {
-        await this.connectContracts(toRaw(<Web3Provider>this.provider))
+        await this.connectContracts(provider.getSigner())
         await this.refreshUser(address)
         this.contracts_connected = true
       }
@@ -187,8 +190,8 @@ export const UseStore = defineStore("main", {
         ...categories
       ]
     },
-    async connectContracts(provider: Web3Provider) {
-      this.contract = ImplementationInterface__factory.connect(OutputAddress.address, provider.getSigner())
+    async connectContracts(provider: Signer) {
+      this.contract = ImplementationInterface__factory.connect(OutputAddress.address, provider)
       await this.getCategories()
     },
     async refreshUser(address: string) {
