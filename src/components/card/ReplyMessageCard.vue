@@ -6,7 +6,7 @@
     @load="load"
   >
     <div v-for="(message,k) in messages" :key="k" @click="toDetail(k)">
-      <div class="flex justify-between items-start p-2 gap-4 cursor-pointer hover:bg-gray-100 duration-200 rounded">
+      <div class="flex justify-between items-start p-2 md:py-3 gap-4 cursor-pointer hover:bg-gray-100 duration-200 rounded">
         <div class="flex justify-start items-start gap-2 flex-grow">
           <div class="w-10">
             <var-image :src="avatar(message.avatar)" radius="50" width="40"/>

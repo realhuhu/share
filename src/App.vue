@@ -1,5 +1,5 @@
 <template>
-  <router-view v-slot="{ Component }" class="md:pl-[64px]">
+  <router-view v-slot="{ Component }" class="md:pl-12 lg:pl-16">
 
     <suspense v-if="show">
       <transition @after-enter="to_top" :name="page_animation">

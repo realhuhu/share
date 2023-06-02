@@ -3,10 +3,10 @@
     <div class="fixed left-0 top-0 w-screen h-screen bg-[#f0f1f5] z-[-100]"/>
     <home-header class="flex md:hidden"/>
 
-    <div class="w-[780px] max-w-full md:mt-24 md:px-6">
+    <div class="w-[780px] max-w-full lg:mt-24 lg:px-6">
 
       <var-sticky class="md:hidden">
-        <var-tabs v-model:active="solved" style="padding: 0">
+        <var-tabs class="flex w-full" style="--tabs-item-horizontal-height:36px" v-model:active="solved">
           <var-tab>全部</var-tab>
           <var-tab>已解决</var-tab>
           <var-tab>未解决</var-tab>
@@ -15,7 +15,7 @@
       </var-sticky>
 
       <var-sticky>
-        <div class="bg-white shadow-around md:py-2">
+        <div class="bg-white shadow-around lg:py-2">
           <var-button class="hidden md:inline" @click="solved=0" text
                       :class="solved===0?'text-[#4ebaee] underline':'text-gray-500'">
             全部
@@ -31,8 +31,8 @@
         </div>
       </var-sticky>
 
-      <div class="flex justify-end  py-2 text-sm">
-        <var-menu placement="bottom-end" class="cursor-pointer md:hover:bg-gray-100 md:p-2 p-1 duration-75"
+      <div class="flex justify-end p-1 lg:py-2 text-sm">
+        <var-menu placement="bottom-start" class="cursor-pointer md:hover:bg-gray-100 lg:p-2 p-1 duration-75"
                   v-model:show="show_menu">
           <div class="flex justify-start items-center text-gray-500">
             {{ orders[current_order].text }}
@@ -41,7 +41,7 @@
 
           <template #menu>
             <div v-for="(order,k) in orders" :key="k" :class="k===current_order?'text-[#4ebaee]':''"
-                 class="cursor-pointer hover:bg-blue-100 p-2 duration-200" @click="current_order=k">
+                 class="cursor-pointer hover:bg-blue-100 py-1 px-2 duration-200 text-sm" @click="current_order=k">
               {{ order.text }}
             </div>
           </template>
@@ -94,7 +94,7 @@ const orders = ref([
   {
     text: "最近更新",
     type: 2,
-    reverse: true
+    reverse: false
   },
   {
     text: "价格降序",

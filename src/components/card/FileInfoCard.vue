@@ -1,5 +1,5 @@
 <template>
-  <div class="rounded-xl md:shadow-around p-6 md:px-16 flex flex-col gap-3">
+  <div class="rounded-xl md:shadow-around py-3 md:py-4 lg:py-6 px-5 md:px-8 lg:px-16 flex flex-col gap-2 md:gap-3">
     <div>
       <div class="text-[24px] font-bold">{{ file_info.title }}</div>
       <div class="text-gray-500 text-sm">{{ stripAddress(file_info.file_address) }}</div>

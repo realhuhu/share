@@ -11,7 +11,7 @@
 
         <var-divider margin="0"/>
 
-        <var-tabs-items v-model:active="active">
+        <var-tabs-items v-model:active="active" :can-swipe="false">
           <var-tab-item>
             <upload-file-card/>
           </var-tab-item>

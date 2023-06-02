@@ -1,8 +1,8 @@
 <template>
   <div>
     <head-bar title="用户信息" back="/home/profile"/>
-    <div class="flex flex-col items-center justify-center md:mt-16 gap-4 rounded-xl">
-      <div class="w-[960px] max-w-full md:p-6 p-4 bg-white">
+    <div class="flex items-center justify-center md:mt-8 lg:mt-16 gap-4 rounded-xl">
+      <div class="w-[768px] lg:w-[960px] max-w-full bg-white">
         <transition enter-active-class="animate__animated animate__fadeIn" appear>
           <user-detail-card v-if="user_info" v-model:user_info="user_info"/>
         </transition>

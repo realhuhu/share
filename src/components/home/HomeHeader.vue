@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white h-12 w-full px-3 flex justify-between items-center gap-3">
+  <div class="bg-white h-10 w-full px-3 flex justify-between items-center gap-3">
     <div class="flex">
       <var-avatar src="https://varlet.gitee.io/varlet-ui/cat.jpg" size="small"/>
     </div>

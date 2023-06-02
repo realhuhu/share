@@ -1,10 +1,11 @@
 <template>
   <div>
     <head-bar title="消息" back="/home/resource"/>
+
     <div class="flex flex-col items-center justify-center ">
       <div class="w-[960px] max-w-full md:mt-24 md:px-6 flex flex-col md:flex-row">
         <var-tabs
-          class="md:!w-[80px] md:!h-[120px] flex"
+          class="md:!w-[80px] md:!h-[70px] flex"
           :layout-direction="store.is_mobile?'horizontal':'vertical'"
           v-model:active="active">
           <var-tab>评论</var-tab>
@@ -37,8 +38,4 @@ defineOptions({
 
 
 <style lang="less" scoped>
-.tabs-example-vertical {
-  width: 80px !important;
-  height: 120px !important;
-}
 </style>

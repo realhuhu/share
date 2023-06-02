@@ -9,7 +9,7 @@
       </var-tabs>
 
       <var-list
-        class="p-6 bg-white"
+        class="p-2 md:p-6 bg-white"
         :finished="finished"
         v-model:loading="loading"
         @load="load"

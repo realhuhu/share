@@ -1,7 +1,7 @@
 <template>
-  <div class="flex flex-row justify-between items-center pt-6 px-6 gap-4 whitespace-nowrap">
+  <div class="flex flex-row justify-between items-center p-4 md:p-6 gap-4 whitespace-nowrap">
     <div class="w-[80px]">
-      <var-avatar :src="avatar" size="80"/>
+      <var-avatar :src="avatar" class="w-20 h-20"/>
     </div>
 
     <div class="flex-grow place-self-start flex flex-col justify-start items-start">
@@ -9,6 +9,7 @@
         未授权
         <var-button size="small" type="primary" text outline @click="store.show_register_modal=true">授权</var-button>
       </div>
+
       <div v-else>
         <div class="flex justify-start items-center">
           <div>{{ user.raw_data.nickname }}</div>
@@ -18,7 +19,7 @@
 
         <div class="flex gap-2 py-2">
           <var-tooltip content="硬币数" placement="bottom">
-            <var-chip size="small" color="#" class="hover:shadow-around">
+            <var-chip size="small" class="hover:shadow-around">
               <span>{{ user.raw_data.coins }}</span>
               <template #left>
                 <i-tabler-coin class="text-blue-500 w-5 h-5"/>
@@ -43,8 +44,8 @@
   </div>
 
   <div v-if="user.is_registered">
-    <div class="px-8 pt-1 pb-3 text-gray-500 md:px-12 md:pt-3">{{ user.raw_data.signature || "还没有签名..." }}</div>
-    <div class="hidden md:block px-12 py-6">
+    <div class="text-gray-500 px-5 md:px-7 lg:px-9">{{ user.raw_data.signature || "还没有签名..." }}</div>
+    <div class="hidden md:block px-12 py-4">
       <var-divider margin="0" dashed/>
     </div>
     <div class="flex justify-between items-center text-gray-500 px-12 md:px-24 ">

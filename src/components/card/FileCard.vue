@@ -1,41 +1,37 @@
 <template>
-  <var-card
-    :src="`${ipfs_url}ipfs/${file_info.cover||cover}`"
-    elevation="0"
-    layout="row"
-    ripple
-    @click="router.push(`/file-detail/${file_info.file_address}`)"
-    class="cursor-pointer hover:shadow-2xl duration-200"
-  >
-    <template #title>
-      <div class="flex justify-between items-center mt-2 ml-2 gap-1">
-        <div class="font-bold line1">{{ file_info.title }}</div>
+  <div class="flex w-full justify-between items-center rounded overflow-hidden cursor-pointer duration-200"
+       @click="router.push(`/file-detail/${file_info.file_address}`)">
+    <div class="w-32 max-w-[30%] flex-shrink-0">
+      <var-image class="w-full h-full object-cover" :src="`${ipfs_url}ipfs/${file_info.cover||cover}`"/>
+    </div>
 
-        <var-tooltip class="flex justify-end items-center text-blue-500 mr-2" :content="`价格：${file_info.price}`">
-          <div>{{ file_info.price }}</div>
-          <i-tabler-coin class="w-5 h-5"/>
-        </var-tooltip>
-      </div>
-    </template>
+    <div class="flex flex-col flex-grow  justify-between">
+      <div class="flex flex-col justify-start items-start p-2">
+        <div class="flex justify-between items-center w-full">
+          <div class="font-bold line1">{{ file_info.title }}</div>
 
-    <template #subtitle>
-      <div class="flex justify-between items-center">
-        <div class="flex justify-start items-center ml-3 text-sm text-gray-500 gap-2">
-          <div>{{ file_info.owner }}</div>
-          <div>{{ time }}</div>
+          <var-tooltip class="flex justify-end items-center text-blue-500" :content="`价格：${file_info.price}`">
+            <div>{{ file_info.price }}</div>
+            <i-tabler-coin class="w-4 md:w-5"/>
+          </var-tooltip>
         </div>
 
-        <var-chip size="mini" color="#4ebaee" text-color="white" class="ml-3">{{ category }}</var-chip>
+        <div class="flex justify-between items-center w-full">
+          <div class="flex justify-start items-center text-sm text-gray-500 gap-2">
+            <div>{{ file_info.owner }}</div>
+            <div>{{ time }}</div>
+          </div>
+
+          <var-chip size="mini" color="#4ebaee" text-color="white" class="ml-3">{{ category }}</var-chip>
+        </div>
+
+        <div class="line2 text-sm"> {{ file_info.description }}</div>
+
+
       </div>
-    </template>
 
-    <template #description>
-      <div class="mx-3 mt-1 line2 text-sm">{{ file_info.description }}</div>
-    </template>
-
-    <template #extra>
-      <div class="flex justify-end items-center gap-4 text-sm">
-        <div class="flex justify-center items-center gap-1  text-gray-500">
+      <div class="flex justify-end items-center gap-3 md:gap-4 text-sm w-full pb-1 pr-2">
+        <div class="flex justify-center items-center gap-1 text-gray-500">
           <i-material-symbols-download/>
           {{ file_info.buyer_num }}
         </div>
@@ -57,8 +53,9 @@
           {{ file_info.comment_num }}
         </div>
       </div>
-    </template>
-  </var-card>
+    </div>
+
+  </div>
 </template>
 
 

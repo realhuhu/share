@@ -2,10 +2,10 @@
   <div class="flex flex-col items-center justify-center md:pt-0">
     <home-header class="flex md:hidden"/>
 
-    <div class="w-[1280px] max-w-full md:mt-24 md:px-6">
+    <div class="w-[1280px] max-w-full lg:mt-24 lg:px-6">
 
       <var-sticky class="md:hidden">
-        <var-tabs v-model:active="current_category" style="padding: 0">
+        <var-tabs v-model:active="current_category" class="h-8">
           <var-tab v-for="(category,k) of store.categories" :key="k" :name="category.category_address">
             {{ category.name }} ({{ category.num }})
           </var-tab>
@@ -14,7 +14,7 @@
       </var-sticky>
 
       <var-sticky>
-        <div class=" bg-white md:py-2 border-gray-100 border">
+        <div class=" bg-white lg:py-2 border-gray-100 border">
           <var-button text v-for="(category,k) of store.categories" :key="k" class="hidden md:inline"
                       @click="current_category=category.category_address"
                       :class="current_category===category.category_address?'text-[#4ebaee] underline':'text-gray-500'">
@@ -23,8 +23,8 @@
         </div>
       </var-sticky>
 
-      <div class="flex justify-end  py-2">
-        <var-menu placement="bottom-end" class="cursor-pointer md:hover:bg-gray-100 md:p-2 p-1 duration-75"
+      <div class="flex justify-end p-1 lg:py-2 text-sm">
+        <var-menu placement="bottom-end" class="cursor-pointer md:hover:bg-gray-100 duration-75"
                   v-model:show="show_menu">
           <div class="flex justify-start items-center text-gray-500">
             {{ orders[current_order].text }}
@@ -33,7 +33,7 @@
 
           <template #menu>
             <div v-for="(order,k) in orders" :key="k" :class="k===current_order?'text-[#4ebaee]':''"
-                 class="cursor-pointer hover:bg-blue-100 p-2 duration-200" @click="current_order=k">
+                 class="cursor-pointer hover:bg-blue-100  py-1 px-2 duration-200 text-sm" @click="current_order=k">
               {{ order.text }}
             </div>
           </template>
@@ -47,9 +47,9 @@
         @load="load"
       >
         <div class="flex items-start justify-start flex-wrap">
-          <div v-for="(file_info,k) in files" :key="k" class="lg:w-[50%] w-full p-2">
+          <div v-for="(file_info,k) in files" :key="k" class="lg:w-[50%] w-full p-1 md:p-2">
             <transition enter-active-class="animate__animated animate__fadeIn" appear>
-              <file-card class="shadow-around" :file_info="file_info as Types.FileBriefInfoStructOutput"/>
+              <file-card class="shadow-around hover:shadow-xl" :file_info="file_info as Types.FileBriefInfoStructOutput"/>
             </transition>
           </div>
         </div>

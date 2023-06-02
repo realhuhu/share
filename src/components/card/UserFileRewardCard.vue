@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="lg:mt-8">
     <var-sticky>
       <var-tabs class="flex" v-model:active="active">
         <var-tab>文件</var-tab>
@@ -7,7 +7,7 @@
       </var-tabs>
     </var-sticky>
 
-    <var-tabs-items v-model:active="active" class="mt-4">
+    <var-tabs-items v-model:active="active" class="mt-1 lg:mt-3" :can-swipe="false">
       <var-tab-item>
         <var-list
           class="min-h-screen"

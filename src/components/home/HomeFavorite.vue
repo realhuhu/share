@@ -1,40 +1,40 @@
 <template>
   <div class="flex flex-col items-center justify-start min-h-screen">
     <div class="w-[768px] max-w-full md:mt-12">
-      <var-tabs class="flex bg-gray-100  shadow-around" v-model:active="active" >
+      <var-tabs class="flex bg-gray-100  shadow-around" v-model:active="active" @change="clear">
         <var-tab>收藏的资料</var-tab>
         <var-tab>收藏的悬赏</var-tab>
       </var-tabs>
       <var-divider margin="0"/>
 
-      <var-tabs-items v-model:active="active">
+      <var-tabs-items v-model:active="active" :can-swipe="false">
         <var-tab-item>
           <var-list
-            class="p-6 bg-white"
+            class="bg-white"
             :finished="file_data.finished"
             v-model:loading="file_data.loading"
             @load="loadFiles"
           >
-            <div v-for="(file,k) in file_data.files" :key="k">
+            <div v-for="(file,k) in file_data.files" :key="k" class="p-1 md:p-2">
               <transition enter-active-class="animate__animated animate__fadeIn" appear>
                 <file-card :file_info="file as Types.FileBriefInfoStructOutput"/>
               </transition>
-              <var-divider/>
             </div>
           </var-list>
         </var-tab-item>
         <var-tab-item>
           <var-list
-            class="p-6 bg-white"
+            class="bg-white"
             :finished="reward_data.finished"
             v-model:loading="reward_data.loading"
             @load="loadRewards"
+            :immediate-check="false"
           >
-            <div v-for="(reward,k) in reward_data.files" :key="k">
+            <div v-for="(reward,k) in reward_data.files" :key="k" class="p-2 rounded-xl">
               <transition enter-active-class="animate__animated animate__fadeIn" appear>
                 <reward-card :reward_info="reward as Types.RewardBriefInfoStructOutput"/>
               </transition>
-              <var-divider/>
+              <var-divider margin="0"/>
             </div>
           </var-list>
         </var-tab-item>
@@ -99,6 +99,26 @@ const loadRewards = async () => {
   }
   reward_data.value.loading = false
   reward_data.value.finished = res.finished
+}
+
+const clear = (active: string | number) => {
+  if (active) {
+    reward_data.value = {
+      files: [],
+      cursor: head_address,
+      loading: false,
+      finished: false
+    }
+    loadRewards()
+  } else {
+    file_data.value = {
+      files: [],
+      cursor: head_address,
+      loading: false,
+      finished: false
+    }
+    loadFiles()
+  }
 }
 
 defineOptions({

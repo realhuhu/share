@@ -10,10 +10,10 @@
         @load="load"
         :immediate-check="false"
       >
-        <div v-for="(file_info,k) in files" :key="k" class="my-3">
+        <div v-for="(file_info,k) in files" :key="k" class="my-1 md:my-3">
           <transition enter-active-class="animate__animated animate__fadeIn" appear>
             <div class="flex flex-col justify-center items-end">
-              <div class="text-gray-500">{{ date(file_info.upload_timestamp.toNumber()) }}</div>
+              <div class="text-gray-500 text-sm">{{ date(file_info.upload_timestamp.toNumber()) }}</div>
               <file-card class="shadow-around" :file_info="file_info as Types.FileBriefInfoStructOutput"/>
             </div>
           </transition>
