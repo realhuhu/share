@@ -94,18 +94,21 @@ const opened_comment_index = ref<number>()
 const contract = assertNotEmpty(store.contract, "合约未初始化")
 
 const upAndDown = async (is_up: boolean) => {
-  await wait(contract.upAndDownFile(via.FILE, file_info.value.file_address, is_up))
-  file_info.value = upAndDownCallback(file_info.value, is_up)
+  if (await wait(contract.upAndDownFile(via.FILE, file_info.value.file_address, is_up))) {
+    file_info.value = upAndDownCallback(file_info.value, is_up)
+  }
 }
 
 const upAndDownRootComment = async (comment_index: number, is_up: boolean) => {
-  await wait(contract.upAndDownFileComment(via.FILE, file_info.value.file_address, root_comment.value.comments[comment_index].comment_address, is_up))
-  root_comment.value.comments[comment_index] = upAndDownCallback(root_comment.value.comments[comment_index], is_up)
+  if (await wait(contract.upAndDownFileComment(via.FILE, file_info.value.file_address, root_comment.value.comments[comment_index].comment_address, is_up))) {
+    root_comment.value.comments[comment_index] = upAndDownCallback(root_comment.value.comments[comment_index], is_up)
+  }
 }
 
 const mark = async () => {
-  await wait(contract.markFile(via.FILE, file_info.value.file_address))
-  file_info.value = markCallback(file_info.value)
+  if (await wait(contract.markFile(via.FILE, file_info.value.file_address))) {
+    file_info.value = markCallback(file_info.value)
+  }
 }
 
 const loadRootComments = async () => {

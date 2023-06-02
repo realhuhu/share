@@ -244,7 +244,7 @@ library FileLib {
     }
 
     function upAndDown(Types.FileStore storage self, address file_address, bool is_up)
-    public {
+    public returns (address user_address, uint _is_up){
         Types.File storage file = self.file_info[file_address];
         uint up_and_down = file.up_and_downs[msg.sender];
 
@@ -252,13 +252,15 @@ library FileLib {
         uint _up_num;
         uint _down_num;
 
-        (_up_and_down, _up_num, _down_num) = CommonLib.upAndDown(up_and_down, file.up_num, file.down_num, is_up);
+        (_up_and_down, _up_num, _down_num, _is_up) = CommonLib.upAndDown(up_and_down, file.up_num, file.down_num, is_up);
 
         file.up_and_downs[msg.sender] = _up_and_down;
         file.up_num = _up_num;
         file.down_num = _down_num;
 
         self._file_by_up_num.update(AddressOrderedMap.Item(file_address, file.up_num));
+
+        user_address = file.owner;
     }
 
     function addComment(
@@ -266,10 +268,10 @@ library FileLib {
         address file_address,
         string memory content,
         string[3] memory images
-    ) public {
+    ) public returns (address user_address, address comment_address) {
         Types.File storage file = self.file_info[file_address];
 
-        address comment_address = keccak256(abi.encodePacked(file_address, content, msg.sender, block.timestamp)).toAddress();
+        comment_address = keccak256(abi.encodePacked(file_address, content, msg.sender, block.timestamp)).toAddress();
 
         Types.FileComment storage comment = file.comment_info[comment_address];
 
@@ -286,6 +288,8 @@ library FileLib {
         file.comment_num++;
         file.comment_index.append(comment_address);
         file._comments_by_up_num.update(AddressOrderedMap.Item(comment_address, file.comment_num));
+
+        user_address = file.owner;
     }
 
     function upAndDownComment(
@@ -293,7 +297,7 @@ library FileLib {
         address file_address,
         address comment_address,
         bool is_up
-    ) public {
+    ) public returns (address user_address, uint _is_up){
         Types.FileComment storage comment = self.file_info[file_address].comment_info[comment_address];
         uint up_and_down = comment.up_and_downs[msg.sender];
 
@@ -302,7 +306,7 @@ library FileLib {
         uint _up_num;
         uint _down_num;
 
-        (_up_and_down, _up_num, _down_num) = CommonLib.upAndDown(up_and_down, comment.up_num, comment.down_num, is_up);
+        (_up_and_down, _up_num, _down_num, _is_up) = CommonLib.upAndDown(up_and_down, comment.up_num, comment.down_num, is_up);
 
         comment.up_and_downs[msg.sender] = _up_and_down;
         comment.up_num = _up_num;
@@ -310,6 +314,8 @@ library FileLib {
 
 
         self.file_info[file_address]._comments_by_up_num.update(AddressOrderedMap.Item(comment_address, comment.up_num));
+
+        user_address = comment.author;
     }
 
     function addSubComment(
@@ -318,11 +324,11 @@ library FileLib {
         address target_address,
         address comment_address,
         string memory content
-    ) public {
+    ) public returns (address user_address, uint _target_type, address sub_comment_address){
         Types.File storage file = self.file_info[file_address];
         Types.FileComment storage comment = file.comment_info[comment_address];
 
-        address sub_comment_address = keccak256(abi.encodePacked(file_address, comment_address, content, msg.sender, block.timestamp)).toAddress();
+        sub_comment_address = keccak256(abi.encodePacked(file_address, comment_address, content, msg.sender, block.timestamp)).toAddress();
 
         Types.FileSubComment storage sub_comment = comment.sub_comment_info[sub_comment_address];
 
@@ -338,6 +344,14 @@ library FileLib {
         comment.sub_comment_index.append(sub_comment_address);
 
         file.comment_num++;
+
+        if (target_address == address(0x0)) {
+            user_address = comment.author;
+            _target_type = 1;
+        } else {
+            user_address = comment.sub_comment_info[target_address].author;
+            _target_type = 2;
+        }
     }
 
     function upAndDownSubComment(
@@ -346,7 +360,7 @@ library FileLib {
         address comment_address,
         address sub_comment_address,
         bool is_up
-    ) public {
+    ) public returns (address user_address, uint _is_up){
         Types.FileSubComment storage comment = self.file_info[file_address].comment_info[comment_address].sub_comment_info[sub_comment_address];
         uint up_and_down = comment.up_and_downs[msg.sender];
 
@@ -354,11 +368,13 @@ library FileLib {
         uint _up_num;
         uint _down_num;
 
-        (_up_and_down, _up_num, _down_num) = CommonLib.upAndDown(up_and_down, comment.up_num, comment.down_num, is_up);
+        (_up_and_down, _up_num, _down_num, _is_up) = CommonLib.upAndDown(up_and_down, comment.up_num, comment.down_num, is_up);
 
         comment.up_and_downs[msg.sender] = _up_and_down;
         comment.up_num = _up_num;
         comment.down_num = _down_num;
+
+        user_address = comment.author;
     }
 
     function getRootComments(

@@ -82,8 +82,9 @@ const load = async () => {
 
 const follow = async (index: number, is_follow: boolean) => {
   if (is_follow || await Dialog({title: "是否取消关注?"}) === "confirm") {
-    await wait(contract.follow(via.USER, users.value[index].user_address))
-    users.value[index] = followCallback(users.value[index])
+    if (await wait(contract.follow(via.USER, users.value[index].user_address))) {
+      users.value[index] = followCallback(users.value[index])
+    }
   }
 }
 

@@ -78,6 +78,7 @@ export const UseStore = defineStore("main", {
       } else {
         this.ethereum_type = "other"
       }
+
       switch (this.ethereum_type) {
         case "local":
           await this.useDefaultWallet()

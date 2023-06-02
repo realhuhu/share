@@ -97,18 +97,21 @@ const opened_comment_index = ref<number>()
 const contract = assertNotEmpty(store.contract, "合约未初始化")
 
 const upAndDown = async (is_up: boolean) => {
-  await wait(contract.upAndDownReward(via.REWARD, reward_info.value.reward_address, is_up))
-  reward_info.value = upAndDownCallback(reward_info.value, is_up)
+  if (await wait(contract.upAndDownReward(via.REWARD, reward_info.value.reward_address, is_up))) {
+    reward_info.value = upAndDownCallback(reward_info.value, is_up)
+  }
 }
 
 const upAndDownRootComment = async (comment_index: number, is_up: boolean) => {
-  await wait(contract.upAndDownRewardComment(via.REWARD, reward_info.value.reward_address, root_comment.value.comments[comment_index].comment_address, is_up))
-  root_comment.value.comments[comment_index] = upAndDownCallback(root_comment.value.comments[comment_index], is_up)
+  if (await wait(contract.upAndDownRewardComment(via.REWARD, reward_info.value.reward_address, root_comment.value.comments[comment_index].comment_address, is_up))) {
+    root_comment.value.comments[comment_index] = upAndDownCallback(root_comment.value.comments[comment_index], is_up)
+  }
 }
 
 const mark = async () => {
-  await wait(contract.markReward(via.REWARD, reward_info.value.reward_address))
-  reward_info.value = markCallback(reward_info.value)
+  if (await wait(contract.markReward(via.REWARD, reward_info.value.reward_address))) {
+    reward_info.value = markCallback(reward_info.value)
+  }
 }
 
 

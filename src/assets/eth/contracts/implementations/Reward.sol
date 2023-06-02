@@ -38,6 +38,7 @@ interface RewardInterface {
 contract RewardContact is BaseContact, RewardInterface {
     using UserLib for Types.UserStore;
     using RewardLib for Types.RewardStore;
+    using MessageLib for Types.MessageStore;
 
     function RewardContact_init(uint)
     _onlyAdmin_
@@ -75,31 +76,47 @@ contract RewardContact is BaseContact, RewardInterface {
     function upAndDownReward(uint, address reward_address, bool is_up)
     external {
         _published_(reward_address);
-        rewards.upAndDown(reward_address, is_up);
+        address user_address;
+        uint _is_up;
+        (user_address, _is_up) = rewards.upAndDown(reward_address, is_up);
+        messages.afterUp(user_address, reward_address, address(0x0), address(0x0), _is_up, 3, users);
     }
 
     function addRewardComment(uint, address reward_address, address file_address, string memory content, string[3] memory images)
     external {
         _published_(reward_address);
-        rewards.addComment(reward_address, file_address, content, images);
+        address user_address;
+        address reply_address;
+        (user_address, reply_address) = rewards.addComment(reward_address, file_address, content, images);
+        messages.afterComment(user_address, reply_address, reward_address, address(0x0), address(0x0), 3, users);
     }
 
     function upAndDownRewardComment(uint, address reward_address, address comment_address, bool is_up)
     external {
         _reward_commented_(reward_address, comment_address);
-        rewards.upAndDownComment(reward_address, comment_address, is_up);
+        address user_address;
+        uint _is_up;
+        (user_address, _is_up) = rewards.upAndDownComment(reward_address, comment_address, is_up);
+        messages.afterUp(user_address, reward_address, comment_address, address(0x0), _is_up, 4, users);
     }
 
     function addRewardSubComment(uint, address reward_address, address target_address, address comment_address, string memory content)
     external {
         _reward_commented_(reward_address, comment_address);
-        rewards.addSubComment(reward_address, target_address, comment_address, content);
+        address user_address;
+        uint _target_type;
+        address reply_address;
+        (user_address, _target_type, reply_address) = rewards.addSubComment(reward_address, target_address, comment_address, content);
+        messages.afterComment(user_address, reply_address, reward_address, comment_address, target_address, _target_type, users);
     }
 
     function upAndDownRewardSubComment(uint, address reward_address, address comment_address, address sub_comment_address, bool is_up)
     external {
         _reward_sub_commented_(reward_address, comment_address, sub_comment_address);
-        rewards.upAndDownSubComment(reward_address, comment_address, sub_comment_address, is_up);
+        address user_address;
+        uint _is_up;
+        (user_address, _is_up) = rewards.upAndDownSubComment(reward_address, comment_address, sub_comment_address, is_up);
+        messages.afterUp(user_address, reward_address, comment_address, sub_comment_address, _is_up, 5, users);
     }
 
     function getRewardRootComments(uint, address reward_address, address cursor, uint order, bool reverse)

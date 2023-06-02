@@ -423,32 +423,64 @@ abstract contract Types {
     struct FollowingUploadMessage {
         address user_address;//上传者
         address file_address;//文件地址
+
+        uint timestamp;
     }
 
     //关注的悬赏被解决
     struct MarkedRewardSolvedMessage {
         address reward_address;//所属悬赏
         address comment_address;
+
+        uint timestamp;
     }
 
     //悬赏或评论被回复
     struct ReplyMessage {
         address user_address;//评论者
-        address target;//所属悬赏|文件
-        address comment;//所属评论
-        address sub_comment;//所属子评论
+        address reply_address;//评论地址
+        address target_address;//所属悬赏|文件
+        address comment_address;//所属评论
+        address sub_comment_address;//所属子评论
 
-        uint target_type;//评论类型 0:文件 1:文件评论 2:悬赏 3:悬赏评论
+        uint timestamp;
+        uint target_type;//评论类型 0:文件 1:文件评论 2:文件评论评论 3:悬赏 4:悬赏评论 5:悬赏评论评论
+    }
+
+    //悬赏或评论被回复
+    struct ReplyMessageInfo {
+        address target_address;//所属悬赏|文件
+
+        string avatar;
+        string target;
+        string content;
+        string nickname;
+
+        uint timestamp;
+        uint target_type;//评论类型 0:文件 1:文件评论 2:文件评论评论 3:悬赏 4:悬赏评论 5:悬赏评论评论
     }
 
     //悬赏或评论被点赞
     struct UpMessage {
-        address user;//点赞者
-        address target;//所属悬赏|文件
-        address comment;//所属评论
-        address sub_comment;//所属子评论
+        address user_address;//点赞者
+        address target_address;//所属悬赏|文件
+        address comment_address;//所属评论
+        address sub_comment_address;//所属子评论
 
-        uint target_type;//点赞类型 0:文件 1:文件评论 2:悬赏 3:悬赏评论
+        uint num;
+        uint timestamp;
+        uint target_type;//点赞类型 0:文件 1:文件评论 2:文件评论评论 3:悬赏 4:悬赏评论 5:悬赏评论评论
+    }
+
+    struct UpMessageInfo {
+        address target_address;//所属悬赏|文件
+
+        string avatar;
+        string content;
+        string nickname;
+
+        uint num;
+        uint target_type;//点赞类型 0:文件 1:文件评论 2:文件评论评论 3:悬赏 4:悬赏评论 5:悬赏评论评论
     }
 
     //消息表

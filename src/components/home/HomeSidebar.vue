@@ -39,7 +39,8 @@
             <i-material-symbols-search class="text-gray-700 w-10 h-10 p-1.5 hover:text-gray-900 duration-75"/>
           </var-tooltip>
         </div>
-        <div class="hover:shadow-around cursor-pointer rounded-2xl duration-75 active:bg-gray-100 w-10 h-10">
+        <div class="hover:shadow-around cursor-pointer rounded-2xl duration-75 active:bg-gray-100 w-10 h-10"
+             @click="router.push('/message')">
           <var-tooltip content="消息" placement="right">
             <i-mdi-message-processing-outline class="text-gray-700 w-10 h-10 p-1.5 hover:text-gray-900 duration-75"/>
           </var-tooltip>

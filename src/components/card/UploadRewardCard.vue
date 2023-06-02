@@ -40,15 +40,8 @@ const valid = () => Boolean(title.value && description.value && remuneration.val
 const upload = async () => {
   if (title.value && description.value && remuneration.value) {
     uploading.value = true
-
-    try {
-      await wait(contract.createReward(via.REWARD, title.value, description.value, images.value, remuneration.value))
-      uploading.value = false
-    } catch (e) {
-      uploading.value = false
-      throw e
-    }
-
+    await wait(contract.createReward(via.REWARD, title.value, description.value, images.value, remuneration.value))
+    uploading.value = false
   }
 }
 

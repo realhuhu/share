@@ -1,6 +1,6 @@
 <template>
-  <div v-if="store.ethereum_type==='metamask'">
-    <div class="w-screen h-screen flex flex-col justify-center items-center">
+  <div class="w-screen h-screen flex flex-col justify-center items-center">
+    <div v-if="store.ethereum_type==='metamask'">
       <div>请登录MetaMask</div>
       <div v-if="!store.isCorrectChain()">并连接
         <var-link
@@ -9,11 +9,14 @@
           type="success">OurChain测试链
         </var-link>
       </div>
+    </div>
+    <div v-else>
+      建议使用MetaMask，或使用默认钱包
+    </div>
 
-      <div class="flex justify-center items-center gap-2 mt-6">
-        <var-button text outline type="primary" class="w-28" @click="store.useDefaultWallet()">使用默认钱包</var-button>
-        <var-button text outline type="info" class="w-28" @click="reload">刷新页面</var-button>
-      </div>
+    <div class="flex justify-center items-center gap-2 mt-6">
+      <var-button text outline type="primary" class="w-28" @click="store.useDefaultWallet()">使用默认钱包</var-button>
+      <var-button text outline type="info" class="w-28" @click="reload">刷新页面</var-button>
     </div>
   </div>
 </template>

@@ -62,25 +62,28 @@ const clear = () => {
 const comment = async () => {
   if (!valid()) return
   uploading.value = true
-  try {
-    const {root_comment, target_comment} = props.meta
-    if (!root_comment) {
-      await wait(contract.addFileComment(via.FILE, props.file_info.file_address, content.value, images.value))
-    } else {
-      await wait(contract.addFileSubComment(
-        via.FILE,
-        props.file_info.file_address,
-        target_comment ? target_comment.sub_comment_address : zero_address,
-        root_comment.comment_address,
-        content.value
-      ))
-    }
+
+  const {root_comment, target_comment} = props.meta
+  let success
+
+  if (!root_comment) {
+    success = await wait(contract.addFileComment(via.FILE, props.file_info.file_address, content.value, images.value))
+  } else {
+    success = await wait(contract.addFileSubComment(
+      via.FILE,
+      props.file_info.file_address,
+      target_comment ? target_comment.sub_comment_address : zero_address,
+      root_comment.comment_address,
+      content.value
+    ))
+  }
+
+  if (success) {
     clear()
     show.value = false
-  } catch (e) {
-    uploading.value = false
-    throw e
   }
+
+  uploading.value = false
 }
 
 const tip = computed(() => {

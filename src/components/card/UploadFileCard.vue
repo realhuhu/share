@@ -51,25 +51,25 @@ const upload = async () => {
 
   const contract = assertNotEmpty(store.contract, "合约未初始化")
   uploading.value = true
-  try {
-    await wait(contract.uploadFile(
-      via.FILE,
-      ipfs_address.value,
-      name.value,
-      title.value,
-      description.value,
-      category_address.value,
-      images.value,
-      price.value
-    ))
-
+  
+  if (await wait(contract.uploadFile(
+    via.FILE,
+    ipfs_address.value,
+    name.value,
+    title.value,
+    description.value,
+    category_address.value,
+    images.value,
+    price.value
+  ))) {
     uploading.value = false
     title.value = description.value = category_address.value = undefined
     price.value = 2;
     file_uploader.value.clearFile()
     image_uploader.value.clear()
-  } catch {
+  } else {
     uploading.value = false
+
   }
 }
 

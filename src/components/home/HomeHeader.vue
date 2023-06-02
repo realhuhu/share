@@ -7,13 +7,17 @@
       <search-bar redirect="/search"/>
     </div>
     <var-button text round>
-      <var-icon name="message-processing-outline" color="black"/>
+      <var-icon name="message-processing-outline" color="black" @click="router.push('/message')"/>
     </var-button>
   </div>
 </template>
 
 
 <script lang="ts" setup>
+import {useRouter} from "vue-router";
+
+const router = useRouter()
+
 defineOptions({
   name: "HomeHeader"
 })

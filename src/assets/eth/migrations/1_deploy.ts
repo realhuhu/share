@@ -43,6 +43,8 @@ module.exports = async (
   // @ts-ignore
   const RewardLib = artifacts.require("RewardLib")
   // @ts-ignore
+  const MessageLib = artifacts.require("MessageLib")
+  // @ts-ignore
   const CommonLib = artifacts.require("CommonLib")
 
   const UserContract = await artifacts.require("UserContract")
@@ -101,6 +103,14 @@ module.exports = async (
   deployer.link(RewardUtils, RewardLib)
   await deployer.deploy(RewardLib)
 
+  deployer.link(AddressLinkedList, MessageLib)
+  deployer.link(AddressOrderedMap, MessageLib)
+  deployer.link(Bytes32Lib, MessageLib)
+  deployer.link(UserLib, MessageLib)
+  deployer.link(FileLib, MessageLib)
+  deployer.link(RewardLib, MessageLib)
+  await deployer.deploy(MessageLib)
+
   deployer.link(UserLib, UserContract)
   await deployer.deploy(UserContract)
   const UserImplementation = await UserContract.deployed()
@@ -109,14 +119,17 @@ module.exports = async (
   deployer.link(UserLib, FileContact)
   deployer.link(FileLib, FileContact)
   deployer.link(CategoryLib, FileContact)
+  deployer.link(MessageLib, FileContact)
   await deployer.deploy(FileContact)
   const FileImplementation = await FileContact.deployed()
 
   deployer.link(UserLib, RewardContact)
   deployer.link(RewardLib, RewardContact)
+  deployer.link(MessageLib, RewardContact)
   await deployer.deploy(RewardContact)
   const RewardImplementation = await RewardContact.deployed()
 
+  deployer.link(MessageLib, MessageContact)
   await deployer.deploy(MessageContact)
   const MessageImplementation = await MessageContact.deployed()
 

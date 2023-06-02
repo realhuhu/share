@@ -118,25 +118,28 @@ const clear = () => {
 const comment = async () => {
   if (!valid()) return
   uploading.value = true
-  try {
-    const {root_comment, target_comment} = props.meta
-    if (!root_comment) {
-      await wait(contract.addRewardComment(via.REWARD, props.reward_info.reward_address, file_address.value, content.value, images.value))
-    } else {
-      await wait(contract.addRewardSubComment(
-        via.REWARD,
-        props.reward_info.reward_address,
-        target_comment ? target_comment.sub_comment_address : zero_address,
-        root_comment.comment_address,
-        content.value
-      ))
-    }
+
+  let success
+  const {root_comment, target_comment} = props.meta
+
+  if (!root_comment) {
+    success = await wait(contract.addRewardComment(via.REWARD, props.reward_info.reward_address, file_address.value, content.value, images.value))
+  } else {
+    success = await wait(contract.addRewardSubComment(
+      via.REWARD,
+      props.reward_info.reward_address,
+      target_comment ? target_comment.sub_comment_address : zero_address,
+      root_comment.comment_address,
+      content.value
+    ))
+  }
+
+  if(success) {
     clear()
     show.value = false
-  } catch (e) {
-    uploading.value = false
-    throw e
   }
+
+  uploading.value = false
 }
 
 const tip = computed(() => {

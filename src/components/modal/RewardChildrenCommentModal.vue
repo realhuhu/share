@@ -116,14 +116,15 @@ const loadChildrenComments = async () => {
 }
 
 const upAndDownChildrenComment = async (children_comment_index: number, is_up: boolean) => {
-  await wait(contract.upAndDownRewardSubComment(
+  if (await wait(contract.upAndDownRewardSubComment(
     via.REWARD,
     props.reward_info.reward_address,
     props.root_comment.comment_address,
     children_comment.value.comments[children_comment_index].sub_comment_address,
     is_up
-  ))
-  children_comment.value.comments[children_comment_index] = upAndDownCallback(children_comment.value.comments[children_comment_index], is_up)
+  ))) {
+    children_comment.value.comments[children_comment_index] = upAndDownCallback(children_comment.value.comments[children_comment_index], is_up)
+  }
 }
 
 const upAndDownRootComment = (root_comment_index: number, is_up: boolean) => {

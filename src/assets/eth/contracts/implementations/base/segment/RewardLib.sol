@@ -241,7 +241,7 @@ library RewardLib {
     }
 
     function upAndDown(Types.RewardStore storage self, address reward_address, bool is_up)
-    public {
+    public returns (address user_address, uint _is_up){
         Types.Reward storage reward = self.reward_info[reward_address];
         uint up_and_down = reward.up_and_downs[msg.sender];
 
@@ -249,13 +249,15 @@ library RewardLib {
         uint _up_num;
         uint _down_num;
 
-        (_up_and_down, _up_num, _down_num) = CommonLib.upAndDown(up_and_down, reward.up_num, reward.down_num, is_up);
+        (_up_and_down, _up_num, _down_num, _is_up) = CommonLib.upAndDown(up_and_down, reward.up_num, reward.down_num, is_up);
 
         reward.up_and_downs[msg.sender] = _up_and_down;
         reward.up_num = _up_num;
         reward.down_num = _down_num;
 
         self._reward_by_up_num.update(AddressOrderedMap.Item(reward_address, reward.up_num));
+
+        user_address = reward.author;
     }
 
     function addComment(
@@ -264,10 +266,10 @@ library RewardLib {
         address file_address,
         string memory content,
         string[3] memory images
-    ) public {
+    ) public returns (address user_address, address comment_address){
         Types.Reward storage reward = self.reward_info[reward_address];
 
-        address comment_address = keccak256(abi.encodePacked(reward_address, content, msg.sender, block.timestamp)).toAddress();
+        comment_address = keccak256(abi.encodePacked(reward_address, content, msg.sender, block.timestamp)).toAddress();
 
         Types.RewardComment storage comment = reward.comment_info[comment_address];
 
@@ -286,6 +288,8 @@ library RewardLib {
         reward.update_timestamp = block.timestamp;
         reward.comment_index.append(comment_address);
         reward._comments_by_up_num.update(AddressOrderedMap.Item(comment_address, reward.comment_num));
+
+        user_address = reward.author;
     }
 
     function upAndDownComment(
@@ -293,7 +297,7 @@ library RewardLib {
         address reward_address,
         address comment_address,
         bool is_up
-    ) public {
+    ) public returns (address user_address, uint _is_up){
         Types.RewardComment storage comment = self.reward_info[reward_address].comment_info[comment_address];
         uint up_and_down = comment.up_and_downs[msg.sender];
 
@@ -302,13 +306,15 @@ library RewardLib {
         uint _up_num;
         uint _down_num;
 
-        (_up_and_down, _up_num, _down_num) = CommonLib.upAndDown(up_and_down, comment.up_num, comment.down_num, is_up);
+        (_up_and_down, _up_num, _down_num, _is_up) = CommonLib.upAndDown(up_and_down, comment.up_num, comment.down_num, is_up);
 
         comment.up_and_downs[msg.sender] = _up_and_down;
         comment.up_num = _up_num;
         comment.down_num = _down_num;
 
         self.reward_info[reward_address]._comments_by_up_num.update(AddressOrderedMap.Item(comment_address, comment.up_num));
+
+        user_address = comment.author;
     }
 
     function addSubComment(
@@ -317,11 +323,11 @@ library RewardLib {
         address target_address,
         address comment_address,
         string memory content
-    ) public {
+    ) public returns (address user_address, uint _target_type, address sub_comment_address){
         Types.Reward storage reward = self.reward_info[reward_address];
         Types.RewardComment storage comment = reward.comment_info[comment_address];
 
-        address sub_comment_address = keccak256(abi.encodePacked(reward_address, comment_address, content, msg.sender, block.timestamp)).toAddress();
+        sub_comment_address = keccak256(abi.encodePacked(reward_address, comment_address, content, msg.sender, block.timestamp)).toAddress();
 
         Types.RewardSubComment storage sub_comment = comment.sub_comment_info[sub_comment_address];
 
@@ -338,6 +344,14 @@ library RewardLib {
 
         reward.comment_num++;
         reward.update_timestamp = block.timestamp;
+
+        if (target_address == address(0x0)) {
+            user_address = comment.author;
+            _target_type = 4;
+        } else {
+            user_address = comment.sub_comment_info[target_address].author;
+            _target_type = 5;
+        }
     }
 
     function upAndDownSubComment(
@@ -346,7 +360,7 @@ library RewardLib {
         address comment_address,
         address sub_comment_address,
         bool is_up
-    ) public {
+    ) public returns (address user_address, uint _is_up){
         Types.RewardSubComment storage comment = self.reward_info[reward_address].comment_info[comment_address].sub_comment_info[sub_comment_address];
         uint up_and_down = comment.up_and_downs[msg.sender];
 
@@ -354,11 +368,13 @@ library RewardLib {
         uint _up_num;
         uint _down_num;
 
-        (_up_and_down, _up_num, _down_num) = CommonLib.upAndDown(up_and_down, comment.up_num, comment.down_num, is_up);
+        (_up_and_down, _up_num, _down_num, _is_up) = CommonLib.upAndDown(up_and_down, comment.up_num, comment.down_num, is_up);
 
         comment.up_and_downs[msg.sender] = _up_and_down;
         comment.up_num = _up_num;
         comment.down_num = _down_num;
+
+        user_address = comment.author;
     }
 
     function getRootComments(

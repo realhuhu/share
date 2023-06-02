@@ -137,11 +137,25 @@ export const wait = async (func: Promise<ContractTransaction>) => {
     content: "处理中...",
     type: "success"
   })
-  await res.wait()
-  Snackbar({
-    content: "已完成",
-    type: "success"
-  })
+  try {
+    await res.wait()
+    Snackbar({
+      content: "已完成",
+      type: "success"
+    })
+    return true
+  } catch (e) {
+    const err = <MetaMaskError>e
+    console.error(err.message);
+    switch (err.code) {
+      default:
+        Snackbar({
+          content: "频率过快，请重试",
+          type: "error"
+        })
+    }
+    return false
+  }
 }
 export const upAndDownCallback = <T extends {
   up_and_down: BigNumber,

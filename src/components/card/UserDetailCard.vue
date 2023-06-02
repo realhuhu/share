@@ -51,8 +51,9 @@ const contract = assertNotEmpty(store.contract, "合约未初始化")
 
 const follow = async (is_follow: boolean) => {
   if (is_follow || await Dialog({title: "是否取消关注?"}) === "confirm") {
-    await wait(contract.follow(via.USER, user_info.value.user_address))
-    user_info.value = followCallback(user_info.value)
+    if (await wait(contract.follow(via.USER, user_info.value.user_address))) {
+      user_info.value = followCallback(user_info.value)
+    }
   }
 }
 

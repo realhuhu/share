@@ -63,7 +63,8 @@ const routes: Array<RouteRecordRaw> = [
     name: "MainSearch",
     component: () => import("@/views/MainSearch.vue"),
     meta: {
-      depth: 1
+      depth: 1,
+      auth: true
     }
   },
   {
@@ -113,11 +114,22 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
+    path: "/message",
+    name: "AllMessage",
+    component: () => import("@/views/AllMessage.vue"),
+    meta: {
+      depth: 1,
+      auth: true,
+      keep_alive: true
+    }
+  },
+  {
     path: "/file-detail/:file_address",
     name: "FileDetail",
     component: () => import("@/views/FileDetail.vue"),
     meta: {
       depth: 4,
+      auth: true,
       keep_alive: true
     }
   },
@@ -127,6 +139,7 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import("@/views/RewardDetail.vue"),
     meta: {
       depth: 3,
+      auth: true,
       keep_alive: true
     }
   },

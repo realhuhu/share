@@ -45,6 +45,7 @@ contract FileContact is BaseContact, FileInterface {
     using UserLib for Types.UserStore;
     using FileLib for Types.FileStore;
     using CategoryLib for Types.CategoryStore;
+    using MessageLib for Types.MessageStore;
 
     function FileContract_init(uint)
     _onlyAdmin_
@@ -69,6 +70,7 @@ contract FileContact is BaseContact, FileInterface {
         address file_address = files.upload(ipfs_address, name, title, description, category_address, images, price);
         categories.increase(category_address);
         users.afterUploadFile(file_address);
+        messages.afterUploadFile(file_address, users);
     }
 
     function getFileBriefInfos(uint, address cursor, address category_address, uint order, bool reverse)
@@ -95,31 +97,47 @@ contract FileContact is BaseContact, FileInterface {
     function upAndDownFile(uint, address file_address, bool is_up)
     external {
         _uploaded_(file_address);
-        files.upAndDown(file_address, is_up);
+        address user_address;
+        uint _is_up;
+        (user_address, _is_up) = files.upAndDown(file_address, is_up);
+        messages.afterUp(user_address, file_address, address(0x0), address(0x0), _is_up, 0, users);
     }
 
     function addFileComment(uint, address file_address, string memory content, string[3] memory images)
     external {
         _uploaded_(file_address);
-        files.addComment(file_address, content, images);
+        address user_address;
+        address reply_address;
+        (user_address, reply_address) = files.addComment(file_address, content, images);
+        messages.afterComment(user_address, reply_address, file_address, address(0x0), address(0x0), 0, users);
     }
 
     function upAndDownFileComment(uint, address file_address, address comment_address, bool is_up)
     external {
         _file_commented_(file_address, comment_address);
-        files.upAndDownComment(file_address, comment_address, is_up);
+        address user_address;
+        uint _is_up;
+        (user_address, _is_up) = files.upAndDownComment(file_address, comment_address, is_up);
+        messages.afterUp(user_address, file_address, comment_address, address(0x0), _is_up, 1, users);
     }
 
     function addFileSubComment(uint, address file_address, address target_address, address comment_address, string memory content)
     external {
         _file_commented_(file_address, comment_address);
-        files.addSubComment(file_address, target_address, comment_address, content);
+        address user_address;
+        uint _target_type;
+        address reply_address;
+        (user_address, _target_type, reply_address) = files.addSubComment(file_address, target_address, comment_address, content);
+        messages.afterComment(user_address, reply_address, file_address, comment_address, target_address, _target_type, users);
     }
 
     function upAndDownFileSubComment(uint, address file_address, address comment_address, address sub_comment_address, bool is_up)
     external {
         _file_sub_commented_(file_address, comment_address, sub_comment_address);
-        files.upAndDownSubComment(file_address, comment_address, sub_comment_address, is_up);
+        address user_address;
+        uint _is_up;
+        (user_address, _is_up) = files.upAndDownSubComment(file_address, comment_address, sub_comment_address, is_up);
+        messages.afterUp(user_address, file_address, comment_address, sub_comment_address, _is_up, 2, users);
     }
 
     function getFileRootComments(uint, address file_address, address cursor, uint order, bool reverse)
